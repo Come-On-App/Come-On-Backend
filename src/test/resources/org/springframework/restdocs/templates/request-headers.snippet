@@ -1,0 +1,12 @@
+.{{title}}
+[cols="<,^,<"]
+|===
+|헤더 이름|필수값 여부|설명
+
+{{#headers}}
+|{{#tableCellContent}}`+{{name}}+`{{/tableCellContent}}
+|{{#tableCellContent}}{{#optional}}X{{/optional}}{{^optional}}O{{/optional}}{{/tableCellContent}}
+|{{#tableCellContent}}{{description}}{{/tableCellContent}}
+{{/headers}}
+
+|===

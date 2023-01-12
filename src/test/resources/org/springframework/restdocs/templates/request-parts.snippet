@@ -1,0 +1,12 @@
+.{{title}}
+[cols="<,^,<"]
+|===
+|파트 이름|필수값 여부|설명
+
+{{#requestParts}}
+|{{#tableCellContent}}`+{{name}}+`{{/tableCellContent}}
+|{{#tableCellContent}}{{#optional}}X{{/optional}}{{^optional}}O{{/optional}}{{/tableCellContent}}
+|{{#tableCellContent}}{{description}}{{/tableCellContent}}
+{{/requestParts}}
+
+|===
