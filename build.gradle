@@ -23,6 +23,8 @@ ext {
     set('snippetsDir', file("build/generated-snippets"))
     set('testcontainersVersion', "1.17.6")
     set('springCloudVersion', "2021.0.5")
+    set('feignHttpClientVersion', "12.1")
+    set('jjwtVersion', "0.11.5")
 }
 
 dependencies {
@@ -34,8 +36,18 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-websocket'
     implementation 'org.springframework.kafka:spring-kafka'
+
+    // feign-client
     implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
-    implementation "io.github.openfeign:feign-httpclient:12.1"
+    implementation "io.github.openfeign:feign-httpclient:${feignHttpClientVersion}"
+
+    // reids
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
+    // jwt
+    implementation "io.jsonwebtoken:jjwt-api:${jjwtVersion}"
+    implementation "io.jsonwebtoken:jjwt-impl:${jjwtVersion}"
+    implementation "io.jsonwebtoken:jjwt-jackson:${jjwtVersion}"
 
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
