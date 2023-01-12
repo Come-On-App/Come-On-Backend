@@ -3,6 +3,7 @@ spring:
     additional-location: config/
   profiles:
     group:
-      local: "local,auth"
-      dev: "dev,auth"
+      local: "local,jwt-local,oauth-local"
+      dev: "dev,jwt-dev,oauth-dev"
+      prod: "prod,jwt-prod,oauth-prod"
     active: local
