@@ -1,0 +1,17 @@
+= Error Response Docs
+:toc-title: Error Response
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 2
+:sectlinks:
+:docinfo: shared-head
+
+ifndef::snippets[]
+:snippets: ./build/generated-snippets
+endif::[]
+
+include::error-response.adoc[]
+
+include::error-code.adoc[]

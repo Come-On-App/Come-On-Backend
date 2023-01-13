@@ -1,0 +1,24 @@
+:doctype: book
+:icons: font
+:sectlinks:
+:docinfo: shared-head
+
+== 오류 응답 스펙
+요청에 대한 오류 발생시 아래와 같은 스펙으로 응답합니다.
+
+include::{snippets}/error-response/valid-error/response-fields.adoc[]
+
+아래는 오류 응답 예시입니다.
+
+include::{snippets}/error-response/normal-error/http-response.adoc[]
+
+=== 검증 오류 발생시
+
+요청 데이터에 대한 검증 오류가 발생하였을 경우, `errors` 필드는 `null`이 아니며 아래와 같은 스펙을 가집니다.
+
+include::{snippets}/error-response/valid-error/response-fields-errors.adoc[]
+
+아래는 검증 오류에 대한 응답 예시입니다.
+
+include::{snippets}/error-response/valid-error/http-response.adoc[]
+

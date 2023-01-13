@@ -1,0 +1,11 @@
+:doctype: book
+:icons: font
+:sectlinks:
+:docinfo: shared-head
+
+=== 유저 관련 오류 코드
+
+유저 관련 오류 코드는 `2XXX` 형식을 갖습니다.
+
+[[user-error-code]]
+include::{snippets}/error-code/users/error-code-response-fields.adoc[]
