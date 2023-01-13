@@ -5,29 +5,30 @@ import com.comeon.backend.common.jwt.JwtToken;
 import com.comeon.backend.common.jwt.TokenType;
 import com.comeon.backend.user.domain.OauthProvider;
 import com.comeon.backend.user.domain.User;
-import com.comeon.backend.user.domain.UserService;
-import com.comeon.backend.user.infrastructure.feign.google.GoogleAuthFeignClient;
+import com.comeon.backend.user.domain.SocialLoginHandler;
+import com.comeon.backend.user.infrastructure.feign.google.GoogleAuthFeignService;
+import com.comeon.backend.user.infrastructure.feign.google.GoogleUserInfoResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.util.Map;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
-public class GoogleAuthService {
+public class GoogleUserService {
 
-    private final GoogleAuthFeignClient googleAuthFeignClient;
-    private final UserService userService;
+    private final GoogleAuthFeignService googleAuthFeignService;
+    private final SocialLoginHandler socialLoginHandler;
     private final JwtGenerator jwtGenerator;
 
     public Tokens login(String idToken) {
-        Map<String, Object> payload = googleAuthFeignClient.verifyIdToken(idToken);
+        GoogleUserInfoResponse userInfo = googleAuthFeignService.getUserInfo(idToken);
 
-        User user = userService.saveUser(
-                (String) payload.get("sub"),
+        User user = socialLoginHandler.doLogin(
+                userInfo.getOauthId(),
                 OauthProvider.GOOGLE,
-                (String) payload.get("email"),
-                (String) payload.get("name")
+                userInfo.getEmail(),
+                userInfo.getName()
         );
 
         JwtToken accessToken = jwtGenerator.initBuilder(TokenType.ACCESS)
