@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Map;
 
-@FeignClient(name = "google-auth-client", url = "https://oauth2.googleapis.com")
+@FeignClient(name = "google-auth-client", url = "https://oauth2.googleapis.com", configuration = GoogleFeignErrorDecoder.class)
 public interface GoogleAuthFeignClient {
 
     @GetMapping(value = "/tokeninfo")
