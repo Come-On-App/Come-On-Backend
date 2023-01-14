@@ -1,0 +1,14 @@
+.{{title}}
+|===
+|헤더|쿠키 이름|HttpOnly|Optioanl|설명
+
+{{#headers}}
+|{{#tableCellContent}}`+{{name}}+`{{/tableCellContent}}
+|{{#tableCellContent}}{{cookie}}{{/tableCellContent}}
+|{{#tableCellContent}}{{HttpOnly}}{{/tableCellContent}}
+|{{#tableCellContent}}{{optional}}{{/tableCellContent}}
+|{{#tableCellContent}}{{description}}{{/tableCellContent}}
+
+
+{{/headers}}
+|===

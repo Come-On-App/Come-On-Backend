@@ -1,0 +1,12 @@
+.{{title}}
+[cols="<,^,<"]
+|===
+|파라미터 이름|필수값 여부|설명
+
+{{#parameters}}
+|{{#tableCellContent}}`+{{name}}+`{{/tableCellContent}}
+|{{#tableCellContent}}{{#optional}}X{{/optional}}{{^optional}}O{{/optional}}{{/tableCellContent}}
+|{{#tableCellContent}}{{description}}{{/tableCellContent}}
+{{/parameters}}
+
+|===
