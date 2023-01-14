@@ -2,6 +2,7 @@ package com.comeon.backend.user.application;
 
 import com.comeon.backend.common.jwt.JwtGenerator;
 import com.comeon.backend.common.jwt.JwtToken;
+import com.comeon.backend.common.jwt.RefreshTokenRepository;
 import com.comeon.backend.common.jwt.TokenType;
 import com.comeon.backend.user.domain.OauthProvider;
 import com.comeon.backend.user.domain.User;
@@ -20,6 +21,7 @@ public class GoogleUserService {
     private final GoogleAuthFeignService googleAuthFeignService;
     private final SocialLoginHandler socialLoginHandler;
     private final JwtGenerator jwtGenerator;
+    private final RefreshTokenRepository refreshTokenRepository;
 
     public Tokens login(String idToken) {
         GoogleUserInfoResponse userInfo = googleAuthFeignService.getUserInfo(idToken);
@@ -36,8 +38,9 @@ public class GoogleUserService {
                 .authorities(user.getRole().getValue())
                 .nickname(user.getNickname())
                 .build();
-        JwtToken refreshToken = jwtGenerator.initBuilder(TokenType.REFRESH)
-                .build();
+
+        JwtToken refreshToken = jwtGenerator.initBuilder(TokenType.REFRESH).build();
+        refreshTokenRepository.add(refreshToken.getToken(), user.getId(), refreshToken.getClaims().getExpiration());
 
         return new Tokens(accessToken, refreshToken);
     }

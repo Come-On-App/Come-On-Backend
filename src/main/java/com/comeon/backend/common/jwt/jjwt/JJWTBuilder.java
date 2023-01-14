@@ -16,11 +16,10 @@ public class JJWTBuilder extends JwtBuilder {
 
     @Override
     public JwtToken build() {
-        return new JwtToken(
-                Jwts.builder()
-                        .signWith(Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8)), SignatureAlgorithm.HS256)
-                        .setClaims(claims)
-                        .compact()
-        );
+        String token = Jwts.builder()
+                .signWith(Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8)), SignatureAlgorithm.HS256)
+                .setClaims(claims)
+                .compact();
+        return new JwtToken(token, claims);
     }
 }

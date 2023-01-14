@@ -13,14 +13,14 @@ import org.springframework.stereotype.Service;
 public class JwtReissueService {
 
     private final JwtValidator jwtValidator;
-    private final JwtRepository jwtRepository;
+    private final RefreshTokenRepository refreshTokenRepository;
     private final JwtGenerator jwtGenerator;
     private final JwtParser jwtParser;
     private final UserRepository userRepository;
 
     public Tokens reissue(String refreshTokenValue, boolean reissueRtkAlways) {
         if (jwtValidator.valid(refreshTokenValue)) {
-            Long userId = jwtRepository.getUserIdBy(refreshTokenValue).orElseThrow();
+            Long userId = refreshTokenRepository.getUserIdBy(refreshTokenValue).orElseThrow();
             User user = userRepository.findById(userId).orElseThrow();
 
             JwtToken accessToken = jwtGenerator.initBuilder(TokenType.ACCESS)
@@ -32,9 +32,8 @@ public class JwtReissueService {
             // RTK 재발급 조건을 만족하거나 파라미터가 true 이면 RTK 재발급
             JwtToken refreshToken = null;
             if (jwtParser.isRtkSatisfiedAutoReissueCondition(refreshTokenValue) || reissueRtkAlways) {
-                // TODO JwtRepository 저장
-                refreshToken = jwtGenerator.initBuilder(TokenType.REFRESH)
-                        .build();
+                refreshToken = jwtGenerator.initBuilder(TokenType.REFRESH).build();
+                refreshTokenRepository.add(refreshToken.getToken(), user.getId(), refreshToken.getClaims().getExpiration());
             }
             return new Tokens(accessToken, refreshToken);
         }
