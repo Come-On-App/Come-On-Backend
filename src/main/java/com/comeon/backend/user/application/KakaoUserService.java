@@ -39,6 +39,7 @@ public class KakaoUserService {
                 .authorities(user.getRole().getValue())
                 .nickname(user.getNickname())
                 .build();
+        // TODO JwtRepository 저장
         JwtToken refreshToken = jwtGenerator.initBuilder(TokenType.REFRESH)
                 .build();
 
