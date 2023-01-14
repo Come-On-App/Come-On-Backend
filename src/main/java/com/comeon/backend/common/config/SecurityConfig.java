@@ -1,10 +1,10 @@
 package com.comeon.backend.common.config;
 
-import com.comeon.backend.common.jwt.JwtParser;
 import com.comeon.backend.common.jwt.JwtValidator;
-import com.comeon.backend.common.security.CustomAccessDeniedHandler;
-import com.comeon.backend.common.security.CustomAuthenticationEntryPoint;
+import com.comeon.backend.common.security.JwtAccessDeniedHandler;
+import com.comeon.backend.common.security.JwtAuthenticationEntryPoint;
 import com.comeon.backend.common.security.JwtAuthenticationFilter;
+import com.comeon.backend.common.security.JwtAuthenticationProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,12 +21,12 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
     private final JwtValidator jwtValidator;
-    private final JwtParser jwtParser;
-    private final CustomAccessDeniedHandler accessDeniedHandler;
-    private final CustomAuthenticationEntryPoint authenticationEntryPoint;
+    private final JwtAuthenticationProvider jwtAuthenticationProvider;
+    private final JwtAccessDeniedHandler accessDeniedHandler;
+    private final JwtAuthenticationEntryPoint authenticationEntryPoint;
 
     private JwtAuthenticationFilter jwtAuthenticationFilter() {
-        return new JwtAuthenticationFilter(jwtValidator, jwtParser);
+        return new JwtAuthenticationFilter(jwtValidator, jwtAuthenticationProvider);
     }
 
     @Bean
@@ -45,7 +45,7 @@ public class SecurityConfig {
 
                 .and()
                 .authorizeRequests()
-                .antMatchers("/api/v1/oauth/**").permitAll()
+                .antMatchers("/api/v1/oauth/**", "/api/v1/auth/reissue").permitAll()
                 .anyRequest().authenticated() // 나머지는 인증된 유저면 허가
 
                 .and()
