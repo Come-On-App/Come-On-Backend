@@ -13,3 +13,5 @@ ifndef::snippets[]
 endif::[]
 
 include::social-login.adoc[]
+
+include::jwt-reissue.adoc[]

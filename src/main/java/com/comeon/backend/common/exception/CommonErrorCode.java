@@ -13,7 +13,7 @@ public enum CommonErrorCode implements ErrorCode {
     REQUEST_VALIDATION_FAIL(1002, HttpStatus.BAD_REQUEST, "요청 데이터 검증에 실패하였습니다. API 스펙을 확인해주세요."),
     HTTP_METHOD_NOT_SUPPORTED(1003, HttpStatus.METHOD_NOT_ALLOWED, "해당 HTTP METHOD는 지원하지 않습니다. API 스펙을 확인해주세요."),
     UNAUTHORIZED(1004, HttpStatus.UNAUTHORIZED, "인증된 사용자만이 이용할 수 있습니다."),
-    NO_AUTHORITIES(1004, HttpStatus.FORBIDDEN, "해당 요청에 필요한 권한이 부족합니다."),
+    NO_AUTHORITIES(1005, HttpStatus.FORBIDDEN, "해당 요청에 필요한 권한이 부족합니다."),
     ;
 
     private final int code;

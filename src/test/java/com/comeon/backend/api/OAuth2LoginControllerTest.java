@@ -1,7 +1,6 @@
 package com.comeon.backend.api;
 
 import com.comeon.backend.api.utils.RestDocsTestSupport;
-import com.comeon.backend.common.jwt.JwtParser;
 import com.comeon.backend.common.jwt.TokenType;
 import com.comeon.backend.user.application.GoogleUserService;
 import com.comeon.backend.user.application.KakaoUserService;
@@ -15,8 +14,6 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
-import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.JsonFieldType;
@@ -29,9 +26,7 @@ import java.nio.charset.StandardCharsets;
 
 import static org.mockito.BDDMockito.*;
 
-@Import({JwtParser.class})
-@WebMvcTest(OAuth2LoginController.class)
-@MockBean(JpaMetamodelMappingContext.class)
+@WebMvcTest({OAuth2LoginController.class})
 public class OAuth2LoginControllerTest extends RestDocsTestSupport {
 
     @MockBean

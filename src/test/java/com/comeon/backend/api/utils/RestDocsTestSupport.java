@@ -21,18 +21,12 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
 @AutoConfigureMockMvc
-@Import({
-        RestDocsConfig.class,
-        JwtGenerator.class
-})
+@Import({RestDocsConfig.class})
 @ExtendWith(RestDocumentationExtension.class)
 public class RestDocsTestSupport extends ControllerUnitTest {
 
     @Autowired
     protected RestDocumentationResultHandler restDocs;
-
-    @Autowired
-    protected JwtGenerator jwtGenerator;
 
     @BeforeEach
     void setUp(final WebApplicationContext context,

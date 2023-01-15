@@ -8,4 +8,5 @@ import lombok.Getter;
 public class JwtToken {
 
     private String token;
+    private JwtClaims claims;
 }

@@ -22,7 +22,6 @@ import java.util.Map;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 
 @WebMvcTest(ErrorRestDocsController.class)
-@MockBean(JpaMetamodelMappingContext.class)
 public class ErrorCodeRestDocsTest extends RestDocsTestSupport {
 
     @Nested
