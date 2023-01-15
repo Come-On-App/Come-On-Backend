@@ -3,6 +3,7 @@ package com.comeon.backend.api.error.controller;
 import com.comeon.backend.common.api.ErrorResponse;
 import com.comeon.backend.common.exception.CommonErrorCode;
 import com.comeon.backend.common.exception.ErrorCode;
+import com.comeon.backend.image.common.ImageErrorCode;
 import com.comeon.backend.user.common.UserErrorCode;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -51,4 +52,9 @@ public class ErrorRestDocsController {
                 .collect(Collectors.toMap(ErrorCode::getCode, ErrorCode::getDescription));
     }
 
+    @GetMapping("/error/code/image")
+    public Map<Integer, String> imageErrorCodes() {
+        return Arrays.stream(ImageErrorCode.values())
+                .collect(Collectors.toMap(ErrorCode::getCode, ErrorCode::getDescription));
+    }
 }

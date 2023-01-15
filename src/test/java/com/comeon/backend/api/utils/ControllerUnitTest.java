@@ -1,8 +1,10 @@
 package com.comeon.backend.api.utils;
 
-import com.comeon.backend.common.jwt.JwtGenerator;
-import com.comeon.backend.common.jwt.JwtParser;
-import com.comeon.backend.common.jwt.JwtValidator;
+import com.comeon.backend.common.jwt.*;
+import com.comeon.backend.common.security.JwtAccessDeniedHandler;
+import com.comeon.backend.common.security.JwtAuthenticationEntryPoint;
+import com.comeon.backend.common.security.JwtAuthenticationFilter;
+import com.comeon.backend.common.security.JwtAuthenticationProvider;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;

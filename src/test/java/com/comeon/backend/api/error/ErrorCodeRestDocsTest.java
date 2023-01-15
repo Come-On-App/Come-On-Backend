@@ -8,8 +8,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.FieldDescriptor;
@@ -115,6 +113,36 @@ public class ErrorCodeRestDocsTest extends RestDocsTestSupport {
                                     RestDocsUtil.customResponseFields(
                                             "error-code-response",
                                             Attributes.attributes(Attributes.key("title").value("유저 오류 코드")),
+                                            enumConvertFieldDescriptor(response)
+                                    )
+                            )
+                    );
+        }
+
+        @Test
+        @DisplayName("이미지 오류 코드")
+        void image() throws Exception {
+            //when
+            ResultActions perform = mockMvc.perform(
+                    RestDocumentationRequestBuilders.get("/error/code/image")
+                            .accept(MediaType.APPLICATION_JSON)
+            );
+
+            Map<Integer, String> response = objectMapper.readValue(
+                    perform.andReturn()
+                            .getResponse()
+                            .getContentAsByteArray(),
+                    new TypeReference<>() {
+                    }
+            );
+
+            // docs
+            perform.andExpect(MockMvcResultMatchers.status().isOk())
+                    .andDo(
+                            restDocs.document(
+                                    RestDocsUtil.customResponseFields(
+                                            "error-code-response",
+                                            Attributes.attributes(Attributes.key("title").value("이미지 오류 코드")),
                                             enumConvertFieldDescriptor(response)
                                     )
                             )
