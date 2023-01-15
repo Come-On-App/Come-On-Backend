@@ -21,7 +21,7 @@ public class ImageFileController {
 
     @PostMapping
     public ImageUploadResponse uploadImage(@AuthenticationPrincipal JwtPrincipal jwtPrincipal,
-                                           @RequestParam("imageFile") MultipartFile imageFile) {
+                                           @RequestParam("image") MultipartFile imageFile) {
         return new ImageUploadResponse(fileManager.upload(imageFile, jwtPrincipal.getUserId()));
     }
 
