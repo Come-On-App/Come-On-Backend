@@ -7,6 +7,7 @@ import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.comeon.backend.common.exception.CommonErrorCode;
 import com.comeon.backend.common.exception.RestApiException;
+import com.comeon.backend.image.common.ImageErrorCode;
 import com.comeon.backend.image.domain.FileManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -35,8 +36,7 @@ public class S3FileManager implements FileManager {
     @Override
     public String upload(MultipartFile multipartFile, Long userId) {
         if (multipartFile == null || multipartFile.isEmpty()) {
-            // TODO 예외 처리
-            throw new RestApiException(CommonErrorCode.INTERNAL_SERVER_ERROR);
+            throw new RestApiException("이미지 파일이 비어있습니다.", ImageErrorCode.NO_IMAGE_FILE);
         }
 
         String filename = getFilenameToStore(multipartFile);
@@ -45,13 +45,10 @@ public class S3FileManager implements FileManager {
         ObjectMetadata objectMetadata = new ObjectMetadata();
         objectMetadata.setContentType(multipartFile.getContentType());
         try (InputStream inputStream = multipartFile.getInputStream()) {
-            amazonS3.putObject(
-                    new PutObjectRequest(bucket, fullPath, inputStream, objectMetadata)
-                            .withCannedAcl(CannedAccessControlList.PublicRead)
-            );
+            amazonS3.putObject(new PutObjectRequest(bucket, fullPath, inputStream, objectMetadata)
+                    .withCannedAcl(CannedAccessControlList.PublicRead));
         } catch (IOException e) {
-            // TODO 예외 처리
-            throw new RestApiException(CommonErrorCode.INTERNAL_SERVER_ERROR);
+            throw new RestApiException(e, CommonErrorCode.INTERNAL_SERVER_ERROR);
         }
 
         return amazonS3.getUrl(bucket, fullPath).toString();
