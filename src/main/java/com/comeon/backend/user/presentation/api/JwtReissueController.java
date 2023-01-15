@@ -1,6 +1,5 @@
 package com.comeon.backend.user.presentation.api;
 
-import com.comeon.backend.common.jwt.JwtParser;
 import com.comeon.backend.user.application.JwtReissueService;
 import com.comeon.backend.user.application.Tokens;
 import com.comeon.backend.user.presentation.api.request.JwtReissueRequest;
@@ -19,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/auth/reissue")
 public class JwtReissueController {
 
-    private final JwtParser jwtParser;
     private final JwtReissueService jwtReissueService;
 
     @PostMapping
@@ -29,6 +27,6 @@ public class JwtReissueController {
                 request.getReissueRefreshTokenAlways()
         );
 
-        return AppAuthTokenResponseUtil.generateResponse(jwtParser, tokens);
+        return AppAuthTokenResponseUtil.generateResponse(tokens);
     }
 }

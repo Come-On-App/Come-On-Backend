@@ -1,6 +1,5 @@
 package com.comeon.backend.user.presentation.api;
 
-import com.comeon.backend.common.jwt.JwtParser;
 import com.comeon.backend.user.application.GoogleUserService;
 import com.comeon.backend.user.application.KakaoUserService;
 import com.comeon.backend.user.application.Tokens;
@@ -18,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/oauth")
 public class OAuth2LoginController {
 
-    private final JwtParser jwtParser;
     private final GoogleUserService googleUserService;
     private final KakaoUserService kakaoUserService;
 
@@ -26,13 +24,13 @@ public class OAuth2LoginController {
     public AppAuthTokensResponse googleOAuth2Login(@Validated @RequestBody GoogleOAuth2LoginRequest request) {
         Tokens tokens = googleUserService.login(request.getIdToken());
 
-        return AppAuthTokenResponseUtil.generateResponse(jwtParser, tokens);
+        return AppAuthTokenResponseUtil.generateResponse(tokens);
     }
 
     @PostMapping("/kakao")
     public AppAuthTokensResponse kakaoOAuth2Login(@Validated @RequestBody KakaoOAuth2LoginRequest request) {
         Tokens tokens = kakaoUserService.login(request.getCode());
 
-        return AppAuthTokenResponseUtil.generateResponse(jwtParser, tokens);
+        return AppAuthTokenResponseUtil.generateResponse(tokens);
     }
 }
