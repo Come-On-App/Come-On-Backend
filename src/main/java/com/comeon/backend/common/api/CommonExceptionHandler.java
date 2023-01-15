@@ -27,7 +27,6 @@ public class CommonExceptionHandler {
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<ErrorResponse> invalidJsonHandle(HttpMessageNotReadableException e) {
-        log.error("{}", e.getClass().getSimpleName(), e);
         CommonErrorCode errorCode = CommonErrorCode.INVALID_JSON;
         return ResponseEntity.status(errorCode.getHttpStatus())
                 .body(

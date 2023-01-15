@@ -32,7 +32,7 @@ public class KakaoUserService {
         User user = socialLoginHandler.doLogin(
                 String.valueOf(kakaoUserInfo.getId()),
                 OauthProvider.KAKAO,
-                (String) kakaoUserInfo.getKakaoAccount().get("name"),
+                (String) kakaoUserInfo.getKakaoAccount().get("email"),
                 (String) ((Map<String, Object>) kakaoUserInfo.getKakaoAccount().get("profile")).get("nickname")
         );
 

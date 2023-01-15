@@ -27,6 +27,18 @@ spring:
             user-info-uri: https://kapi.kakao.com/v2/user/me
             user-name-attribute: id
 
+cloud:
+  aws:
+    region:
+      static: ap-northeast-2
+    s3:
+      bucket: comeon-app-test
+    stack:
+      auto: false
+
+s3:
+  dir-name: test
+
 jwt:
   secret: 76a6e4c00003d20b9805858efc7098c2bfcf073ebf19f5958ef6b9f533845cb6bfe4d4ca20ea3cc1e23730a6d87c893fe6a6ced760629a4f4e905cb4ab7b7915
   access-token:

@@ -36,6 +36,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-websocket'
     implementation 'org.springframework.kafka:spring-kafka'
+    implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 
     // feign-client
     implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
@@ -69,6 +70,8 @@ dependencies {
     testImplementation 'org.testcontainers:junit-jupiter'
     testImplementation 'org.testcontainers:kafka'
     testImplementation 'org.testcontainers:mysql'
+
+    testImplementation 'io.findify:s3mock_2.13:0.2.6'
 
     asciidoctorExt 'org.springframework.restdocs:spring-restdocs-asciidoctor'
 }

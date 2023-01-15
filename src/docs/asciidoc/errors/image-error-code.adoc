@@ -1,0 +1,11 @@
+:doctype: book
+:icons: font
+:sectlinks:
+:docinfo: shared-head
+
+=== 이미지 관련 오류 코드
+
+이미지 관련 오류 코드는 `9XXX` 형식을 갖습니다.
+
+[[image-error-code]]
+include::{snippets}/error-code/image/error-code-response-fields.adoc[]

@@ -3,13 +3,11 @@
 :sectlinks:
 :docinfo: shared-head
 
-[[social-login]]
-== 소셜 로그인
-
-[[google]]
-=== 구글 로그인
+[[google-login]]
+== 구글 로그인
 POST /api/v1/oauth/google
 
+=== API Spec
 ==== 요청 필드
 include::{snippets}/google-o-auth2-login/success/request-fields.adoc[]
 
@@ -18,6 +16,7 @@ include::{snippets}/google-o-auth2-login/success/response-fields.adoc[]
 include::{snippets}/google-o-auth2-login/success/response-fields-ACC-TOKEN.adoc[]
 include::{snippets}/google-o-auth2-login/success/response-fields-REF-TOKEN.adoc[]
 
+=== 요청/응답 예시
 ==== 요청 예시
 include::{snippets}/google-o-auth2-login/success/http-request.adoc[]
 
@@ -28,10 +27,11 @@ include::{snippets}/google-o-auth2-login/success/http-response.adoc[]
 
 * link:../errors/error-code.html[오류 코드 확인하기,role="error-code-popup"]
 
-[[kakao]]
-=== 카카오 로그인
+[[kakao-login]]
+== 카카오 로그인
 POST /api/v1/oauth/kakao
 
+=== API Spec
 ==== 요청 필드
 include::{snippets}/kakao-o-auth2-login/success/request-fields.adoc[]
 
@@ -40,6 +40,7 @@ include::{snippets}/kakao-o-auth2-login/success/response-fields.adoc[]
 include::{snippets}/kakao-o-auth2-login/success/response-fields-ACC-TOKEN.adoc[]
 include::{snippets}/kakao-o-auth2-login/success/response-fields-REF-TOKEN.adoc[]
 
+=== 요청/응답 예시
 ==== 요청 예시
 include::{snippets}/kakao-o-auth2-login/success/http-request.adoc[]
 

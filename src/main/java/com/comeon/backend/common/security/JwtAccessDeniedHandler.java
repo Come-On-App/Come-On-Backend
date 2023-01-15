@@ -26,8 +26,7 @@ public class JwtAccessDeniedHandler implements AccessDeniedHandler {
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException, ServletException {
-        log.error("No Authorities", accessDeniedException);
-        log.error("Request Uri : {} {}", request.getMethod(), request.getRequestURI());
+        log.error("No Authorities. Request Uri : {} {}", request.getMethod(), request.getRequestURI());
 
         ErrorCode errorCode = CommonErrorCode.NO_AUTHORITIES;
         ErrorResponse errorResponse = ErrorResponse.builder()

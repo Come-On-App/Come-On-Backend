@@ -7,3 +7,4 @@
 
 include::common-error-code.adoc[]
 include::user-error-code.adoc[]
+include::image-error-code.adoc[]

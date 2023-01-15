@@ -45,7 +45,7 @@ public class SecurityConfig {
 
                 .and()
                 .authorizeRequests()
-                .antMatchers("/api/v1/oauth/**", "/api/v1/auth/reissue").permitAll()
+                .antMatchers("/oauth/callback/**", "/api/v1/oauth/**", "/api/v1/auth/reissue", "/test-api/v1/**").permitAll()
                 .anyRequest().authenticated() // 나머지는 인증된 유저면 허가
 
                 .and()
