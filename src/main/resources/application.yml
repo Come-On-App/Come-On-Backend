@@ -7,3 +7,5 @@ spring:
       dev: "dev,jwt-dev,oauth-dev"
       prod: "prod,jwt-prod,oauth-prod"
     active: local
+  messages:
+    basename: errors
