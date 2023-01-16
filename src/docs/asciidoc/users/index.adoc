@@ -17,3 +17,5 @@ include::social-login.adoc[]
 include::jwt-reissue.adoc[]
 
 include::my-details.adoc[]
+
+include::modify-me.adoc[]

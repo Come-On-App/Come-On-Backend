@@ -4,6 +4,7 @@ import com.comeon.backend.api.utils.RestDocsTestSupport;
 import com.comeon.backend.user.application.UserDetails;
 import com.comeon.backend.user.application.UserService;
 import com.comeon.backend.user.presentation.api.UserController;
+import com.comeon.backend.user.presentation.api.request.UserModifyRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -81,6 +82,57 @@ public class UserControllerTest extends RestDocsTestSupport {
                                     PayloadDocumentation.subsectionWithPath("role").type(JsonFieldType.STRING).description("유저의 권한"),
                                     PayloadDocumentation.subsectionWithPath("email").type(JsonFieldType.STRING).description("회원가입시 등록한 유저의 이메일 정보").optional(),
                                     PayloadDocumentation.subsectionWithPath("name").type(JsonFieldType.STRING).description("회원가입시 등록한 유저의 이름 정보")
+                            )
+                    )
+            );
+        }
+    }
+
+    @Nested
+    @DisplayName("내 정보 수정 API")
+    class modifyMe {
+
+        String endpoint = "/api/v1/users/me";
+
+        @Test
+        @DisplayName("given: 인증 필요, 유저 닉네임과 프로필 이미지 URL -> then: HTTP 200, success true 응답")
+        void success() throws Exception {
+            //given
+            UserModifyRequest request = new UserModifyRequest("new_nickname", "https://xxx.xxxx.xxxx/new-profile-image-url");
+
+            BDDMockito.willDoNothing()
+                    .given(userService).modifyUser(BDDMockito.anyLong(), BDDMockito.anyString(), BDDMockito.anyString());
+
+            //when
+            ResultActions perform = mockMvc.perform(
+                    RestDocumentationRequestBuilders.put(endpoint)
+                            .content(createJson(request))
+                            .header(HttpHeaders.AUTHORIZATION, "Bearer " + currentRequestATK.getToken())
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .characterEncoding(StandardCharsets.UTF_8)
+            );
+
+            //then
+            perform.andExpect(MockMvcResultMatchers.status().isOk())
+                    .andExpect(MockMvcResultMatchers.jsonPath("$.success").value(true));
+
+            // docs
+            perform.andDo(
+                    restDocs.document(
+                            HeaderDocumentation.requestHeaders(
+                                    getTitleAttributes("요청 헤더"),
+                                    authorizationHeaderDescriptor
+                            ),
+                            PayloadDocumentation.requestFields(
+                                    getTitleAttributes("요청 필드"),
+                                    PayloadDocumentation.fieldWithPath("nickname").type(JsonFieldType.STRING)
+                                            .description("변경할 유저의 닉네임. 닉네임을 변경하지 않을 시에는 기존 유저의 닉네임을 필수로 입력해주세요."),
+                                    PayloadDocumentation.fieldWithPath("profileImageUrl").type(JsonFieldType.STRING).optional()
+                                            .description("변경할 프로필 이미지 URL. 프로필 이미지 삭제시에는 해당 필드를 비워두면 됩니다.")
+                            ),
+                            PayloadDocumentation.responseFields(
+                                    getTitleAttributes("응답 필드"),
+                                    PayloadDocumentation.fieldWithPath("success").type(JsonFieldType.BOOLEAN).description("요청 처리 성공 여부")
                             )
                     )
             );
