@@ -17,4 +17,11 @@ public class UserService {
         User user = userRepository.findById(userId).orElseThrow();
         return new UserDetails(user);
     }
+
+    @Transactional
+    public void modifyUser(Long userId, String nickname, String profileImageUrl) {
+        User user = userRepository.findById(userId).orElseThrow();
+        user.updateNickname(nickname);
+        user.updateProfileImage(profileImageUrl);
+    }
 }
