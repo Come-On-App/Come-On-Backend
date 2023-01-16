@@ -75,7 +75,7 @@ public class JwtReissueControllerTest extends RestDocsTestSupport {
             perform.andDo(
                     restDocs.document(
                             PayloadDocumentation.requestFields(
-                                    Attributes.attributes(Attributes.key("title").value("요청 필드")),
+                                    getTitleAttributes("요청 필드"),
                                     PayloadDocumentation.subsectionWithPath("refreshToken").type(JsonFieldType.STRING).description("백엔드에서 발급한 유효한 리프레시 토큰. Bearer는 붙이지 않습니다."),
                                     PayloadDocumentation.subsectionWithPath("reissueRefreshTokenAlways").type(JsonFieldType.BOOLEAN).description("리프레시 토큰을 항상 재발급 할 것인지 여부. +\n" +
                                             "true로 설정하면, 리프레시 토큰 만료 기한이 7일 이상 남았어도 항상 재발급합니다. +\n" +
@@ -83,20 +83,20 @@ public class JwtReissueControllerTest extends RestDocsTestSupport {
                                             "해당 필드를 입력하지 않을 시, 기본값은 false 입니다.").optional()
                             ),
                             PayloadDocumentation.responseFields(
-                                    Attributes.attributes(Attributes.key("title").value("응답 필드")),
+                                    getTitleAttributes("응답 필드"),
                                     PayloadDocumentation.subsectionWithPath("accessToken").type(JsonFieldType.OBJECT).description("재발급된 유저의 엑세스 토큰"),
                                     PayloadDocumentation.subsectionWithPath("refreshToken").type(JsonFieldType.OBJECT).description("재발급된 유저의 리프레시 토큰").optional()
                             ),
                             PayloadDocumentation.responseFields(
                                     PayloadDocumentation.beneathPath("accessToken").withSubsectionId("ACC-TOKEN"),
-                                    Attributes.attributes(Attributes.key("title").value("accessToken의 각 필드")),
+                                    getTitleAttributes("accessToken의 각 필드"),
                                     PayloadDocumentation.fieldWithPath("token").type(JsonFieldType.STRING).description("토큰 값"),
                                     PayloadDocumentation.fieldWithPath("expiry").type(JsonFieldType.NUMBER).description("토큰의 만료 시간. UNIX TIME 형태."),
                                     PayloadDocumentation.fieldWithPath("userId").type(JsonFieldType.NUMBER).description("로그인 처리된 유저의 식별값")
                             ),
                             PayloadDocumentation.responseFields(
                                     PayloadDocumentation.beneathPath("refreshToken").withSubsectionId("REF-TOKEN"),
-                                    Attributes.attributes(Attributes.key("title").value("refreshToken의 각 필드")),
+                                    getTitleAttributes("refreshToken의 각 필드"),
                                     PayloadDocumentation.fieldWithPath("token").type(JsonFieldType.STRING).description("토큰 값"),
                                     PayloadDocumentation.fieldWithPath("expiry").type(JsonFieldType.NUMBER).description("토큰의 만료 시간. UNIX TIME 형태.")
                             )

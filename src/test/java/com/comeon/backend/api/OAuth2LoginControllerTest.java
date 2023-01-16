@@ -18,7 +18,6 @@ import org.springframework.http.MediaType;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.restdocs.payload.PayloadDocumentation;
-import org.springframework.restdocs.snippet.Attributes;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
@@ -79,24 +78,24 @@ public class OAuth2LoginControllerTest extends RestDocsTestSupport {
             perform.andDo(
                     restDocs.document(
                             PayloadDocumentation.requestFields(
-                                    Attributes.attributes(Attributes.key("title").value("요청 필드")),
+                                    getTitleAttributes("요청 필드"),
                                     PayloadDocumentation.subsectionWithPath("idToken").type(JsonFieldType.STRING).description("구글 로그인 성공시 응답으로 받은 ID-Token. Bearer는 붙이지 않습니다.")
                             ),
                             PayloadDocumentation.responseFields(
-                                    Attributes.attributes(Attributes.key("title").value("응답 필드")),
+                                    getTitleAttributes("응답 필드"),
                                     PayloadDocumentation.subsectionWithPath("accessToken").type(JsonFieldType.OBJECT).description("로그인 처리된 유저의 엑세스 토큰"),
                                     PayloadDocumentation.subsectionWithPath("refreshToken").type(JsonFieldType.OBJECT).description("로그인 처리된 유저의 리프레시 토큰")
                             ),
                             PayloadDocumentation.responseFields(
                                     PayloadDocumentation.beneathPath("accessToken").withSubsectionId("ACC-TOKEN"),
-                                    Attributes.attributes(Attributes.key("title").value("accessToken의 각 필드")),
+                                    getTitleAttributes("accessToken의 각 필드"),
                                     PayloadDocumentation.fieldWithPath("token").type(JsonFieldType.STRING).description("토큰 값"),
                                     PayloadDocumentation.fieldWithPath("expiry").type(JsonFieldType.NUMBER).description("토큰의 만료 시간. UNIX TIME 형태."),
                                     PayloadDocumentation.fieldWithPath("userId").type(JsonFieldType.NUMBER).description("로그인 처리된 유저의 식별값")
                             ),
                             PayloadDocumentation.responseFields(
                                     PayloadDocumentation.beneathPath("refreshToken").withSubsectionId("REF-TOKEN"),
-                                    Attributes.attributes(Attributes.key("title").value("refreshToken의 각 필드")),
+                                    getTitleAttributes("refreshToken의 각 필드,"),
                                     PayloadDocumentation.fieldWithPath("token").type(JsonFieldType.STRING).description("토큰 값"),
                                     PayloadDocumentation.fieldWithPath("expiry").type(JsonFieldType.NUMBER).description("토큰의 만료 시간. UNIX TIME 형태.")
                             )
@@ -197,24 +196,24 @@ public class OAuth2LoginControllerTest extends RestDocsTestSupport {
             perform.andDo(
                     restDocs.document(
                             PayloadDocumentation.requestFields(
-                                    Attributes.attributes(Attributes.key("title").value("요청 필드")),
+                                    getTitleAttributes("요청 필드"),
                                     PayloadDocumentation.subsectionWithPath("code").type(JsonFieldType.STRING).description("카카오 로그인 성공시 응답으로 받은 인가코드")
                             ),
                             PayloadDocumentation.responseFields(
-                                    Attributes.attributes(Attributes.key("title").value("응답 필드")),
+                                    getTitleAttributes("응답 필드"),
                                     PayloadDocumentation.subsectionWithPath("accessToken").type(JsonFieldType.OBJECT).description("로그인 처리된 유저의 엑세스 토큰"),
                                     PayloadDocumentation.subsectionWithPath("refreshToken").type(JsonFieldType.OBJECT).description("로그인 처리된 유저의 리프레시 토큰")
                             ),
                             PayloadDocumentation.responseFields(
                                     PayloadDocumentation.beneathPath("accessToken").withSubsectionId("ACC-TOKEN"),
-                                    Attributes.attributes(Attributes.key("title").value("accessToken의 각 필드")),
+                                    getTitleAttributes("accessToken의 각 필드"),
                                     PayloadDocumentation.fieldWithPath("token").type(JsonFieldType.STRING).description("토큰 값"),
                                     PayloadDocumentation.fieldWithPath("expiry").type(JsonFieldType.NUMBER).description("토큰의 만료 시간. UNIX TIME 형태."),
                                     PayloadDocumentation.fieldWithPath("userId").type(JsonFieldType.NUMBER).description("로그인 처리된 유저의 식별값")
                             ),
                             PayloadDocumentation.responseFields(
                                     PayloadDocumentation.beneathPath("refreshToken").withSubsectionId("REF-TOKEN"),
-                                    Attributes.attributes(Attributes.key("title").value("refreshToken의 각 필드")),
+                                    getTitleAttributes("refreshToken의 각 필드,"),
                                     PayloadDocumentation.fieldWithPath("token").type(JsonFieldType.STRING).description("토큰 값"),
                                     PayloadDocumentation.fieldWithPath("expiry").type(JsonFieldType.NUMBER).description("토큰의 만료 시간. UNIX TIME 형태.")
                             )
