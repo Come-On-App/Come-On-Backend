@@ -77,10 +77,10 @@ public class JwtReissueControllerTest extends RestDocsTestSupport {
                             PayloadDocumentation.requestFields(
                                     Attributes.attributes(Attributes.key("title").value("요청 필드")),
                                     PayloadDocumentation.subsectionWithPath("refreshToken").type(JsonFieldType.STRING).description("백엔드에서 발급한 유효한 리프레시 토큰. Bearer는 붙이지 않습니다."),
-                                    PayloadDocumentation.subsectionWithPath("reissueRefreshTokenAlways").type(JsonFieldType.BOOLEAN).description("리프레시 토큰을 항상 재발급 할 것인지 여부." +
-                                            " true로 설정하면, 리프레시 토큰 만료 기한이 7일 이상 남았어도 항상 재발급합니다." +
-                                            " false로 설정하면, 리프레시 토큰 만료 기한이 7일 이상으로 남으면 재발급하지 않고 7일 미만일 때 자동으로 재발급합니다." +
-                                            " 해당 필드를 입력하지 않을 시, 기본값은 false 입니다.").optional()
+                                    PayloadDocumentation.subsectionWithPath("reissueRefreshTokenAlways").type(JsonFieldType.BOOLEAN).description("리프레시 토큰을 항상 재발급 할 것인지 여부. +\n" +
+                                            "true로 설정하면, 리프레시 토큰 만료 기한이 7일 이상 남았어도 항상 재발급합니다. +\n" +
+                                            "false로 설정하면, 리프레시 토큰 만료 기한이 7일 이상으로 남으면 재발급하지 않고 7일 미만일 때 자동으로 재발급합니다. +\n" +
+                                            "해당 필드를 입력하지 않을 시, 기본값은 false 입니다.").optional()
                             ),
                             PayloadDocumentation.responseFields(
                                     Attributes.attributes(Attributes.key("title").value("응답 필드")),

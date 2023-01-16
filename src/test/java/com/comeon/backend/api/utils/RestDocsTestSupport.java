@@ -90,7 +90,7 @@ public class RestDocsTestSupport extends ControllerUnitTest {
 
     protected Snippet[] validErrorSnippets = {errorResponseSnippet, errorResponseDotErrorsSnippet};
 
-    protected HeaderDescriptor authorizationHeaderDescriptor = HeaderDocumentation.headerWithName(HttpHeaders.AUTHORIZATION).description("유저의 엑세스 토큰. 토큰 앞에 'Bearer '를 붙여줘야 합니다. ex) Bearer {access-token}\n자세한 내용은 요청 예시를 참고해주세요.");
+    protected HeaderDescriptor authorizationHeaderDescriptor = HeaderDocumentation.headerWithName(HttpHeaders.AUTHORIZATION).description("유저의 엑세스 토큰. 토큰 앞에 'Bearer '를 붙여줘야 합니다. +\nex) Bearer {access-token} +\n자세한 내용은 요청 예시를 참고해주세요.");
 
     @NotNull
     protected Map<String, Object> getTitleAttributes(String titleValue) {
