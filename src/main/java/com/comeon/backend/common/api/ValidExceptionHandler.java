@@ -26,8 +26,6 @@ public class ValidExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> validExceptionHandle(MethodArgumentNotValidException e) {
-        log.error("Valid Fail", e);
-
         List<ErrorResponse.ValidError> errors = e.getBindingResult().getFieldErrors().stream()
                 .map(fieldError -> new ErrorResponse.ValidError(fieldError, getMessage(fieldError)))
                 .collect(Collectors.toList());
@@ -37,8 +35,15 @@ public class ValidExceptionHandler {
                 .collect(Collectors.toList())
         );
 
-        ErrorCode errorCode = CommonErrorCode.REQUEST_VALIDATION_FAIL;
+        if (e.getTarget() != null) {
+            log.error(
+                    "Valid Fail. TargetClass: {}, Error Fields: {}",
+                    e.getTarget().getClass().getSimpleName(),
+                    errors.stream().map(ErrorResponse.ValidError::getField).collect(Collectors.toList())
+            );
+        }
 
+        ErrorCode errorCode = CommonErrorCode.REQUEST_VALIDATION_FAIL;
         return ResponseEntity.status(errorCode.getHttpStatus())
                 .body(
                         ErrorResponse.builder()
