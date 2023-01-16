@@ -5,7 +5,6 @@ import com.comeon.backend.config.S3MockConfig;
 import com.comeon.backend.image.infrastructure.S3FileManager;
 import com.comeon.backend.image.presentation.api.ImageFileController;
 import org.apache.http.entity.ContentType;
-import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -14,20 +13,17 @@ import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.restdocs.headers.HeaderDescriptor;
 import org.springframework.restdocs.headers.HeaderDocumentation;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.restdocs.payload.PayloadDocumentation;
 import org.springframework.restdocs.request.RequestDocumentation;
-import org.springframework.restdocs.snippet.Attributes;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.util.ResourceUtils;
 
 import java.io.FileInputStream;
 import java.nio.charset.StandardCharsets;
-import java.util.Map;
 
 @Import({
         S3MockConfig.class,

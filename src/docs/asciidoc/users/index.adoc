@@ -15,3 +15,5 @@ endif::[]
 include::social-login.adoc[]
 
 include::jwt-reissue.adoc[]
+
+include::my-details.adoc[]
