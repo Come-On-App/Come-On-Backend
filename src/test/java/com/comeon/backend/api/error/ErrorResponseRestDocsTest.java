@@ -20,7 +20,7 @@ import java.util.Map;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 
 @WebMvcTest(ErrorRestDocsController.class)
-public class ErrorCodeRestDocsTest extends RestDocsTestSupport {
+public class ErrorResponseRestDocsTest extends RestDocsTestSupport {
 
     @Nested
     @DisplayName("API 오류 응답")
@@ -143,6 +143,36 @@ public class ErrorCodeRestDocsTest extends RestDocsTestSupport {
                                     RestDocsUtil.customResponseFields(
                                             "error-code-response",
                                             Attributes.attributes(Attributes.key("title").value("이미지 오류 코드")),
+                                            enumConvertFieldDescriptor(response)
+                                    )
+                            )
+                    );
+        }
+
+        @Test
+        @DisplayName("모임 오류 코드")
+        void meetings() throws Exception {
+            //when
+            ResultActions perform = mockMvc.perform(
+                    RestDocumentationRequestBuilders.get("/error/code/meetings")
+                            .accept(MediaType.APPLICATION_JSON)
+            );
+
+            Map<Integer, String> response = objectMapper.readValue(
+                    perform.andReturn()
+                            .getResponse()
+                            .getContentAsByteArray(),
+                    new TypeReference<>() {
+                    }
+            );
+
+            // docs
+            perform.andExpect(MockMvcResultMatchers.status().isOk())
+                    .andDo(
+                            restDocs.document(
+                                    RestDocsUtil.customResponseFields(
+                                            "error-code-response",
+                                            Attributes.attributes(Attributes.key("title").value("모임 오류 코드")),
                                             enumConvertFieldDescriptor(response)
                                     )
                             )

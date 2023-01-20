@@ -1,9 +1,13 @@
 package com.comeon.backend.api;
 
 import com.comeon.backend.api.utils.RestDocsTestSupport;
-import com.comeon.backend.meeting.application.MeetingService;
+import com.comeon.backend.meeting.command.application.MeetingCommandService;
+import com.comeon.backend.meeting.command.application.MeetingMemberCommandService;
+import com.comeon.backend.meeting.command.application.MeetingMemberSummary;
+import com.comeon.backend.meeting.command.domain.MeetingMemberRole;
 import com.comeon.backend.meeting.presentation.api.MeetingController;
 import com.comeon.backend.meeting.presentation.api.request.MeetingAddRequest;
+import com.comeon.backend.meeting.presentation.api.request.MeetingJoinRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -26,7 +30,10 @@ import java.time.LocalDate;
 public class MeetingControllerTest extends RestDocsTestSupport {
 
     @MockBean
-    MeetingService meetingService;
+    MeetingCommandService meetingCommandService;
+
+    @MockBean
+    MeetingMemberCommandService meetingMemberCommandService;
 
     @Nested
     @DisplayName("모임 등록 API")
@@ -46,7 +53,7 @@ public class MeetingControllerTest extends RestDocsTestSupport {
             );
 
             long meetingId = 28L;
-            BDDMockito.given(meetingService.addMeeting(BDDMockito.anyLong(), BDDMockito.anyString(), BDDMockito.anyString(), BDDMockito.any(), BDDMockito.any()))
+            BDDMockito.given(meetingCommandService.addMeeting(BDDMockito.anyLong(), BDDMockito.anyString(), BDDMockito.anyString(), BDDMockito.any(), BDDMockito.any()))
                     .willReturn(meetingId);
 
             //when
@@ -79,6 +86,70 @@ public class MeetingControllerTest extends RestDocsTestSupport {
                             PayloadDocumentation.responseFields(
                                     getTitleAttributes("응답 필드"),
                                     PayloadDocumentation.fieldWithPath("meetingId").type(JsonFieldType.NUMBER).description("생성된 모임의 식별값")
+                            )
+                    )
+            );
+        }
+    }
+
+    @Nested
+    @DisplayName("모임 참가 API")
+    class meetingJoin {
+
+        String endpoint = "/api/v1/meetings/join";
+
+        @Test
+        @DisplayName("given: 인증 필요, 유효한 모임 코드 -> then: HTTP 200, meetingId, meetingMember(memberId, role)")
+        void join() throws Exception {
+            //given
+            MeetingJoinRequest request = new MeetingJoinRequest("EF25FK");
+
+            // mocking
+            long meetingIdMock = 300L;
+            long memberIdMock = 4777L;
+            String memberRoleMock = MeetingMemberRole.PARTICIPANT.name();
+            BDDMockito.given(meetingMemberCommandService.joinMeeting(BDDMockito.anyLong(), BDDMockito.anyString()))
+                    .willReturn(
+                            new MeetingMemberSummary(meetingIdMock, memberIdMock, memberRoleMock)
+                    );
+
+            //when
+            ResultActions perform = mockMvc.perform(
+                    RestDocumentationRequestBuilders.post(endpoint)
+                            .header(HttpHeaders.AUTHORIZATION, "Bearer " + currentRequestATK.getToken())
+                            .content(createJson(request))
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .characterEncoding(StandardCharsets.UTF_8)
+            );
+
+            //then
+            perform.andExpect(MockMvcResultMatchers.status().isOk())
+                    .andExpect(MockMvcResultMatchers.jsonPath("$.meetingId").value(meetingIdMock))
+                    .andExpect(MockMvcResultMatchers.jsonPath("$.meetingMember").exists())
+                    .andExpect(MockMvcResultMatchers.jsonPath("$.meetingMember.memberId").value(memberIdMock))
+                    .andExpect(MockMvcResultMatchers.jsonPath("$.meetingMember.role").value(memberRoleMock));
+
+            // docs
+            perform.andDo(
+                    restDocs.document(
+                            HeaderDocumentation.requestHeaders(
+                                    getTitleAttributes("요청 헤더"),
+                                    authorizationHeaderDescriptor
+                            ),
+                            PayloadDocumentation.requestFields(
+                                    getTitleAttributes("요청 필드"),
+                                    PayloadDocumentation.fieldWithPath("entryCode").type(JsonFieldType.STRING).description("모임 입장 코드")
+                            ),
+                            PayloadDocumentation.responseFields(
+                                    getTitleAttributes("응답 필드"),
+                                    PayloadDocumentation.fieldWithPath("meetingId").type(JsonFieldType.NUMBER).description("가입한 모임의 식별값"),
+                                    PayloadDocumentation.subsectionWithPath("meetingMember").type(JsonFieldType.OBJECT).description("가입된 모임 회원 정보")
+                            ),
+                            PayloadDocumentation.responseFields(
+                                    PayloadDocumentation.beneathPath("meetingMember").withSubsectionId("MEETING-MEMBER"),
+                                    getTitleAttributes("meetingMember의 각 필드"),
+                                    PayloadDocumentation.fieldWithPath("memberId").type(JsonFieldType.NUMBER).description("해당 모임에서의 회원 번호. 유저 식별값인 user-id와 회원 번호인 member-id는 서로 다른 값 입니다."),
+                                    PayloadDocumentation.fieldWithPath("role").type(JsonFieldType.STRING).description("해당 모임에서 유저의 권한")
                             )
                     )
             );
