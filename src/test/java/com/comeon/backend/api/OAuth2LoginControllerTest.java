@@ -2,10 +2,10 @@ package com.comeon.backend.api;
 
 import com.comeon.backend.api.utils.RestDocsTestSupport;
 import com.comeon.backend.common.jwt.TokenType;
-import com.comeon.backend.user.application.GoogleUserService;
-import com.comeon.backend.user.application.KakaoUserService;
-import com.comeon.backend.user.application.Tokens;
-import com.comeon.backend.user.domain.Role;
+import com.comeon.backend.user.command.application.GoogleUserService;
+import com.comeon.backend.user.command.application.KakaoUserService;
+import com.comeon.backend.user.command.application.Tokens;
+import com.comeon.backend.user.command.domain.Role;
 import com.comeon.backend.user.presentation.api.OAuth2LoginController;
 import com.comeon.backend.user.presentation.api.request.GoogleOAuth2LoginRequest;
 import com.comeon.backend.user.presentation.api.request.KakaoOAuth2LoginRequest;

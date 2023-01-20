@@ -6,7 +6,7 @@ import com.comeon.backend.common.security.JwtAccessDeniedHandler;
 import com.comeon.backend.common.security.JwtAuthenticationEntryPoint;
 import com.comeon.backend.common.security.JwtAuthenticationFilter;
 import com.comeon.backend.common.security.JwtAuthenticationProvider;
-import com.comeon.backend.user.domain.Role;
+import com.comeon.backend.user.command.domain.Role;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;

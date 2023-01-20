@@ -1,10 +1,11 @@
 package com.comeon.backend.api;
 
 import com.comeon.backend.api.utils.RestDocsTestSupport;
-import com.comeon.backend.user.application.UserDetails;
-import com.comeon.backend.user.application.UserService;
+import com.comeon.backend.user.command.application.UserCommandService;
 import com.comeon.backend.user.presentation.api.UserController;
 import com.comeon.backend.user.presentation.api.request.UserModifyRequest;
+import com.comeon.backend.user.query.application.UserQueryService;
+import com.comeon.backend.user.query.dto.UserDetails;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -26,7 +27,10 @@ import java.nio.charset.StandardCharsets;
 public class UserControllerTest extends RestDocsTestSupport {
 
     @MockBean
-    UserService userService;
+    UserCommandService userCommandService;
+
+    @MockBean
+    UserQueryService userQueryService;
 
     @Nested
     @DisplayName("내 정보 조회 API")
@@ -38,7 +42,7 @@ public class UserControllerTest extends RestDocsTestSupport {
         @DisplayName("given: 인증 필요, -> then: HTTP 200, 요청한 유저 식별값에 매칭되는 유저 정보를 반환")
         void success() throws Exception {
             //given
-            BDDMockito.given(userService.findUserDetails(BDDMockito.anyLong()))
+            BDDMockito.given(userQueryService.findUserDetails(BDDMockito.anyLong()))
                     .willReturn(
                             new UserDetails(
                                     currentRequestATK.getClaims().getUserId(),
@@ -101,7 +105,7 @@ public class UserControllerTest extends RestDocsTestSupport {
             UserModifyRequest request = new UserModifyRequest("new_nickname", "https://xxx.xxxx.xxxx/new-profile-image-url");
 
             BDDMockito.willDoNothing()
-                    .given(userService).modifyUser(BDDMockito.anyLong(), BDDMockito.anyString(), BDDMockito.anyString());
+                    .given(userCommandService).modifyUser(BDDMockito.anyLong(), BDDMockito.anyString(), BDDMockito.anyString());
 
             //when
             ResultActions perform = mockMvc.perform(
