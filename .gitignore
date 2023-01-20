@@ -36,4 +36,5 @@ out/
 ### VS Code ###
 .vscode/
 
-local-db/db/**
+local-db/write/db/**
+local-db/read/db/**

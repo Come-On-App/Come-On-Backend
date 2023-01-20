@@ -1,8 +1,8 @@
 package com.comeon.backend.user.presentation.api;
 
-import com.comeon.backend.user.application.GoogleUserService;
-import com.comeon.backend.user.application.KakaoUserService;
-import com.comeon.backend.user.application.Tokens;
+import com.comeon.backend.user.command.application.GoogleUserService;
+import com.comeon.backend.user.command.application.KakaoUserService;
+import com.comeon.backend.user.command.application.Tokens;
 import com.comeon.backend.user.presentation.api.request.KakaoOAuth2LoginRequest;
 import com.comeon.backend.user.presentation.api.request.GoogleOAuth2LoginRequest;
 import com.comeon.backend.user.presentation.api.response.AppAuthTokensResponse;
@@ -24,13 +24,13 @@ public class OAuth2LoginController {
     public AppAuthTokensResponse googleOAuth2Login(@Validated @RequestBody GoogleOAuth2LoginRequest request) {
         Tokens tokens = googleUserService.login(request.getIdToken());
 
-        return AppAuthTokenResponseUtil.generateResponse(tokens);
+        return AppAuthTokensResponse.generateResponse(tokens);
     }
 
     @PostMapping("/kakao")
     public AppAuthTokensResponse kakaoOAuth2Login(@Validated @RequestBody KakaoOAuth2LoginRequest request) {
         Tokens tokens = kakaoUserService.login(request.getCode());
 
-        return AppAuthTokenResponseUtil.generateResponse(tokens);
+        return AppAuthTokensResponse.generateResponse(tokens);
     }
 }

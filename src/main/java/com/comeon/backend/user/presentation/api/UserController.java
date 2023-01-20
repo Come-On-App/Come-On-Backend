@@ -1,8 +1,9 @@
 package com.comeon.backend.user.presentation.api;
 
 import com.comeon.backend.common.security.JwtPrincipal;
-import com.comeon.backend.user.application.UserDetails;
-import com.comeon.backend.user.application.UserService;
+import com.comeon.backend.user.query.application.UserQueryService;
+import com.comeon.backend.user.query.dto.UserDetails;
+import com.comeon.backend.user.command.application.UserCommandService;
 import com.comeon.backend.user.presentation.api.request.UserModifyRequest;
 import com.comeon.backend.user.presentation.api.response.UserDetailsResponse;
 import com.comeon.backend.user.presentation.api.response.UserModifyResponse;
@@ -17,11 +18,12 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/users")
 public class UserController {
 
-    private final UserService userService;
+    private final UserCommandService userCommandService;
+    private final UserQueryService userQueryService;
 
     @GetMapping("/me")
     public UserDetailsResponse myDetails(@AuthenticationPrincipal JwtPrincipal jwtPrincipal) {
-        UserDetails userDetails = userService.findUserDetails(jwtPrincipal.getUserId());
+        UserDetails userDetails = userQueryService.findUserDetails(jwtPrincipal.getUserId());
 
         return new UserDetailsResponse(
                 userDetails.getUserId(),
@@ -36,7 +38,7 @@ public class UserController {
     @PutMapping("/me")
     public UserModifyResponse modifyMe(@AuthenticationPrincipal JwtPrincipal jwtPrincipal,
                                        @RequestBody UserModifyRequest request) {
-        userService.modifyUser(jwtPrincipal.getUserId(), request.getNickname(), request.getProfileImageUrl());
+        userCommandService.modifyUser(jwtPrincipal.getUserId(), request.getNickname(), request.getProfileImageUrl());
         return new UserModifyResponse();
     }
 }

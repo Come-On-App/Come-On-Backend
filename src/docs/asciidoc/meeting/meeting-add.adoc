@@ -1,0 +1,30 @@
+:doctype: book
+:icons: font
+:sectlinks:
+:docinfo: shared-head
+
+[[meeting-add]]
+== 모임 등록
+
+POST /api/v1/meetings
+
+=== API Spec
+==== 요청 헤더
+include::{snippets}/meeting-add/success/request-headers.adoc[]
+
+==== 요청 필드
+include::{snippets}/meeting-add/success/request-fields.adoc[]
+
+==== 응답 필드
+include::{snippets}/meeting-add/success/response-fields.adoc[]
+
+=== 요청/응답 예시
+==== 요청 예시
+include::{snippets}/meeting-add/success/http-request.adoc[]
+
+==== 응답 예시
+include::{snippets}/meeting-add/success/http-response.adoc[]
+
+오류 발생시 아래 "오류 코드 확인하기" 링크에서 모임 관련 오류(`3XXX`)를 확인해주세요.
+
+* link:../errors/error-code.html[오류 코드 확인하기,role="error-code-popup"]

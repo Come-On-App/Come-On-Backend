@@ -1,0 +1,19 @@
+version: "3.8"
+services:
+  mysql:
+    container_name: local-read-comeon-app-mysql
+    image: mysql
+    volumes:
+      - ./db/var/lib/mysql:/var/lib/mysql
+    ports:
+      - "3307:3306"
+    env_file: .env
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+      - --character-set-client-handshake=FALSE
+
+networks:
+  default:
+    name: local-comeon-app-backend
+    external: true

@@ -8,6 +8,8 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.MessageSourceResolvable;
 import org.springframework.context.NoSuchMessageException;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindException;
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -26,19 +28,9 @@ public class ValidExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> validExceptionHandle(MethodArgumentNotValidException e) {
-        log.error("Valid Fail", e);
-
-        List<ErrorResponse.ValidError> errors = e.getBindingResult().getFieldErrors().stream()
-                .map(fieldError -> new ErrorResponse.ValidError(fieldError, getMessage(fieldError)))
-                .collect(Collectors.toList());
-        errors.addAll(
-                e.getBindingResult().getGlobalErrors().stream()
-                .map(objectError -> new ErrorResponse.ValidError(getMessage(objectError)))
-                .collect(Collectors.toList())
-        );
+        List<ErrorResponse.ValidError> errors = parseValidErrors(e);
 
         ErrorCode errorCode = CommonErrorCode.REQUEST_VALIDATION_FAIL;
-
         return ResponseEntity.status(errorCode.getHttpStatus())
                 .body(
                         ErrorResponse.builder()
@@ -47,6 +39,44 @@ public class ValidExceptionHandler {
                                 .errors(errors)
                                 .build()
                 );
+    }
+
+    @ExceptionHandler(BindException.class)
+    public ResponseEntity<ErrorResponse> bindExceptionHandle(BindException e) {
+        List<ErrorResponse.ValidError> errors = parseValidErrors(e);
+
+        CommonErrorCode errorCode = CommonErrorCode.BIND_ERROR;
+        return ResponseEntity.status(errorCode.getHttpStatus())
+                .body(
+                        ErrorResponse.builder()
+                                .errorCode(errorCode.getCode())
+                                .errorDescription(errorCode.getDescription())
+                                .errors(errors)
+                                .build()
+                );
+    }
+
+    private List<ErrorResponse.ValidError> parseValidErrors(BindException e) {
+        BindingResult bindingResult = e.getBindingResult();
+        List<ErrorResponse.ValidError> errors = bindingResult.getFieldErrors().stream()
+                .map(fieldError -> new ErrorResponse.ValidError(fieldError, getMessage(fieldError)))
+                .collect(Collectors.toList());
+        errors.addAll(
+                bindingResult.getGlobalErrors().stream()
+                        .map(objectError -> new ErrorResponse.ValidError(getMessage(objectError)))
+                        .collect(Collectors.toList())
+        );
+
+        Object target = e.getTarget();
+        if (target != null) {
+            log.error(
+                    "Valid Fail. TargetClass: {}, Error Fields: {}",
+                    target.getClass().getSimpleName(),
+                    errors.stream().map(ErrorResponse.ValidError::getField).collect(Collectors.toList())
+            );
+        }
+
+        return errors;
     }
 
     private String getMessage(MessageSourceResolvable resolvable) {

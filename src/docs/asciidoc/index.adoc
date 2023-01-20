@@ -14,6 +14,8 @@ endif::[]
 
 == link:errors/index.html[오류 응답 Docs, window=blank]
 
+== link:image/index.html[Image API Docs, window=blank]
+
 == link:users/index.html[User API Docs, window=blank]
 
-== link:image/index.html[Image API Docs, window=blank]
+== link:meeting/index.html[Meeting API Docs, window=blank]
