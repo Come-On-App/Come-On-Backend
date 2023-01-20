@@ -28,28 +28,36 @@ public class MeetingCommandService {
         return meetingRepository.saveMeeting(meeting).getId();
     }
 
-    public String renewEntryCode(Long meetingId, Long userId) {
+    public EntryCodeDetails renewEntryCode(Long meetingId, Long userId) {
         Meeting meeting = meetingRepository.findMeetingBy(meetingId)
                 .orElseThrow(() -> new RestApiException(MeetingErrorCode.MEETING_NOT_EXIST));
         checkHostUser(meetingId, userId);
         MeetingEntryCode entryCode = renewCode(meeting);
-        return entryCode.getCode();
+        return new EntryCodeDetails(meetingId, entryCode.getCode(), entryCode.getLastModifiedDate().plusDays(7));
+    }
+
+    private void checkHostUser(Long meetingId, Long userId) {
+        meetingRepository.findMeetingMemberBy(meetingId, userId)
+                .ifPresentOrElse(
+                        meetingMember -> {
+                            // 모임에 가입된 유저이면 권한 확인
+                            if (meetingMember.getRole() != MeetingMemberRole.HOST) {
+                                throw new RestApiException(MeetingErrorCode.NO_AUTHORITIES);
+                            }
+                        },
+                        // 그렇지 않으면 예외 발생
+                        () -> {
+                            throw new RestApiException(MeetingErrorCode.NOT_MEMBER);
+                        }
+                );
     }
 
     private MeetingEntryCode renewCode(Meeting meeting) {
         MeetingEntryCode entryCode = meetingRepository.findEntryCodeBy(meeting.getId())
                 .orElse(MeetingEntryCode.createWithRandomCode(meeting));
-        if (entryCode.getId() == null) {
-            meetingRepository.saveEntryCode(entryCode);
-        } else {
+        if (entryCode.getId() != null) {
             entryCode.renewCode();
         }
-        return entryCode;
-    }
-
-    private void checkHostUser(Long meetingId, Long userId) {
-        meetingRepository.findMeetingMemberBy(meetingId, userId)
-                .filter(meetingMember -> meetingMember.getRole() == MeetingMemberRole.HOST)
-                .orElseThrow(() -> new RestApiException(MeetingErrorCode.NO_AUTHORITIES));
+        return meetingRepository.saveEntryCodeAndFlush(entryCode);
     }
 }

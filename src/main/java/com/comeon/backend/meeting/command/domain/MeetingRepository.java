@@ -11,4 +11,5 @@ public interface MeetingRepository {
     Optional<MeetingMember> findMeetingMemberBy(Long meetingId, Long userId);
     Optional<MeetingEntryCode> findEntryCodeBy(Long meetingId);
     MeetingEntryCode saveEntryCode(MeetingEntryCode entryCode);
+    MeetingEntryCode saveEntryCodeAndFlush(MeetingEntryCode entryCode);
 }

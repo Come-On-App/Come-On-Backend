@@ -9,7 +9,6 @@ import java.util.Optional;
 
 import static com.comeon.backend.meeting.command.domain.QMeetingEntryCode.meetingEntryCode;
 
-
 @Component
 @RequiredArgsConstructor
 public class MeetingRepositoryImpl implements MeetingRepository {
@@ -33,7 +32,7 @@ public class MeetingRepositoryImpl implements MeetingRepository {
     public Optional<Meeting> findMeetingBy(String entryCode) {
         Meeting meeting = jpaQueryFactory.select(meetingEntryCode.meeting)
                 .from(meetingEntryCode)
-                .leftJoin(meetingEntryCode.meeting, QMeeting.meeting).fetchJoin()
+                .leftJoin(meetingEntryCode.meeting, QMeeting.meeting)
                 .where(meetingEntryCode.code.eq(entryCode))
                 .fetchOne();
 
@@ -63,5 +62,10 @@ public class MeetingRepositoryImpl implements MeetingRepository {
     @Override
     public MeetingEntryCode saveEntryCode(MeetingEntryCode entryCode) {
         return meetingEntryCodeJpaRepository.save(entryCode);
+    }
+
+    @Override
+    public MeetingEntryCode saveEntryCodeAndFlush(MeetingEntryCode entryCode) {
+        return meetingEntryCodeJpaRepository.saveAndFlush(entryCode);
     }
 }

@@ -1,6 +1,7 @@
 package com.comeon.backend.meeting.presentation.api;
 
 import com.comeon.backend.common.security.JwtPrincipal;
+import com.comeon.backend.meeting.command.application.EntryCodeDetails;
 import com.comeon.backend.meeting.command.application.MeetingCommandService;
 import com.comeon.backend.meeting.presentation.api.response.MeetingEntryCodeDetailResponse;
 import com.comeon.backend.meeting.presentation.api.response.MeetingEntryCodeRenewResponse;
@@ -30,7 +31,7 @@ public class MeetingEntryCodeController {
     @PostMapping
     public MeetingEntryCodeRenewResponse entryCodeRenew(@AuthenticationPrincipal JwtPrincipal jwtPrincipal,
                                                         @PathVariable Long meetingId) {
-        String entryCode = meetingCommandService.renewEntryCode(meetingId, jwtPrincipal.getUserId());
-        return new MeetingEntryCodeRenewResponse(entryCode);
+        EntryCodeDetails entryCodeDetails = meetingCommandService.renewEntryCode(meetingId, jwtPrincipal.getUserId());
+        return new MeetingEntryCodeRenewResponse(entryCodeDetails.getMeetingId(), entryCodeDetails.getEntryCode(), entryCodeDetails.getExpiration());
     }
 }
