@@ -1,7 +1,7 @@
 package com.comeon.backend.user.presentation.api;
 
-import com.comeon.backend.user.application.JwtReissueService;
-import com.comeon.backend.user.application.Tokens;
+import com.comeon.backend.user.command.application.JwtReissueService;
+import com.comeon.backend.user.command.application.Tokens;
 import com.comeon.backend.user.presentation.api.request.JwtReissueRequest;
 import com.comeon.backend.user.presentation.api.response.AppAuthTokensResponse;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +27,6 @@ public class JwtReissueController {
                 request.getReissueRefreshTokenAlways()
         );
 
-        return AppAuthTokenResponseUtil.generateResponse(tokens);
+        return AppAuthTokensResponse.generateResponse(tokens);
     }
 }
