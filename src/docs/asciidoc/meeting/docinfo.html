@@ -1,0 +1,49 @@
+<script>
+    function ready(callbackFunc) {
+        if (document.readyState !== 'loading') {
+            callbackFunc();
+        } else if (document.addEventListener) {
+            document.addEventListener('DOMContentLoaded', callbackFunc);
+        } else {
+            document.attachEvent('onreadystatechange', function () {
+                if (document.readyState === 'complete') {
+                    callbackFunc();
+                }
+            });
+        }
+    }
+
+    function openPopup(event) {
+
+        const target = event.target;
+        let width
+        let height
+        let left
+        let top
+
+        if (target.className === "popup") {
+            width = 500
+            height = 600
+        } else if (target.className === "update-popup" || target.className === "error-code-popup") {
+            // event.preventDefault();
+            // const screenX = event.screenX;
+            // const screenY = event.screenY;
+            // window.open(target.href, target.text, `left=${screenX}, top=${screenY}, width=700, height=1000, status=no, menubar=no, toolbar=no, resizable=no`);
+            width = 700
+            height = 800
+        } else {
+            return
+        }
+
+        left = Math.round(window.screenX + (window.outerWidth / 2) - (width / 2))
+        top = Math.round(window.screenY + (window.outerHeight / 2) - (height / 2))
+
+        event.preventDefault();
+        window.open(target.href, target.text, `left=${left}, top=${top}, width=${width}, height=${height}, status=no, menubar=no, toolbar=no, resizable=no`);
+    }
+
+    ready(function () {
+        const el = document.getElementById("content");
+        el.addEventListener("click", event => openPopup(event), false);
+    });
+</script>
