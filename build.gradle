@@ -127,6 +127,10 @@ asciidoctor.doLast {
     }
 }
 
+bootJar {
+    dependsOn asciidoctor
+}
+
 def querydslDir = "$buildDir/generated/querydsl"
 
 querydsl {

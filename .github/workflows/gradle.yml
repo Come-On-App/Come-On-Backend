@@ -37,9 +37,6 @@ jobs:
     # 테스트 수행
     - name: Test
       run: ./gradlew clean test -Pprofile=test
-    # 테스트 기반으로 API 문서 생성
-    - name: Generate REST API Documents
-      run: ./gradlew asciidoctor
     # 프로젝트 빌드
     - name: Build
       run: ./gradlew bootJar
@@ -50,3 +47,18 @@ jobs:
       run: |
         docker login --username=${{ secrets.YOO_DOCKERHUB_USERNAME }} --password=${{ secrets.YOO_DOCKERHUB_PASSWORD }}
         docker buildx build --platform linux/arm64/v8,linux/amd64 --tag ${{ secrets.YOO_DOCKERHUB_USERNAME }}/comeon-backend:latest --push .
+
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Docker image pull and run
+        uses: appleboy/ssh-action@v0.1.7
+        with:
+          host: ${{ secrets.DEV_HOST }}
+          username: ${{ secrets.DEV_USERNAME }}
+          key: ${{ secrets.DEV_PRIVATE_KEY }}
+          port: ${{ secrets.DEV_PORT }}
+          script: |
+            docker compose -f ~/yoo_dev/comeon-app-backend/docker-compose.yml down
+            docker image rm ${{ secrets.YOO_DOCKERHUB_USERNAME }}/comeon-backend
+            docker compose -f ~/yoo_dev/comeon-app-backend/docker-compose.yml up -d --no-recreate
