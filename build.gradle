@@ -112,7 +112,7 @@ asciidoctor {
     inputs.dir snippetsDir
 
     sources{
-        include('**/index.adoc','**/errors/*.adoc','**/update/*.adoc','**/users/*.adoc')
+        include('**/index.adoc','**/errors/*.adoc','**/response/*.adoc','**/update/*.adoc','**/enums/*.adoc','**/users/*.adoc','**/image/*.adoc','**/meeting/*.adoc')
     }
 
     baseDirFollowsSourceFile()

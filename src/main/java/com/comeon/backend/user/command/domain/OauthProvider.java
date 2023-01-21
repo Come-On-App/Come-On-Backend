@@ -7,13 +7,13 @@ public enum OauthProvider {
     APPLE("애플"),
     ;
 
-    private final String name;
+    private final String description;
 
-    OauthProvider(String name) {
-        this.name = name;
+    OauthProvider(String description) {
+        this.description = description;
     }
 
-    public String getName() {
-        return name;
+    public String getDescription() {
+        return description;
     }
 }
