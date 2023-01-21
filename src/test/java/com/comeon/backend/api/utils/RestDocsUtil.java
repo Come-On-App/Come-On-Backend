@@ -41,8 +41,10 @@ public class RestDocsUtil {
     @Getter
     @RequiredArgsConstructor
     public enum DocUrl {
-        COMMON_ERROR_CODE("errors", "common-error-code", "공통 오류 코드"),
-        USER_ERROR_CODE("errors", "user-error-code", "유저 오류 코드"),
+        OAUTH_PROVIDER("../enums", "oauth-provider-code", "소셜 로그인 서비스 벤더 코드"),
+        USER_ROLE("../enums", "user-role-code", "유저 권한 코드"),
+        USER_STATUS("../enums", "user-status-code", "유저 상태 코드"),
+        MEETING_MEMBER_ROLE("../enums", "meeting-member-role-code", "모임 회원 권한 코드"),
         ;
 
         private final String dirName;

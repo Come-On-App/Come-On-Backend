@@ -15,8 +15,8 @@ public class SliceResponse<T> {
 
     private int currentSlice;
     private int sizePerSlice;
-    private boolean isFirst;
-    private boolean isLast;
+    private boolean first;
+    private boolean last;
     private boolean hasPrevious;
     private boolean hasNext;
     private int contentsCount;
@@ -26,8 +26,8 @@ public class SliceResponse<T> {
         return SliceResponse.<T>builder()
                 .currentSlice(slice.getNumber())
                 .sizePerSlice(slice.getSize())
-                .isFirst(slice.isFirst())
-                .isLast(slice.isLast())
+                .first(slice.isFirst())
+                .last(slice.isLast())
                 .hasPrevious(slice.hasPrevious())
                 .hasNext(slice.hasNext())
                 .contentsCount(slice.getNumberOfElements())

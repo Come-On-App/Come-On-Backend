@@ -1,6 +1,7 @@
 package com.comeon.backend.api;
 
 import com.comeon.backend.api.utils.RestDocsTestSupport;
+import com.comeon.backend.api.utils.RestDocsUtil;
 import com.comeon.backend.user.command.application.UserCommandService;
 import com.comeon.backend.user.presentation.api.UserController;
 import com.comeon.backend.user.presentation.api.request.UserModifyRequest;
@@ -83,7 +84,7 @@ public class UserControllerTest extends RestDocsTestSupport {
                                     PayloadDocumentation.subsectionWithPath("userId").type(JsonFieldType.NUMBER).description("유저의 식별값"),
                                     PayloadDocumentation.subsectionWithPath("nickname").type(JsonFieldType.STRING).description("유저의 닉네임"),
                                     PayloadDocumentation.subsectionWithPath("profileImageUrl").type(JsonFieldType.STRING).description("유저의 프로필 이미지 URL").optional(),
-                                    PayloadDocumentation.subsectionWithPath("role").type(JsonFieldType.STRING).description("유저의 권한"),
+                                    PayloadDocumentation.subsectionWithPath("role").type(JsonFieldType.STRING).description("유저의 권한. +\n" + RestDocsUtil.generateLinkCode(RestDocsUtil.DocUrl.USER_ROLE)),
                                     PayloadDocumentation.subsectionWithPath("email").type(JsonFieldType.STRING).description("회원가입시 등록한 유저의 이메일 정보").optional(),
                                     PayloadDocumentation.subsectionWithPath("name").type(JsonFieldType.STRING).description("회원가입시 등록한 유저의 이름 정보")
                             )

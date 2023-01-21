@@ -1,0 +1,7 @@
+:doctype: book
+:icons: font
+:sectlinks:
+:docinfo: shared-head
+
+[[user-role-code]]
+include::{snippets}/enums/user-role/enum-response-fields.adoc[]
