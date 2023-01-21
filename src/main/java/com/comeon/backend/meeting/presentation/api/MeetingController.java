@@ -59,7 +59,7 @@ public class MeetingController {
                 jwtPrincipal.getUserId(),
                 pageable,
                 new MeetingCondition(
-                        param.getMeetingName(),
+                        param.getSearchWords(),
                         param.getDateFrom(),
                         param.getDateTo()
                 )

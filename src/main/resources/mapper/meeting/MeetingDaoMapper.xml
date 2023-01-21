@@ -45,7 +45,18 @@
                         lower(replace(m.name, ' ', '')) like concat('%', #{word}, '%')
                 </foreach>
             </if>
+            <if test="dateFrom != null">
+                <![CDATA[
+                    and m.calendar_start_from >= #{dateFrom}
+                ]]>
+            </if>
+            <if test="dateTo != null">
+                <![CDATA[
+                    and m.calendar_end_to <= #{dateTo}
+                ]]>
+            </if>
         </where>
+        order by m.calendar_start_from desc, m.calendar_end_to desc
         limit #{pageSize} offset #{offset}
     </select>
 </mapper>

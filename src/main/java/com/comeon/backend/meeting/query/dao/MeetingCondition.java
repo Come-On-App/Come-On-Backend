@@ -9,7 +9,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class MeetingCondition {
 
-    private String meetingName;
+    private String searchWords;
     private LocalDate dateFrom;
     private LocalDate dateTo;
 }

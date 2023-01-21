@@ -27,8 +27,8 @@ public class FindMeetingSliceParam {
         this.dateTo = cond.getDateTo();
         this.pageSize = pageable.getPageSize() + 1;
         this.offset = pageable.getOffset();
-        if (cond.getMeetingName() != null) {
-            this.words = Arrays.stream(cond.getMeetingName().split(" "))
+        if (cond.getSearchWords() != null) {
+            this.words = Arrays.stream(cond.getSearchWords().split(" "))
                     .distinct()
                     .collect(Collectors.toList());
         }

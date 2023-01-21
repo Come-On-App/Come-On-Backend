@@ -13,7 +13,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class MeetingSummaryListParam {
 
-    private String meetingName;
+    private String searchWords;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate dateFrom;
