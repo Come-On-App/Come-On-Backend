@@ -34,10 +34,16 @@ jobs:
         distribution: 'temurin'
     - name: Grant execute permisstion for gradlew
       run: chmod +x gradlew
-    - name: Test with Gradle
+    # 테스트 수행
+    - name: Test
       run: ./gradlew clean test -Pprofile=test
-    - name: Build with Gradle
+    # 테스트 기반으로 API 문서 생성
+    - name: Generate REST API Documents
+      run: ./gradlew asciidoctor
+    # 프로젝트 빌드
+    - name: Build
       run: ./gradlew bootJar
+    # 도커 이미지 빌드 & Push
     - name: Setup Docker Buildx
       uses: docker/setup-buildx-action@v2.2.1
     - name: Docker Image build and push
