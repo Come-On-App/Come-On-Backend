@@ -1,4 +1,4 @@
-package com.comeon.backend.auth.infra;
+package com.comeon.backend.jwt.infra;
 
 public abstract class ClaimNames {
 

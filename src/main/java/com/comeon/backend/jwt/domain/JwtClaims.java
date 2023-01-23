@@ -1,6 +1,6 @@
-package com.comeon.backend.auth.domain;
+package com.comeon.backend.jwt.domain;
 
-import com.comeon.backend.auth.application.TokenType;
+import com.comeon.backend.jwt.application.TokenType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

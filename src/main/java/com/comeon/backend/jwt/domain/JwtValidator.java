@@ -1,4 +1,4 @@
-package com.comeon.backend.auth.domain;
+package com.comeon.backend.jwt.domain;
 
 public interface JwtValidator {
 

@@ -7,6 +7,6 @@ import lombok.Getter;
 @AllArgsConstructor
 public class JwtPrincipal {
 
-    private String accessToken;
+    private String atk;
     private Long userId;
 }

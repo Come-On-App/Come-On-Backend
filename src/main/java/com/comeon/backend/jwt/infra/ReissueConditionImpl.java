@@ -1,6 +1,6 @@
-package com.comeon.backend.auth.infra;
+package com.comeon.backend.jwt.infra;
 
-import com.comeon.backend.auth.domain.ReissueCondition;
+import com.comeon.backend.jwt.domain.ReissueCondition;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -9,7 +9,7 @@ import java.time.Instant;
 
 @Component
 @RequiredArgsConstructor
-public class JwtReissueCondition implements ReissueCondition {
+public class ReissueConditionImpl implements ReissueCondition {
 
     private final JwtProperties jwtProperties;
 

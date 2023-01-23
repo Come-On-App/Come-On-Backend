@@ -1,6 +1,6 @@
-package com.comeon.backend.auth.application;
+package com.comeon.backend.jwt.application;
 
-import com.comeon.backend.auth.domain.*;
+import com.comeon.backend.jwt.domain.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

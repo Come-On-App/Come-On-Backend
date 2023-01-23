@@ -1,4 +1,4 @@
-package com.comeon.backend.auth.application;
+package com.comeon.backend.jwt.application;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -1,4 +1,4 @@
-package com.comeon.backend.auth.infra;
+package com.comeon.backend.jwt.infra;
 
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;

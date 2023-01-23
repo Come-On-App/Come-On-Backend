@@ -1,6 +1,6 @@
-package com.comeon.backend.auth.infra;
+package com.comeon.backend.jwt.infra;
 
-import com.comeon.backend.auth.domain.RefreshTokenRepository;
+import com.comeon.backend.jwt.domain.RefreshTokenRepository;
 import com.comeon.backend.common.redis.RedisRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

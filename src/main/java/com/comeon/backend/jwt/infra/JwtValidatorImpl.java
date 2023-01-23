@@ -1,6 +1,6 @@
-package com.comeon.backend.auth.infra;
+package com.comeon.backend.jwt.infra;
 
-import com.comeon.backend.auth.domain.JwtValidator;
+import com.comeon.backend.jwt.domain.JwtValidator;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;

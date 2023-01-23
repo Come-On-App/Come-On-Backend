@@ -1,8 +1,8 @@
-package com.comeon.backend.auth.infra;
+package com.comeon.backend.jwt.infra;
 
-import com.comeon.backend.auth.application.TokenType;
-import com.comeon.backend.auth.domain.JwtClaims;
-import com.comeon.backend.auth.domain.JwtParser;
+import com.comeon.backend.jwt.application.TokenType;
+import com.comeon.backend.jwt.domain.JwtClaims;
+import com.comeon.backend.jwt.domain.JwtParser;
 import com.comeon.backend.common.exception.CommonErrorCode;
 import com.comeon.backend.common.exception.RestApiException;
 import com.fasterxml.jackson.core.JsonProcessingException;

@@ -1,6 +1,6 @@
-package com.comeon.backend.auth.application;
+package com.comeon.backend.jwt.application;
 
-import com.comeon.backend.auth.domain.JwtClaims;
+import com.comeon.backend.jwt.domain.JwtClaims;
 import lombok.Getter;
 
 import java.time.Instant;
