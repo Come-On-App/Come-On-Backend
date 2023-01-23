@@ -1,4 +1,4 @@
-package com.comeon.backend.common.jwt;
+package com.comeon.backend.auth.application;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -8,5 +8,5 @@ import lombok.Getter;
 public class JwtToken {
 
     private String token;
-    private JwtClaims claims;
+    private Payload payload;
 }

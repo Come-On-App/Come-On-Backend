@@ -1,31 +1,29 @@
-package com.comeon.backend.common.jwt.jjwt;
+package com.comeon.backend.auth.infra;
 
+import com.comeon.backend.auth.domain.JwtValidator;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
 
 @Slf4j
-public class JJWTValidator {
+@Component
+@RequiredArgsConstructor
+public class JwtValidatorImpl implements JwtValidator {
 
-    private JwtParser jwtParser;
-    private String jwt;
+    private final JwtProperties jwtProperties;
 
-    public JJWTValidator(String secretKey) {
-        this.jwtParser = Jwts.parserBuilder()
-                .setSigningKey(Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8)))
-                .build();
-    }
-
-    public JJWTValidator jwt(String jwt) {
-        this.jwt = jwt;
-        return this;
-    }
-
-    public boolean validate() {
+    @Override
+    public boolean verify(String token) {
         try {
-            return jwtParser.parseClaimsJws(jwt).getBody() != null;
+            return Jwts.parserBuilder()
+                    .setSigningKey(Keys.hmacShaKeyFor(jwtProperties.getSecretKey().getBytes(StandardCharsets.UTF_8)))
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody() != null;
         } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
             log.error("JWT 서명이 잘못되었습니다.");
         } catch (ExpiredJwtException e) {
