@@ -1,10 +1,10 @@
-package com.comeon.backend.image.presentation.api;
+package com.comeon.backend.image.presentation;
 
 import com.comeon.backend.common.security.JwtPrincipal;
 import com.comeon.backend.image.domain.FileManager;
-import com.comeon.backend.image.presentation.api.request.ImageRemoveRequest;
-import com.comeon.backend.image.presentation.api.response.ImageRemoveResponse;
-import com.comeon.backend.image.presentation.api.response.ImageUploadResponse;
+import com.comeon.backend.image.presentation.request.ImageRemoveRequest;
+import com.comeon.backend.image.presentation.response.ImageRemoveResponse;
+import com.comeon.backend.image.presentation.response.ImageUploadResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
