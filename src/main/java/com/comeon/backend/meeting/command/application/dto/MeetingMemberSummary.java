@@ -1,4 +1,4 @@
-package com.comeon.backend.meeting.command.application;
+package com.comeon.backend.meeting.command.application.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -1,6 +1,7 @@
 package com.comeon.backend.meeting.command.application;
 
 import com.comeon.backend.common.exception.RestApiException;
+import com.comeon.backend.meeting.command.application.dto.MeetingMemberSummary;
 import com.comeon.backend.meeting.command.domain.Meeting;
 import com.comeon.backend.meeting.command.domain.MeetingMember;
 import com.comeon.backend.meeting.command.domain.MeetingRepository;
@@ -12,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class MeetingMemberCommandService {
+public class MeetingMemberFacade {
 
     private final MeetingRepository meetingRepository;
 

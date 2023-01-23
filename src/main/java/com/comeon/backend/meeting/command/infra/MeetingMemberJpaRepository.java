@@ -1,4 +1,4 @@
-package com.comeon.backend.meeting.infrastructure;
+package com.comeon.backend.meeting.command.infra;
 
 import com.comeon.backend.meeting.command.domain.MeetingMember;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -1,6 +1,7 @@
 package com.comeon.backend.meeting.command.application;
 
 import com.comeon.backend.common.exception.RestApiException;
+import com.comeon.backend.meeting.command.application.dto.EntryCodeDetails;
 import com.comeon.backend.meeting.command.domain.*;
 import com.comeon.backend.meeting.common.MeetingErrorCode;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +13,7 @@ import java.time.LocalDate;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class MeetingCommandService {
+public class MeetingFacade {
 
     private final MeetingRepository meetingRepository;
 

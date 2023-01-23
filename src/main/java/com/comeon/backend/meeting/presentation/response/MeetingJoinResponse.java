@@ -1,4 +1,4 @@
-package com.comeon.backend.meeting.presentation.api.response;
+package com.comeon.backend.meeting.presentation.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

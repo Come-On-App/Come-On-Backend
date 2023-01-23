@@ -1,4 +1,4 @@
-package com.comeon.backend.meeting.presentation.api.response;
+package com.comeon.backend.meeting.presentation.response;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @AllArgsConstructor
-public class MeetingEntryCodeDetailResponse {
+public class EntryCodeDetailResponse {
 
     private Long meetingId;
     private String entryCode;
