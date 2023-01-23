@@ -1,4 +1,4 @@
-package com.comeon.backend.user.presentation.api.request;
+package com.comeon.backend.jwt.presentation.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

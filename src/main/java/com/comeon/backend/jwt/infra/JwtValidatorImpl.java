@@ -1,5 +1,6 @@
 package com.comeon.backend.jwt.infra;
 
+import com.comeon.backend.jwt.application.TokenType;
 import com.comeon.backend.jwt.domain.JwtValidator;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
@@ -18,13 +19,37 @@ public class JwtValidatorImpl implements JwtValidator {
 
     @Override
     public boolean verify(String token) {
+        return getClaims(token) != null;
+    }
+
+    @Override
+    public boolean verifyAtk(String token) {
+        Claims claims = getClaims(token);
+        if (claims != null) {
+            TokenType tokenType = TokenType.of(claims.get(ClaimNames.SUBJECT, String.class));
+            return tokenType.isAtk();
+        }
+        return false;
+    }
+
+    @Override
+    public boolean verifyRtk(String token) {
+        Claims claims = getClaims(token);
+        if (claims != null) {
+            TokenType tokenType = TokenType.of(claims.get(ClaimNames.SUBJECT, String.class));
+            return tokenType.isRtk();
+        }
+        return false;
+    }
+
+    private Claims getClaims(String token) {
         try {
             return Jwts.parserBuilder()
                     .setSigningKey(Keys.hmacShaKeyFor(jwtProperties.getSecretKey().getBytes(StandardCharsets.UTF_8)))
                     .build()
                     .parseClaimsJws(token)
-                    .getBody() != null;
-        } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
+                    .getBody();
+        } catch (SecurityException | MalformedJwtException e) {
             log.error("JWT 서명이 잘못되었습니다.");
         } catch (ExpiredJwtException e) {
             log.error("JWT 토큰이 만료되었습니다.");
@@ -35,6 +60,6 @@ public class JwtValidatorImpl implements JwtValidator {
         } catch (JwtException e) {
             log.error("JWT 검증 오류 발생", e);
         }
-        return false;
+        return null;
     }
 }

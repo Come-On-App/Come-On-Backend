@@ -34,4 +34,12 @@ public enum TokenType {
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException(name + " type is invalid type"));
     }
+
+    public boolean isAtk() {
+        return this == ATK;
+    }
+
+    public boolean isRtk() {
+        return this == RTK;
+    }
 }

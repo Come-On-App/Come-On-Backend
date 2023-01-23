@@ -21,7 +21,7 @@ public class RefreshTokenRepositoryImpl implements RefreshTokenRepository {
     }
 
     @Override
-    public Optional<Long> getUserIdBy(String refreshToken) {
+    public Optional<Long> findUserIdBy(String refreshToken) {
         String userId = redisRepository.get(refreshToken);
         if (userId == null) {
             return Optional.empty();

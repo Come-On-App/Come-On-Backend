@@ -1,6 +1,5 @@
-package com.comeon.backend.user.command.application;
+package com.comeon.backend.jwt.application;
 
-import com.comeon.backend.common.jwt.JwtToken;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

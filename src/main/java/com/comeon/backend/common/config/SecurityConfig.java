@@ -1,6 +1,6 @@
 package com.comeon.backend.common.config;
 
-import com.comeon.backend.common.jwt.JwtValidator;
+import com.comeon.backend.jwt.application.JwtManager;
 import com.comeon.backend.common.security.JwtAccessDeniedHandler;
 import com.comeon.backend.common.security.JwtAuthenticationEntryPoint;
 import com.comeon.backend.common.security.JwtAuthenticationFilter;
@@ -20,13 +20,13 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final JwtValidator jwtValidator;
+    private final JwtManager jwtManager;
     private final JwtAuthenticationProvider jwtAuthenticationProvider;
     private final JwtAccessDeniedHandler accessDeniedHandler;
     private final JwtAuthenticationEntryPoint authenticationEntryPoint;
 
     private JwtAuthenticationFilter jwtAuthenticationFilter() {
-        return new JwtAuthenticationFilter(jwtValidator, jwtAuthenticationProvider);
+        return new JwtAuthenticationFilter(jwtManager, jwtAuthenticationProvider);
     }
 
     @Bean
