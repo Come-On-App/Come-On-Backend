@@ -1,14 +1,12 @@
 package com.comeon.backend.api;
 
 import com.comeon.backend.api.utils.RestDocsTestSupport;
-import com.comeon.backend.common.jwt.TokenType;
-import com.comeon.backend.user.command.application.GoogleUserService;
-import com.comeon.backend.user.command.application.KakaoUserService;
-import com.comeon.backend.user.command.application.Tokens;
+import com.comeon.backend.user.command.application.OauthUserFacade;
+import com.comeon.backend.user.command.application.dto.LoginUserDto;
 import com.comeon.backend.user.command.domain.Role;
-import com.comeon.backend.user.presentation.api.OAuth2LoginController;
-import com.comeon.backend.user.presentation.api.request.GoogleOAuth2LoginRequest;
-import com.comeon.backend.user.presentation.api.request.KakaoOAuth2LoginRequest;
+import com.comeon.backend.user.presentation.OauthUserApiController;
+import com.comeon.backend.user.presentation.request.GoogleOauthRequest;
+import com.comeon.backend.user.presentation.request.KakaoOauthRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -25,14 +23,11 @@ import java.nio.charset.StandardCharsets;
 
 import static org.mockito.BDDMockito.*;
 
-@WebMvcTest({OAuth2LoginController.class})
-public class OAuth2LoginControllerTest extends RestDocsTestSupport {
+@WebMvcTest({OauthUserApiController.class})
+public class OauthUserApiControllerTest extends RestDocsTestSupport {
 
     @MockBean
-    GoogleUserService googleUserService;
-
-    @MockBean
-    KakaoUserService kakaoUserService;
+    OauthUserFacade oauthUserFacade;
 
     @Nested
     @DisplayName("구글 ID-Token으로 로그인 처리")
@@ -44,19 +39,12 @@ public class OAuth2LoginControllerTest extends RestDocsTestSupport {
         @DisplayName("given: 유효한 idToken -> then: HTTP 200")
         void success() throws Exception {
             //given
-            GoogleOAuth2LoginRequest request = new GoogleOAuth2LoginRequest("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
+            GoogleOauthRequest request = new GoogleOauthRequest("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
 
             // mocking
-            Tokens tokens = new Tokens(
-                    jwtGenerator.initBuilder(TokenType.ACCESS)
-                            .userId(1L)
-                            .nickname("userNickname")
-                            .authorities(Role.USER.getValue())
-                            .build(),
-                    jwtGenerator.initBuilder(TokenType.REFRESH)
-                            .build()
-            );
-            given(googleUserService.login(anyString())).willReturn(tokens);
+            LoginUserDto loginUserDto = new LoginUserDto(1L, "userNickname", Role.USER.getValue());
+            given(oauthUserFacade.googleLogin(anyString()))
+                    .willReturn(loginUserDto);
 
             //when
             ResultActions perform = mockMvc.perform(
@@ -162,19 +150,11 @@ public class OAuth2LoginControllerTest extends RestDocsTestSupport {
         @DisplayName("given: 유효한 인가코드 -> then: HTTP 200")
         void success() throws Exception {
             //given
-            KakaoOAuth2LoginRequest request = new KakaoOAuth2LoginRequest("45n67yw45gtqv34ymms5e4egyw34");
+            KakaoOauthRequest request = new KakaoOauthRequest("45n67yw45gtqv34ymms5e4egyw34");
 
             // mocking
-            Tokens tokens = new Tokens(
-                    jwtGenerator.initBuilder(TokenType.ACCESS)
-                            .userId(1L)
-                            .nickname("userNickname")
-                            .authorities(Role.USER.getValue())
-                            .build(),
-                    jwtGenerator.initBuilder(TokenType.REFRESH)
-                            .build()
-            );
-            given(kakaoUserService.login(anyString())).willReturn(tokens);
+            LoginUserDto loginUserDto = new LoginUserDto(1L, "userNickname", Role.USER.getValue());
+            given(oauthUserFacade.kakaoLogin(anyString())).willReturn(loginUserDto);
 
             //when
             ResultActions perform = mockMvc.perform(

@@ -2,9 +2,9 @@ package com.comeon.backend.api;
 
 import com.comeon.backend.api.utils.RestDocsTestSupport;
 import com.comeon.backend.api.utils.RestDocsUtil;
-import com.comeon.backend.user.command.application.UserCommandService;
-import com.comeon.backend.user.presentation.api.UserController;
-import com.comeon.backend.user.presentation.api.request.UserModifyRequest;
+import com.comeon.backend.user.command.application.UserFacade;
+import com.comeon.backend.user.presentation.UserController;
+import com.comeon.backend.user.presentation.request.UserModifyRequest;
 import com.comeon.backend.user.query.application.UserQueryService;
 import com.comeon.backend.user.query.dto.UserDetails;
 import org.junit.jupiter.api.DisplayName;
@@ -28,7 +28,7 @@ import java.nio.charset.StandardCharsets;
 public class UserControllerTest extends RestDocsTestSupport {
 
     @MockBean
-    UserCommandService userCommandService;
+    UserFacade userFacade;
 
     @MockBean
     UserQueryService userQueryService;
@@ -46,10 +46,10 @@ public class UserControllerTest extends RestDocsTestSupport {
             BDDMockito.given(userQueryService.findUserDetails(BDDMockito.anyLong()))
                     .willReturn(
                             new UserDetails(
-                                    currentRequestATK.getClaims().getUserId(),
-                                    currentRequestATK.getClaims().getNickname(),
+                                    currentRequestATK.getPayload().getUserId(),
+                                    currentRequestATK.getPayload().getNickname(),
                                     "https://xxx.xxxx.xxx/xxxxxxxxxxxxxx",
-                                    currentRequestATK.getClaims().getAuthorities(),
+                                    currentRequestATK.getPayload().getAuthorities(),
                                     "user-email@email.com",
                                     "user-name"
                             )
@@ -65,7 +65,7 @@ public class UserControllerTest extends RestDocsTestSupport {
 
             //then
             perform.andExpect(MockMvcResultMatchers.status().isOk())
-                    .andExpect(MockMvcResultMatchers.jsonPath("$.userId").value(currentRequestATK.getClaims().getUserId()))
+                    .andExpect(MockMvcResultMatchers.jsonPath("$.userId").value(currentRequestATK.getPayload().getUserId()))
                     .andExpect(MockMvcResultMatchers.jsonPath("$.nickname").isNotEmpty())
                     .andExpect(MockMvcResultMatchers.jsonPath("$.profileImageUrl").exists())
                     .andExpect(MockMvcResultMatchers.jsonPath("$.role").isNotEmpty())
@@ -106,7 +106,7 @@ public class UserControllerTest extends RestDocsTestSupport {
             UserModifyRequest request = new UserModifyRequest("new_nickname", "https://xxx.xxxx.xxxx/new-profile-image-url");
 
             BDDMockito.willDoNothing()
-                    .given(userCommandService).modifyUser(BDDMockito.anyLong(), BDDMockito.anyString(), BDDMockito.anyString());
+                    .given(userFacade).modifyUser(BDDMockito.anyLong(), BDDMockito.anyString(), BDDMockito.anyString());
 
             //when
             ResultActions perform = mockMvc.perform(

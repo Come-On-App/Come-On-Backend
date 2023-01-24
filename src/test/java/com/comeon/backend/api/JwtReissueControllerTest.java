@@ -1,13 +1,9 @@
 package com.comeon.backend.api;
 
 import com.comeon.backend.api.utils.RestDocsTestSupport;
-import com.comeon.backend.common.jwt.JwtToken;
-import com.comeon.backend.common.jwt.TokenType;
-import com.comeon.backend.user.command.application.JwtReissueService;
-import com.comeon.backend.user.command.application.Tokens;
-import com.comeon.backend.user.command.domain.Role;
-import com.comeon.backend.user.presentation.api.JwtReissueController;
-import com.comeon.backend.user.presentation.api.request.JwtReissueRequest;
+import com.comeon.backend.jwt.application.*;
+import com.comeon.backend.jwt.presentation.JwtReissueController;
+import com.comeon.backend.jwt.presentation.request.JwtReissueRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -28,7 +24,7 @@ import static org.mockito.BDDMockito.*;
 public class JwtReissueControllerTest extends RestDocsTestSupport {
 
     @MockBean
-    JwtReissueService jwtReissueService;
+    JwtReissueFacade jwtReissueFacade;
 
     @Nested
     @DisplayName("앱 토큰 재발급")
@@ -40,19 +36,12 @@ public class JwtReissueControllerTest extends RestDocsTestSupport {
         @DisplayName("given: 유효한 refresh, 리프레시 토큰 항상 재발급 true -> then: HTTP 200, 모든 토큰 재발급")
         void alwaysAllReissue() throws Exception {
             //given
-            JwtToken refreshToken = jwtGenerator.initBuilder(TokenType.REFRESH).build();
-            JwtReissueRequest request = new JwtReissueRequest(refreshToken.getToken(), true);
+            JwtToken rtk = jwtManager.buildRefreshToken(currentRequestATK.getPayload().getUserId());
+            JwtReissueRequest request = new JwtReissueRequest(rtk.getToken(), true);
 
             // mocking
-            Tokens tokens = new Tokens(
-                    jwtGenerator.initBuilder(TokenType.ACCESS)
-                            .userId(1L)
-                            .nickname("nickname1")
-                            .authorities(Role.USER.getValue())
-                            .build(),
-                    jwtGenerator.initBuilder(TokenType.REFRESH).build()
-            );
-            given(jwtReissueService.reissue(anyString(), anyBoolean())).willReturn(tokens);
+            Tokens tokens = jwtManager.buildTokens(currentRequestATK.getPayload().getUserId(), currentRequestATK.getPayload().getNickname(), currentRequestATK.getPayload().getAuthorities());
+            given(jwtReissueFacade.reissue(anyString(), anyBoolean())).willReturn(tokens);
 
             //when
             ResultActions perform = mockMvc.perform(
@@ -66,7 +55,7 @@ public class JwtReissueControllerTest extends RestDocsTestSupport {
             perform.andExpect(MockMvcResultMatchers.status().isOk())
                     .andExpect(MockMvcResultMatchers.jsonPath("$.accessToken.token").isNotEmpty())
                     .andExpect(MockMvcResultMatchers.jsonPath("$.accessToken.expiry").isNotEmpty())
-                    .andExpect(MockMvcResultMatchers.jsonPath("$.accessToken.userId").value(1L))
+                    .andExpect(MockMvcResultMatchers.jsonPath("$.accessToken.userId").value(currentUserId))
                     .andExpect(MockMvcResultMatchers.jsonPath("$.refreshToken.token").isNotEmpty())
                     .andExpect(MockMvcResultMatchers.jsonPath("$.refreshToken.expiry").isNotEmpty());
 
@@ -107,19 +96,12 @@ public class JwtReissueControllerTest extends RestDocsTestSupport {
         @DisplayName("given: 유효한 refresh, 리프레시 토큰 항상 재발급 false, 리프레시 토큰 자동 갱신 조건 만족 false -> then: HTTP 200, 엑세스 토큰만 재발급")
         void atkOnlyReissue() throws Exception {
             //given
-            JwtToken refreshToken = jwtGenerator.initBuilder(TokenType.REFRESH).build();
-            JwtReissueRequest request = new JwtReissueRequest(refreshToken.getToken(), false);
+            JwtToken rtk = jwtManager.buildRefreshToken(currentRequestATK.getPayload().getUserId());
+            JwtReissueRequest request = new JwtReissueRequest(rtk.getToken(), false);
 
             // mocking
-            Tokens tokens = new Tokens(
-                    jwtGenerator.initBuilder(TokenType.ACCESS)
-                            .userId(1L)
-                            .nickname("nickname1")
-                            .authorities(Role.USER.getValue())
-                            .build(),
-                    null
-            );
-            given(jwtReissueService.reissue(anyString(), anyBoolean())).willReturn(tokens);
+            Tokens tokens = new Tokens(jwtManager.buildAccessToken(currentRequestATK.getPayload().getUserId(), currentRequestATK.getPayload().getNickname(), currentRequestATK.getPayload().getAuthorities()), null);
+            given(jwtReissueFacade.reissue(anyString(), anyBoolean())).willReturn(tokens);
 
             //when
             ResultActions perform = mockMvc.perform(
@@ -133,7 +115,7 @@ public class JwtReissueControllerTest extends RestDocsTestSupport {
             perform.andExpect(MockMvcResultMatchers.status().isOk())
                     .andExpect(MockMvcResultMatchers.jsonPath("$.accessToken.token").isNotEmpty())
                     .andExpect(MockMvcResultMatchers.jsonPath("$.accessToken.expiry").isNotEmpty())
-                    .andExpect(MockMvcResultMatchers.jsonPath("$.accessToken.userId").value(1L))
+                    .andExpect(MockMvcResultMatchers.jsonPath("$.accessToken.userId").value(currentUserId))
                     .andExpect(MockMvcResultMatchers.jsonPath("$.refreshToken").isEmpty())
                     .andExpect(MockMvcResultMatchers.jsonPath("$.refreshToken").isEmpty());
 
@@ -144,19 +126,12 @@ public class JwtReissueControllerTest extends RestDocsTestSupport {
         @DisplayName("given: 유효한 refresh, 리프레시 토큰 항상 재발급 false, 리프레시 토큰 자동 갱신 조건 만족 true -> then: HTTP 200, 모두 재발급")
         void allReissue() throws Exception {
             //given
-            JwtToken refreshToken = jwtGenerator.initBuilder(TokenType.REFRESH).build();
-            JwtReissueRequest request = new JwtReissueRequest(refreshToken.getToken(), false);
+            JwtToken rtk = jwtManager.buildRefreshToken(currentRequestATK.getPayload().getUserId());
+            JwtReissueRequest request = new JwtReissueRequest(rtk.getToken(), false);
 
             // mocking
-            Tokens tokens = new Tokens(
-                    jwtGenerator.initBuilder(TokenType.ACCESS)
-                            .userId(1L)
-                            .nickname("nickname1")
-                            .authorities(Role.USER.getValue())
-                            .build(),
-                    jwtGenerator.initBuilder(TokenType.REFRESH).build()
-            );
-            given(jwtReissueService.reissue(anyString(), anyBoolean())).willReturn(tokens);
+            Tokens tokens = jwtManager.buildTokens(currentRequestATK.getPayload().getUserId(), currentRequestATK.getPayload().getNickname(), currentRequestATK.getPayload().getAuthorities());
+            given(jwtReissueFacade.reissue(anyString(), anyBoolean())).willReturn(tokens);
 
             //when
             ResultActions perform = mockMvc.perform(
@@ -170,7 +145,7 @@ public class JwtReissueControllerTest extends RestDocsTestSupport {
             perform.andExpect(MockMvcResultMatchers.status().isOk())
                     .andExpect(MockMvcResultMatchers.jsonPath("$.accessToken.token").isNotEmpty())
                     .andExpect(MockMvcResultMatchers.jsonPath("$.accessToken.expiry").isNotEmpty())
-                    .andExpect(MockMvcResultMatchers.jsonPath("$.accessToken.userId").value(1L))
+                    .andExpect(MockMvcResultMatchers.jsonPath("$.accessToken.userId").value(currentUserId))
                     .andExpect(MockMvcResultMatchers.jsonPath("$.refreshToken.token").isNotEmpty())
                     .andExpect(MockMvcResultMatchers.jsonPath("$.refreshToken.expiry").isNotEmpty());
 

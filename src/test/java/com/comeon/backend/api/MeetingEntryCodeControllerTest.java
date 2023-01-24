@@ -1,9 +1,9 @@
 package com.comeon.backend.api;
 
 import com.comeon.backend.api.utils.RestDocsTestSupport;
-import com.comeon.backend.meeting.command.application.EntryCodeDetails;
-import com.comeon.backend.meeting.command.application.MeetingCommandService;
-import com.comeon.backend.meeting.presentation.api.MeetingEntryCodeController;
+import com.comeon.backend.meeting.command.application.dto.EntryCodeDetails;
+import com.comeon.backend.meeting.command.application.MeetingFacade;
+import com.comeon.backend.meeting.presentation.MeetingEntryCodeController;
 import com.comeon.backend.meeting.query.application.MeetingQueryService;
 import com.comeon.backend.meeting.query.dto.MeetingEntryCodeDetails;
 import org.junit.jupiter.api.DisplayName;
@@ -30,7 +30,7 @@ import java.time.format.DateTimeFormatter;
 public class MeetingEntryCodeControllerTest extends RestDocsTestSupport {
 
     @MockBean
-    MeetingCommandService meetingCommandService;
+    MeetingFacade meetingFacade;
 
     @MockBean
     MeetingQueryService meetingQueryService;
@@ -104,7 +104,7 @@ public class MeetingEntryCodeControllerTest extends RestDocsTestSupport {
             String entryCodeMock = "AJ4ER9";
             LocalDateTime expirationMock = LocalDateTime.now().plusDays(7);
 
-            BDDMockito.given(meetingCommandService.renewEntryCode(BDDMockito.anyLong(), BDDMockito.anyLong()))
+            BDDMockito.given(meetingFacade.renewEntryCode(BDDMockito.anyLong(), BDDMockito.anyLong()))
                     .willReturn(new EntryCodeDetails(meetingIdMock, entryCodeMock, expirationMock));
 
             //when

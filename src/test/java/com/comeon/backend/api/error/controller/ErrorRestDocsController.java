@@ -4,6 +4,7 @@ import com.comeon.backend.common.api.ErrorResponse;
 import com.comeon.backend.common.exception.CommonErrorCode;
 import com.comeon.backend.common.exception.ErrorCode;
 import com.comeon.backend.image.common.ImageErrorCode;
+import com.comeon.backend.jwt.common.JwtErrorCode;
 import com.comeon.backend.meeting.common.MeetingErrorCode;
 import com.comeon.backend.user.common.UserErrorCode;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -63,6 +64,13 @@ public class ErrorRestDocsController {
     @GetMapping("/error/code/meetings")
     public Map<Integer, String> meetingErrorCodes() {
         return Arrays.stream(MeetingErrorCode.values())
+                .collect(Collectors.toMap(ErrorCode::getCode, ErrorCode::getDescription));
+    }
+
+    // 오류 코드 - JWT 관련
+    @GetMapping("/error/code/jwt")
+    public Map<Integer, String> jwtErrorCodes() {
+        return Arrays.stream(JwtErrorCode.values())
                 .collect(Collectors.toMap(ErrorCode::getCode, ErrorCode::getDescription));
     }
 }
