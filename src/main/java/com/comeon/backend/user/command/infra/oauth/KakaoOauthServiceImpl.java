@@ -53,7 +53,7 @@ public class KakaoOauthServiceImpl implements KakaoOauthService {
 
         return OauthUserInfo.ofKakao(
                 String.valueOf(userInfoResponse.getId()),
-                userInfoResponse.getKakaoAccount().get("email").toString(),
+                (String) userInfoResponse.getKakaoAccount().get("email"),
                 (String) ((Map<String, Object>) userInfoResponse.getKakaoAccount().get("profile")).get("nickname")
         );
     }
