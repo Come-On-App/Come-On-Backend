@@ -1,0 +1,11 @@
+:doctype: book
+:icons: font
+:sectlinks:
+:docinfo: shared-head
+
+=== 인증 관련 오류 코드
+
+유저 관련 오류 코드는 `4XXX` 형식을 갖습니다.
+
+[[jwt-error-code]]
+include::{snippets}/error-code/jwt/error-code-response-fields.adoc[]
