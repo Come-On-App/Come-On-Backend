@@ -28,8 +28,12 @@ public class Meeting extends BaseTimeEntity {
     @OneToMany(mappedBy = "meeting", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MeetingMember> members = new ArrayList<>();
 
+    @OneToMany(mappedBy = "meeting", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<MeetingPlace> places = new ArrayList<>();
+
     @Builder
-    public Meeting(Long hostUserId, String name, String thumbnailImageUrl, LocalDate calendarStartFrom, LocalDate calendarEndTo) {
+    public Meeting(Long hostUserId, String name, String thumbnailImageUrl,
+                   LocalDate calendarStartFrom, LocalDate calendarEndTo) {
         this.name = name;
         this.thumbnailImageUrl = thumbnailImageUrl;
         this.calendarStartFrom = calendarStartFrom;
@@ -42,5 +46,43 @@ public class Meeting extends BaseTimeEntity {
         MeetingMember participantMember = MeetingMember.createParticipantMember(participantUserId, this);
         members.add(participantMember);
         return participantMember;
+    }
+
+    public MeetingPlace createPlace(Long userId, String placeName, String placeMemo, Double lat, Double lng,
+                                    String address, String placeCategory, String googlePlaceId) {
+        MeetingPlace place = MeetingPlace.builder()
+                .meeting(this)
+                .name(placeName)
+                .memo(placeMemo)
+                .lat(lat)
+                .lng(lng)
+                .address(address)
+                .category(PlaceCategory.of(placeCategory))
+                .order(this.places.size() + 1)
+                .userId(userId)
+                .googlePlaceId(googlePlaceId)
+                .build();
+        places.add(place);
+
+        return place;
+    }
+
+    public void removePlaceByPlaceId(Long placeId) {
+        MeetingPlace mp = getPlaceByPlaceId(placeId);
+        this.places.remove(mp);
+        arrangeOrder(mp.getOrder());
+    }
+
+    private MeetingPlace getPlaceByPlaceId(Long placeId) {
+        return this.places.stream()
+                .filter(place -> place.getId() == placeId)
+                .findFirst()
+                .orElseThrow(() -> new PlaceNotExistException(placeId));
+    }
+
+    private void arrangeOrder(int startOrder) {
+        this.places.stream()
+                .filter(place -> place.getOrder() > startOrder)
+                .forEach(MeetingPlace::decreaseOrder);
     }
 }

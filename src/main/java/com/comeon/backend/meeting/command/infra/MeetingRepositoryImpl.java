@@ -5,20 +5,20 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import javax.persistence.EntityManager;
 import java.util.Optional;
 
 import static com.comeon.backend.meeting.command.domain.QMeetingEntryCode.meetingEntryCode;
-import static com.comeon.backend.meeting.command.domain.QMeetingPlace.meetingPlace;
 
 @Component
 @RequiredArgsConstructor
 public class MeetingRepositoryImpl implements MeetingRepository {
 
+    private final EntityManager em;
     private final JPAQueryFactory jpaQueryFactory;
     private final MeetingJpaRepository meetingJpaRepository;
     private final MeetingMemberJpaRepository meetingMemberJpaRepository;
     private final MeetingEntryCodeJpaRepository meetingEntryCodeJpaRepository;
-    private final MeetingPlaceJpaRepository meetingPlaceJpaRepository;
 
     @Override
     public Meeting saveMeeting(Meeting meeting) {
@@ -72,17 +72,12 @@ public class MeetingRepositoryImpl implements MeetingRepository {
     }
 
     @Override
-    public MeetingPlace savePlace(MeetingPlace meetingPlace) {
-        return meetingPlaceJpaRepository.save(meetingPlace);
+    public Optional<Meeting> findMeetingFetchPlacesBy(Long meetingId) {
+        return meetingJpaRepository.findByIdFetchPlaces(meetingId);
     }
 
     @Override
-    public int getPlaceCountBy(Long meetingId) {
-        return jpaQueryFactory
-                .select(meetingPlace.id.count())
-                .from(meetingPlace)
-                .where(meetingPlace.meeting.id.eq(meetingId))
-                .fetchOne()
-                .intValue();
+    public void flush() {
+        em.flush();
     }
 }

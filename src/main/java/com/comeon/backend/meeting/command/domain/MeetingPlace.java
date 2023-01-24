@@ -55,4 +55,8 @@ public class MeetingPlace extends BaseTimeEntity {
         this.googlePlaceId = googlePlaceId;
         this.lastModifiedUserId = userId;
     }
+
+    public void decreaseOrder() {
+        --this.order;
+    }
 }

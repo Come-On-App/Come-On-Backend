@@ -1,9 +1,6 @@
 package com.comeon.backend.meeting.command.application;
 
-import com.comeon.backend.meeting.command.domain.Meeting;
-import com.comeon.backend.meeting.command.domain.MeetingPlace;
-import com.comeon.backend.meeting.command.domain.MeetingRepository;
-import com.comeon.backend.meeting.command.domain.PlaceCategory;
+import com.comeon.backend.meeting.command.domain.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,20 +15,24 @@ public class MeetingPlaceFacade {
     public Long addPlace(Long userId, Long meetingId,
                          String placeName, String placeMemo, Double lat, Double lng,
                          String address, String category, String googlePlaceId) {
-        Meeting meeting = meetingRepository.findMeetingBy(meetingId).orElseThrow();
-        MeetingPlace place = MeetingPlace.builder()
-                .meeting(meeting)
-                .name(placeName)
-                .memo(placeMemo)
-                .lat(lat)
-                .lng(lng)
-                .address(address)
-                .order(meetingRepository.getPlaceCountBy(meetingId) + 1)
-                .category(PlaceCategory.of(category))
-                .googlePlaceId(googlePlaceId)
-                .userId(userId)
-                .build();
+        Meeting meeting = meetingRepository.findMeetingFetchPlacesBy(meetingId)
+                .orElseThrow(() -> new MeetingNotExistException(meetingId));
+        MeetingPlace place = meeting.createPlace(
+                userId, placeName, placeMemo, lat, lng,
+                address, category, googlePlaceId
+        );
+        meetingRepository.flush();
 
-        return meetingRepository.savePlace(place).getId();
+        return place.getId();
+    }
+
+    public void removePlace(Long meetingId, Long placeId) {
+        meetingRepository.findMeetingFetchPlacesBy(meetingId)
+                .ifPresentOrElse(
+                        meeting -> meeting.removePlaceByPlaceId(placeId),
+                        () -> {
+                            throw new MeetingNotExistException(meetingId);
+                        }
+                );
     }
 }

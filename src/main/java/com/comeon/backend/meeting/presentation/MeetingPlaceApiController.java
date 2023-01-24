@@ -6,6 +6,7 @@ import com.comeon.backend.meeting.command.application.MeetingPlaceFacade;
 import com.comeon.backend.meeting.presentation.request.PlaceAddRequest;
 import com.comeon.backend.meeting.presentation.response.PlaceAddResponse;
 import com.comeon.backend.meeting.presentation.response.PlaceListResponse;
+import com.comeon.backend.meeting.presentation.response.PlaceRemoveResponse;
 import com.comeon.backend.meeting.query.dao.MeetingPlaceDao;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,7 +25,7 @@ public class MeetingPlaceApiController {
     private final MeetingPlaceDao meetingPlaceDao;
 
     @GetMapping
-    public ListResponse<?> placeList(@AuthenticationPrincipal JwtPrincipal jwtPrincipal,
+    public ListResponse<PlaceListResponse> placeList(@AuthenticationPrincipal JwtPrincipal jwtPrincipal,
                                      @PathVariable Long meetingId) {
         return ListResponse.toListResponse(
                 meetingPlaceDao.findPlaceList(meetingId).stream()
@@ -57,5 +58,13 @@ public class MeetingPlaceApiController {
                 request.getGooglePlaceId()
         );
         return new PlaceAddResponse(meetingPlaceId);
+    }
+
+    @DeleteMapping("/{meetingPlaceId}")
+    public PlaceRemoveResponse placeRemove(@AuthenticationPrincipal JwtPrincipal jwtPrincipal,
+                                           @PathVariable Long meetingId,
+                                           @PathVariable Long meetingPlaceId) {
+        meetingPlaceFacade.removePlace(meetingId, meetingPlaceId);
+        return new PlaceRemoveResponse();
     }
 }
