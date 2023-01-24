@@ -9,7 +9,7 @@ import java.util.List;
 
 @Getter
 @AllArgsConstructor
-public class MeetingSummaryResponse {
+public class MeetingListResponse {
 
     private Long meetingId;
     private UserSummaryResponse hostUser;

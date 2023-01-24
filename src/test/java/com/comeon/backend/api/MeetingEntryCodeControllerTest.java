@@ -5,7 +5,7 @@ import com.comeon.backend.meeting.command.application.dto.EntryCodeDetails;
 import com.comeon.backend.meeting.command.application.MeetingFacade;
 import com.comeon.backend.meeting.presentation.MeetingEntryCodeController;
 import com.comeon.backend.meeting.query.application.MeetingQueryService;
-import com.comeon.backend.meeting.query.dto.MeetingEntryCodeDetails;
+import com.comeon.backend.meeting.query.application.dto.MeetingEntryCodeDetails;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;

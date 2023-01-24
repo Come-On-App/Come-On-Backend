@@ -10,7 +10,7 @@ import com.comeon.backend.meeting.presentation.request.MeetingJoinRequest;
 import com.comeon.backend.meeting.presentation.request.MeetingSummaryListParam;
 import com.comeon.backend.meeting.presentation.response.MeetingAddResponse;
 import com.comeon.backend.meeting.presentation.response.MeetingJoinResponse;
-import com.comeon.backend.meeting.presentation.response.MeetingSummaryResponse;
+import com.comeon.backend.meeting.presentation.response.MeetingListResponse;
 import com.comeon.backend.meeting.query.dao.MeetingDao;
 import com.comeon.backend.meeting.query.dao.MeetingCondition;
 import com.comeon.backend.meeting.query.dao.result.FindMeetingSliceResult;
@@ -51,9 +51,9 @@ public class MeetingController {
     }
 
     @GetMapping
-    public SliceResponse<MeetingSummaryResponse> meetingSummaryList(@AuthenticationPrincipal JwtPrincipal jwtPrincipal,
-                                                                    @PageableDefault(size = 10, page = 0) Pageable pageable,
-                                                                    MeetingSummaryListParam param) {
+    public SliceResponse<MeetingListResponse> meetingList(@AuthenticationPrincipal JwtPrincipal jwtPrincipal,
+                                                          @PageableDefault(size = 10, page = 0) Pageable pageable,
+                                                          MeetingSummaryListParam param) {
         // TODO 리팩토링
         Slice<FindMeetingSliceResult> meetingSlice = meetingDao.findMeetingSlice(
                 jwtPrincipal.getUserId(),
@@ -67,9 +67,9 @@ public class MeetingController {
 
         return SliceResponse.toSliceResponse(
                 meetingSlice.map(
-                        result -> new MeetingSummaryResponse(
+                        result -> new MeetingListResponse(
                                 result.getMeetingId(),
-                                new MeetingSummaryResponse.UserSummaryResponse(
+                                new MeetingListResponse.UserSummaryResponse(
                                         result.getHostUserId(),
                                         result.getHostUserNickname(),
                                         result.getHostUserProfileImageUrl()

@@ -1,4 +1,4 @@
-package com.comeon.backend.meeting.query.dto;
+package com.comeon.backend.meeting.query.application.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

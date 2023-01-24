@@ -6,7 +6,7 @@ import com.comeon.backend.meeting.command.application.MeetingFacade;
 import com.comeon.backend.meeting.presentation.response.EntryCodeDetailResponse;
 import com.comeon.backend.meeting.presentation.response.EntryCodeRenewResponse;
 import com.comeon.backend.meeting.query.application.MeetingQueryService;
-import com.comeon.backend.meeting.query.dto.MeetingEntryCodeDetails;
+import com.comeon.backend.meeting.query.application.dto.MeetingEntryCodeDetails;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
