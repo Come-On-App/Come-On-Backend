@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/meetings/{meetingId}/entry-code")
-public class MeetingEntryCodeController {
+public class EntryCodeApiController {
 
     private final MeetingFacade meetingFacade;
     private final MeetingQueryService meetingQueryService;

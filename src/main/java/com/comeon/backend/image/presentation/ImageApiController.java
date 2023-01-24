@@ -15,7 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/image")
-public class ImageFileController {
+public class ImageApiController {
 
     private final FileManager fileManager;
 

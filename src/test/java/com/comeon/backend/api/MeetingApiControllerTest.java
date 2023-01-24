@@ -6,7 +6,7 @@ import com.comeon.backend.meeting.command.application.MeetingFacade;
 import com.comeon.backend.meeting.command.application.MeetingMemberFacade;
 import com.comeon.backend.meeting.command.application.dto.MeetingMemberSummary;
 import com.comeon.backend.meeting.command.domain.MeetingMemberRole;
-import com.comeon.backend.meeting.presentation.MeetingController;
+import com.comeon.backend.meeting.presentation.MeetingApiController;
 import com.comeon.backend.meeting.presentation.request.MeetingAddRequest;
 import com.comeon.backend.meeting.presentation.request.MeetingJoinRequest;
 import com.comeon.backend.meeting.query.dao.MeetingDao;
@@ -35,8 +35,8 @@ import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.List;
 
-@WebMvcTest({MeetingController.class})
-public class MeetingControllerTest extends RestDocsTestSupport {
+@WebMvcTest({MeetingApiController.class})
+public class MeetingApiControllerTest extends RestDocsTestSupport {
 
     @MockBean
     MeetingFacade meetingFacade;

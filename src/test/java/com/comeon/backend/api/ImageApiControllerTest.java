@@ -3,7 +3,7 @@ package com.comeon.backend.api;
 import com.comeon.backend.api.utils.RestDocsTestSupport;
 import com.comeon.backend.config.S3MockConfig;
 import com.comeon.backend.image.infrastructure.S3FileManager;
-import com.comeon.backend.image.presentation.ImageFileController;
+import com.comeon.backend.image.presentation.ImageApiController;
 import org.apache.http.entity.ContentType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -29,8 +29,8 @@ import java.nio.charset.StandardCharsets;
         S3MockConfig.class,
         S3FileManager.class,
 })
-@WebMvcTest(ImageFileController.class)
-public class ImageFileControllerTest extends RestDocsTestSupport {
+@WebMvcTest(ImageApiController.class)
+public class ImageApiControllerTest extends RestDocsTestSupport {
 
     @Nested
     @DisplayName("이미지 업로드")

@@ -30,7 +30,7 @@ import java.time.format.DateTimeFormatter;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/meetings")
-public class MeetingController {
+public class MeetingApiController {
 
     private final MeetingFacade meetingFacade;
     private final MeetingMemberFacade meetingMemberFacade;

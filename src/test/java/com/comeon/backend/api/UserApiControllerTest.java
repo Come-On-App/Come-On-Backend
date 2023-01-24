@@ -3,7 +3,7 @@ package com.comeon.backend.api;
 import com.comeon.backend.api.utils.RestDocsTestSupport;
 import com.comeon.backend.api.utils.RestDocsUtil;
 import com.comeon.backend.user.command.application.UserFacade;
-import com.comeon.backend.user.presentation.UserController;
+import com.comeon.backend.user.presentation.UserApiController;
 import com.comeon.backend.user.presentation.request.UserModifyRequest;
 import com.comeon.backend.user.query.application.UserQueryService;
 import com.comeon.backend.user.query.dto.UserDetails;
@@ -24,8 +24,8 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.nio.charset.StandardCharsets;
 
-@WebMvcTest({UserController.class})
-public class UserControllerTest extends RestDocsTestSupport {
+@WebMvcTest({UserApiController.class})
+public class UserApiControllerTest extends RestDocsTestSupport {
 
     @MockBean
     UserFacade userFacade;
