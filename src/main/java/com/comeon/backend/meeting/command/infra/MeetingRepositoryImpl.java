@@ -17,6 +17,7 @@ public class MeetingRepositoryImpl implements MeetingRepository {
     private final MeetingJpaRepository meetingJpaRepository;
     private final MeetingMemberJpaRepository meetingMemberJpaRepository;
     private final MeetingEntryCodeJpaRepository meetingEntryCodeJpaRepository;
+    private final MeetingPlaceJpaRepository meetingPlaceJpaRepository;
 
     @Override
     public Meeting saveMeeting(Meeting meeting) {
@@ -67,5 +68,10 @@ public class MeetingRepositoryImpl implements MeetingRepository {
     @Override
     public MeetingEntryCode saveEntryCodeAndFlush(MeetingEntryCode entryCode) {
         return meetingEntryCodeJpaRepository.saveAndFlush(entryCode);
+    }
+
+    @Override
+    public MeetingPlace savePlace(MeetingPlace meetingPlace) {
+        return meetingPlaceJpaRepository.save(meetingPlace);
     }
 }
