@@ -26,6 +26,7 @@ public class MeetingPlaceFacade {
                 .lat(lat)
                 .lng(lng)
                 .address(address)
+                .order(meetingRepository.getPlaceCountBy(meetingId) + 1)
                 .category(PlaceCategory.of(category))
                 .googlePlaceId(googlePlaceId)
                 .userId(userId)

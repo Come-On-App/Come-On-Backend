@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import java.util.Optional;
 
 import static com.comeon.backend.meeting.command.domain.QMeetingEntryCode.meetingEntryCode;
+import static com.comeon.backend.meeting.command.domain.QMeetingPlace.meetingPlace;
 
 @Component
 @RequiredArgsConstructor
@@ -73,5 +74,15 @@ public class MeetingRepositoryImpl implements MeetingRepository {
     @Override
     public MeetingPlace savePlace(MeetingPlace meetingPlace) {
         return meetingPlaceJpaRepository.save(meetingPlace);
+    }
+
+    @Override
+    public int getPlaceCountBy(Long meetingId) {
+        return jpaQueryFactory
+                .select(meetingPlace.id.count())
+                .from(meetingPlace)
+                .where(meetingPlace.meeting.id.eq(meetingId))
+                .fetchOne()
+                .intValue();
     }
 }

@@ -13,4 +13,5 @@ public interface MeetingRepository {
     MeetingEntryCode saveEntryCode(MeetingEntryCode entryCode);
     MeetingEntryCode saveEntryCodeAndFlush(MeetingEntryCode entryCode);
     MeetingPlace savePlace(MeetingPlace meetingPlace);
+    int getPlaceCountBy(Long meetingId);
 }

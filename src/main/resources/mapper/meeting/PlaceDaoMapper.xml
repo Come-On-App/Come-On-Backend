@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="meetingPlaceDao">
+    <resultMap id="PlaceResultMap" type="com.comeon.backend.meeting.query.dao.result.PlaceListResult">
+        <result column="place_id" property="meetingPlaceId"/>
+        <result column="name" property="placeName"/>
+        <result column="memo" property="memo"/>
+        <result column="lat" property="lat"/>
+        <result column="lng" property="lng"/>
+        <result column="address" property="address"/>
+        <result column="orders" property="order"/>
+        <result column="category" property="category"/>
+        <result column="google_place_id" property="googlePlaceId"/>
+    </resultMap>
+
+    <select id="findPlaceList" resultMap="PlaceResultMap">
+        select mp.meeting_place_id as place_id,
+               mp.name             as name,
+               mp.memo             as memo,
+               mp.lat              as lat,
+               mp.lng              as lng,
+               mp.address          as address,
+               mp.place_order      as orders,
+               mp.category         as category,
+               mp.google_place_id  as google_place_id
+        from meeting_place mp
+        where mp.meeting_id = #{meetingId}
+        order by mp.place_order;
+    </select>
+</mapper>

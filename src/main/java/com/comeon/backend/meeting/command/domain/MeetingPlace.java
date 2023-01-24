@@ -42,8 +42,8 @@ public class MeetingPlace extends BaseTimeEntity {
 
     @Builder
     public MeetingPlace(Meeting meeting, String name, String memo,
-                        String address, Double lng, Double lat,
-                        PlaceCategory category, String googlePlaceId, Long userId) {
+                        String address, Double lng, Double lat, PlaceCategory category,
+                        int order, String googlePlaceId, Long userId) {
         this.meeting = meeting;
         this.name = name;
         this.memo = memo;
@@ -51,7 +51,7 @@ public class MeetingPlace extends BaseTimeEntity {
         this.lng = lng;
         this.lat = lat;
         this.category = category;
-        this.order = meeting.increasePlaceCount();
+        this.order = order;
         this.googlePlaceId = googlePlaceId;
         this.lastModifiedUserId = userId;
     }

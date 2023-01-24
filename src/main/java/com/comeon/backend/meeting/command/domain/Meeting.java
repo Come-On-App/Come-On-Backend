@@ -25,8 +25,6 @@ public class Meeting extends BaseTimeEntity {
     private LocalDate calendarStartFrom;
     private LocalDate calendarEndTo;
 
-    private int placeCount = 0;
-
     @OneToMany(mappedBy = "meeting", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MeetingMember> members = new ArrayList<>();
 
@@ -44,9 +42,5 @@ public class Meeting extends BaseTimeEntity {
         MeetingMember participantMember = MeetingMember.createParticipantMember(participantUserId, this);
         members.add(participantMember);
         return participantMember;
-    }
-
-    public int increasePlaceCount() {
-        return ++this.placeCount;
     }
 }
