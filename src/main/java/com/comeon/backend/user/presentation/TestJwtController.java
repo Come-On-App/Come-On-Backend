@@ -1,12 +1,10 @@
-package com.comeon.backend.user.presentation.api;
+package com.comeon.backend.user.presentation;
 
-import com.comeon.backend.common.jwt.JwtGenerator;
-import com.comeon.backend.common.jwt.TokenType;
-import com.comeon.backend.user.command.application.Tokens;
+import com.comeon.backend.jwt.application.JwtManager;
 import com.comeon.backend.user.command.domain.OauthProvider;
 import com.comeon.backend.user.command.domain.User;
-import com.comeon.backend.user.infrastructure.repository.UserJpaRepository;
-import com.comeon.backend.user.presentation.api.response.AppAuthTokensResponse;
+import com.comeon.backend.user.command.infra.repository.UserJpaRepository;
+import com.comeon.backend.user.presentation.response.OauthLoginResponse;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,7 +22,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/test-api/v1")
 public class TestJwtController {
 
-    private final JwtGenerator jwtGenerator;
+    private final JwtManager jwtManager;
     private final UserJpaRepository userRepository;
 
     @PostMapping("/users")
@@ -44,32 +42,16 @@ public class TestJwtController {
 
     @PostMapping("/tokens")
     public GetTokensResponse getTokens(@RequestBody GetTokensRequest request) {
-        List<AppAuthTokensResponse> result;
+        List<OauthLoginResponse> result;
         if (request.getUserIds().isEmpty()) {
             result = userRepository.findAll().stream()
-                    .map(user -> new Tokens(
-                            jwtGenerator.initBuilder(TokenType.ACCESS)
-                                    .userId(user.getId())
-                                    .nickname(user.getNickname())
-                                    .authorities(user.getRole().getValue())
-                                    .build(),
-                            jwtGenerator.initBuilder(TokenType.REFRESH)
-                                    .build()
-                    ))
-                    .map(AppAuthTokensResponse::generateResponse)
+                    .map(user -> jwtManager.buildTokens(user.getId(), user.getNickname(), user.getRole().getValue()))
+                    .map(OauthLoginResponse::new)
                     .collect(Collectors.toList());
         } else {
             result = userRepository.findByIdIn(request.userIds).stream()
-                    .map(user -> new Tokens(
-                            jwtGenerator.initBuilder(TokenType.ACCESS)
-                                    .userId(user.getId())
-                                    .nickname(user.getNickname())
-                                    .authorities(user.getRole().getValue())
-                                    .build(),
-                            jwtGenerator.initBuilder(TokenType.REFRESH)
-                                    .build()
-                    ))
-                    .map(AppAuthTokensResponse::generateResponse)
+                    .map(user -> jwtManager.buildTokens(user.getId(), user.getNickname(), user.getRole().getValue()))
+                    .map(OauthLoginResponse::new)
                     .collect(Collectors.toList());
         }
         return new GetTokensResponse(result);
@@ -85,9 +67,9 @@ public class TestJwtController {
     @Getter
     public static class GetTokensResponse {
         private Integer count;
-        private List<AppAuthTokensResponse> result;
+        private List<OauthLoginResponse> result;
 
-        public GetTokensResponse(List<AppAuthTokensResponse> result) {
+        public GetTokensResponse(List<OauthLoginResponse> result) {
             this.count = result.size();
             this.result = result;
         }
