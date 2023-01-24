@@ -1,7 +1,7 @@
 package com.comeon.backend.common.security;
 
-import com.comeon.backend.common.jwt.JwtClaims;
-import com.comeon.backend.common.jwt.JwtParser;
+import com.comeon.backend.jwt.application.JwtManager;
+import com.comeon.backend.jwt.application.Payload;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -17,12 +17,12 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class JwtAuthenticationProvider {
 
-    private final JwtParser jwtParser;
+    private final JwtManager jwtManager;
 
     public Authentication getAuthentication(String accessToken) {
-        JwtClaims claims = jwtParser.parse(accessToken);
-        JwtPrincipal jwtPrincipal = new JwtPrincipal(accessToken, claims.getUserId());
-        List<GrantedAuthority> authorities = Arrays.stream(claims.getAuthorities().split(","))
+        Payload payload = jwtManager.parse(accessToken);
+        JwtPrincipal jwtPrincipal = new JwtPrincipal(accessToken, payload.getUserId());
+        List<GrantedAuthority> authorities = Arrays.stream(payload.getAuthorities().split(","))
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
         return new UsernamePasswordAuthenticationToken(jwtPrincipal, null, authorities);

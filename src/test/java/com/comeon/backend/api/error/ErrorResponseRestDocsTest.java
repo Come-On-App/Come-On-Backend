@@ -178,6 +178,36 @@ public class ErrorResponseRestDocsTest extends RestDocsTestSupport {
                             )
                     );
         }
+
+        @Test
+        @DisplayName("JWT 오류 코드")
+        void jwt() throws Exception {
+            //when
+            ResultActions perform = mockMvc.perform(
+                    RestDocumentationRequestBuilders.get("/error/code/jwt")
+                            .accept(MediaType.APPLICATION_JSON)
+            );
+
+            Map<Integer, String> response = objectMapper.readValue(
+                    perform.andReturn()
+                            .getResponse()
+                            .getContentAsByteArray(),
+                    new TypeReference<>() {
+                    }
+            );
+
+            // docs
+            perform.andExpect(MockMvcResultMatchers.status().isOk())
+                    .andDo(
+                            restDocs.document(
+                                    RestDocsUtil.customResponseFields(
+                                            "error-code-response",
+                                            Attributes.attributes(Attributes.key("title").value("인증/인가 오류 코드")),
+                                            enumConvertFieldDescriptor(response)
+                                    )
+                            )
+                    );
+        }
     }
 
     private static FieldDescriptor[] enumConvertFieldDescriptor(Map<Integer, String> enumValues) {

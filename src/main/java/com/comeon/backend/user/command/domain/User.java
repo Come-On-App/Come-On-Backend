@@ -35,6 +35,15 @@ public class User extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private UserStatus status;
 
+    public static User createBy(OauthUserInfo oauthUserInfo) {
+        return new User(
+                oauthUserInfo.getOauthId(),
+                oauthUserInfo.getProvider(),
+                oauthUserInfo.getEmail(),
+                oauthUserInfo.getName()
+        );
+    }
+
     @Builder
     public User(String oauthId, OauthProvider provider, String email, String name) {
         this.oauthId = oauthId;
@@ -45,6 +54,11 @@ public class User extends BaseTimeEntity {
         this.nickname = name;
         this.role = Role.USER;
         this.status = UserStatus.ACTIVATE;
+    }
+
+    public void update(OauthUserInfo oauthUserInfo) {
+        updateEmail(oauthUserInfo.getEmail());
+        updateName(oauthUserInfo.getName());
     }
 
     public void updateEmail(String email) {

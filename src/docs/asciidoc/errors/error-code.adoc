@@ -8,5 +8,5 @@
 include::common-error-code.adoc[]
 include::user-error-code.adoc[]
 include::meeting-error-code.adoc[]
-
+include::jwt-error-code.adoc[]
 include::image-error-code.adoc[]

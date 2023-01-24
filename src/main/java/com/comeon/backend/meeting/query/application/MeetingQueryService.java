@@ -5,7 +5,7 @@ import com.comeon.backend.meeting.common.MeetingErrorCode;
 import com.comeon.backend.meeting.query.dao.param.FindEntryCodeDetailsParam;
 import com.comeon.backend.meeting.query.dao.result.FindEntryCodeDetailsResult;
 import com.comeon.backend.meeting.query.dao.MeetingEntryCodeDao;
-import com.comeon.backend.meeting.query.dto.MeetingEntryCodeDetails;
+import com.comeon.backend.meeting.query.application.dto.MeetingEntryCodeDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

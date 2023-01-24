@@ -1,5 +1,6 @@
 package com.comeon.backend.meeting.query.dao;
 
+import com.comeon.backend.common.util.SliceUtils;
 import com.comeon.backend.meeting.query.dao.param.FindMeetingSliceParam;
 import com.comeon.backend.meeting.query.dao.result.FindMeetingSliceResult;
 import lombok.RequiredArgsConstructor;
@@ -20,14 +21,6 @@ public class MeetingDao {
     public Slice<FindMeetingSliceResult> findMeetingSlice(Long userId, Pageable pageable, MeetingCondition cond) {
         FindMeetingSliceParam param = new FindMeetingSliceParam(userId, cond, pageable);
         List<FindMeetingSliceResult> results = sqlSession.selectList("findMeetingSlice", param);
-        return new SliceImpl<>(results, pageable, hasNext(pageable, results));
-    }
-
-    private boolean hasNext(Pageable pageable, List<?> contents) {
-        if (contents.size() > pageable.getPageSize()) {
-            contents.remove(pageable.getPageSize());
-            return true;
-        }
-        return false;
+        return new SliceImpl<>(results, pageable, SliceUtils.hasNext(pageable, results));
     }
 }

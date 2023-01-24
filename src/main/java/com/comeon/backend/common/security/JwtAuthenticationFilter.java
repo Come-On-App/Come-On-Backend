@@ -1,6 +1,6 @@
 package com.comeon.backend.common.security;
 
-import com.comeon.backend.common.jwt.JwtValidator;
+import com.comeon.backend.jwt.application.JwtManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpHeaders;
@@ -21,7 +21,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final static String PREFIX_BEARER = "Bearer ";
 
-    private final JwtValidator jwtValidator;
+    private final JwtManager jwtManager;
     private final JwtAuthenticationProvider authenticationProvider;
 
     @Override
@@ -39,7 +39,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     }
 
     private boolean isValidAccessToken(String accessTokenValue) {
-        return StringUtils.hasText(accessTokenValue) && jwtValidator.valid(accessTokenValue);
+        return StringUtils.hasText(accessTokenValue) && jwtManager.verifyAtk(accessTokenValue);
     }
 
     private String resolveAccessToken(HttpServletRequest request) {

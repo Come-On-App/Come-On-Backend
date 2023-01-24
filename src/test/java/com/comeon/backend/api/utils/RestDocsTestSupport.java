@@ -1,7 +1,6 @@
 package com.comeon.backend.api.utils;
 
-import com.comeon.backend.common.jwt.JwtToken;
-import com.comeon.backend.common.jwt.TokenType;
+import com.comeon.backend.jwt.application.JwtToken;
 import com.comeon.backend.common.security.JwtAccessDeniedHandler;
 import com.comeon.backend.common.security.JwtAuthenticationEntryPoint;
 import com.comeon.backend.common.security.JwtAuthenticationFilter;
@@ -54,11 +53,7 @@ public class RestDocsTestSupport extends ControllerUnitTest {
 
     @BeforeEach
     void setUp() {
-        currentRequestATK = jwtGenerator.initBuilder(TokenType.ACCESS)
-                .userId(123L)
-                .nickname("user_123")
-                .authorities(Role.USER.getValue())
-                .build();
+        currentRequestATK = jwtManager.buildAccessToken(currentUserId, "user_" + currentUserId, Role.USER.getValue());
         SecurityContextHolder.getContext().setAuthentication(jwtAuthenticationProvider.getAuthentication(currentRequestATK.getToken()));
     }
 

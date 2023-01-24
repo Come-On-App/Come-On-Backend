@@ -2,13 +2,13 @@ package com.comeon.backend.api;
 
 import com.comeon.backend.api.utils.RestDocsTestSupport;
 import com.comeon.backend.api.utils.RestDocsUtil;
-import com.comeon.backend.meeting.command.application.MeetingCommandService;
-import com.comeon.backend.meeting.command.application.MeetingMemberCommandService;
-import com.comeon.backend.meeting.command.application.MeetingMemberSummary;
+import com.comeon.backend.meeting.command.application.MeetingFacade;
+import com.comeon.backend.meeting.command.application.MeetingMemberFacade;
+import com.comeon.backend.meeting.command.application.dto.MeetingMemberSummary;
 import com.comeon.backend.meeting.command.domain.MeetingMemberRole;
-import com.comeon.backend.meeting.presentation.api.MeetingController;
-import com.comeon.backend.meeting.presentation.api.request.MeetingAddRequest;
-import com.comeon.backend.meeting.presentation.api.request.MeetingJoinRequest;
+import com.comeon.backend.meeting.presentation.MeetingController;
+import com.comeon.backend.meeting.presentation.request.MeetingAddRequest;
+import com.comeon.backend.meeting.presentation.request.MeetingJoinRequest;
 import com.comeon.backend.meeting.query.dao.MeetingDao;
 import com.comeon.backend.meeting.query.dao.result.FindMeetingSliceResult;
 import org.junit.jupiter.api.DisplayName;
@@ -39,10 +39,10 @@ import java.util.List;
 public class MeetingControllerTest extends RestDocsTestSupport {
 
     @MockBean
-    MeetingCommandService meetingCommandService;
+    MeetingFacade meetingFacade;
 
     @MockBean
-    MeetingMemberCommandService meetingMemberCommandService;
+    MeetingMemberFacade meetingMemberFacade;
 
     @MockBean
     MeetingDao meetingDao;
@@ -65,7 +65,7 @@ public class MeetingControllerTest extends RestDocsTestSupport {
             );
 
             long meetingId = 28L;
-            BDDMockito.given(meetingCommandService.addMeeting(BDDMockito.anyLong(), BDDMockito.anyString(), BDDMockito.anyString(), BDDMockito.any(), BDDMockito.any()))
+            BDDMockito.given(meetingFacade.addMeeting(BDDMockito.anyLong(), BDDMockito.anyString(), BDDMockito.anyString(), BDDMockito.any(), BDDMockito.any()))
                     .willReturn(meetingId);
 
             //when
@@ -120,7 +120,7 @@ public class MeetingControllerTest extends RestDocsTestSupport {
             long meetingIdMock = 300L;
             long memberIdMock = 4777L;
             String memberRoleMock = MeetingMemberRole.PARTICIPANT.name();
-            BDDMockito.given(meetingMemberCommandService.joinMeeting(BDDMockito.anyLong(), BDDMockito.anyString()))
+            BDDMockito.given(meetingMemberFacade.joinMeeting(BDDMockito.anyLong(), BDDMockito.anyString()))
                     .willReturn(
                             new MeetingMemberSummary(meetingIdMock, memberIdMock, memberRoleMock)
                     );
@@ -188,7 +188,7 @@ public class MeetingControllerTest extends RestDocsTestSupport {
             // mocking
             List<FindMeetingSliceResult> sliceResults = List.of(
                     new FindMeetingSliceResult(10L, 31L, "user31", null, 10, MeetingMemberRole.PARTICIPANT.name(), "ex meeting 10", "2023-03-01", "2023-03-23", "https://xxxx.xxxxxxx.xxxx/xxxxxxxxxxx"),
-                    new FindMeetingSliceResult(14L, currentRequestATK.getClaims().getUserId(), currentRequestATK.getClaims().getNickname(), "https://xxx.xxxx.xxxxxx/xxxxxx", 4, MeetingMemberRole.HOST.name(), "meeting 14 ex", "2023-03-10", "2023-03-18", "https://xxxx.xxxxxxx.xxxx/xxxxxxxxx"),
+                    new FindMeetingSliceResult(14L, currentRequestATK.getPayload().getUserId(), currentRequestATK.getPayload().getNickname(), "https://xxx.xxxx.xxxxxx/xxxxxx", 4, MeetingMemberRole.HOST.name(), "meeting 14 ex", "2023-03-10", "2023-03-18", "https://xxxx.xxxxxxx.xxxx/xxxxxxxxx"),
                     new FindMeetingSliceResult(23L, 11L, "user 11", null, 6, MeetingMemberRole.PARTICIPANT.name(), "meeting ex 23", "2023-03-22", "2023-03-30", "https://xxxx.xxxxxxx.xxxx/xxxxxxxxx")
             );
             BDDMockito.given(meetingDao.findMeetingSlice(BDDMockito.anyLong(), BDDMockito.any(), BDDMockito.any()))
