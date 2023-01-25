@@ -74,9 +74,7 @@ public class MeetingPlace extends BaseTimeEntity {
     }
 
     private void updateName(String name) {
-        if (name != null) {
-            this.name = name;
-        }
+        this.name = name;
     }
 
     private void updateMemo(String memo) {
@@ -84,27 +82,19 @@ public class MeetingPlace extends BaseTimeEntity {
     }
 
     private void updateAddress(String address) {
-        if (address != null) {
-            this.address = address;
-        }
+        this.address = address;
     }
 
     private void updateLat(Double lat) {
-        if (lat != null) {
-            this.lat = lat;
-        }
+        this.lat = lat;
     }
 
     private void updateLng(Double lng) {
-        if (lng != null) {
-            this.lng = lng;
-        }
+        this.lng = lng;
     }
 
     private void updateCategory(PlaceCategory category) {
-        if (category != null) {
-            this.category = category;
-        }
+        this.category = category;
     }
 
     private void updateGooglePlaceId(String googlePlaceId) {

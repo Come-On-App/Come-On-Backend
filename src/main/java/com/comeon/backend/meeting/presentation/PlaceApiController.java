@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/meetings/{meetingId}/places")
-public class MeetingPlaceApiController {
+public class PlaceApiController {
 
     private final MeetingPlaceFacade meetingPlaceFacade;
     private final MeetingPlaceDao meetingPlaceDao;
@@ -62,7 +62,7 @@ public class MeetingPlaceApiController {
         return new PlaceAddResponse(meetingPlaceId);
     }
 
-    @PatchMapping("/{meetingPlaceId}")
+    @PutMapping("/{meetingPlaceId}")
     public PlaceModifyResponse placeModify(@AuthenticationPrincipal JwtPrincipal jwtPrincipal,
                                            @PathVariable Long meetingId,
                                            @PathVariable Long meetingPlaceId,
