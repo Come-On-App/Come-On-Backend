@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/test-api/v1")
-public class TestJwtController {
+public class TestJwtApiController {
 
     private final JwtManager jwtManager;
     private final UserJpaRepository userRepository;

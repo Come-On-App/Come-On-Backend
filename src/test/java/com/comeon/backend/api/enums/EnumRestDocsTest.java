@@ -126,6 +126,32 @@ public class EnumRestDocsTest extends RestDocsTestSupport {
                     )
             );
         }
+
+        @Test
+        @DisplayName("place category codes")
+        void placeCategory() throws Exception {
+            ResultActions perform = mockMvc.perform(
+                    RestDocumentationRequestBuilders.get("/enums/place-category")
+                            .accept(MediaType.APPLICATION_JSON)
+            );
+
+            Map<String, String> data = objectMapper.readValue(
+                    perform.andReturn()
+                            .getResponse().getContentAsByteArray(),
+                    new TypeReference<>() {
+                    }
+            );
+
+            perform.andDo(
+                    restDocs.document(
+                            RestDocsUtil.customResponseFields(
+                                    "enum-response",
+                                    getTitleAttributes("장소 카테고리 코드"),
+                                    enumConvertFieldDescriptor(data)
+                            )
+                    )
+            );
+        }
     }
 
     private static FieldDescriptor[] enumConvertFieldDescriptor(Map<String, String> enumValues) {

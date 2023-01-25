@@ -47,4 +47,30 @@ public class CommonResponseRestDocsTest extends RestDocsTestSupport {
                     );
         }
     }
+
+    @Nested
+    @DisplayName("List 응답 스펙")
+    class listResponse {
+        @Test
+        @DisplayName("success")
+        void success() throws Exception {
+            //when
+            ResultActions perform = mockMvc.perform(
+                    RestDocumentationRequestBuilders.get("/response/list")
+                            .accept(MediaType.APPLICATION_JSON)
+            );
+
+            // docs
+            perform.andExpect(MockMvcResultMatchers.status().isOk())
+                    .andDo(
+                            restDocs.document(
+                                    PayloadDocumentation.responseFields(
+                                            getTitleAttributes("List 응답 필드"),
+                                            PayloadDocumentation.fieldWithPath("contentsCount").type(JsonFieldType.NUMBER).description("리스트 응답 contents 필드 내부 데이터 개수"),
+                                            PayloadDocumentation.fieldWithPath("contents").type(JsonFieldType.ARRAY).description("실제 응답 데이터 필드")
+                                    )
+                            )
+                    );
+        }
+    }
 }

@@ -1,5 +1,6 @@
 package com.comeon.backend.api.response.controller;
 
+import com.comeon.backend.common.api.ListResponse;
 import com.comeon.backend.common.api.SliceResponse;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.SliceImpl;
@@ -14,5 +15,10 @@ public class CommonResponseRestDocsController {
     @GetMapping("/response/slice")
     public SliceResponse<?> sliceResponse() {
         return SliceResponse.toSliceResponse(new SliceImpl<>(List.of(1, 2, 3), Pageable.ofSize(5), true));
+    }
+
+    @GetMapping("/response/list")
+    public ListResponse<?> listResponse() {
+        return ListResponse.toListResponse(List.of(1, 2, 3));
     }
 }

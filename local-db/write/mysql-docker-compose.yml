@@ -6,7 +6,7 @@ services:
     volumes:
       - ./db/var/lib/mysql:/var/lib/mysql
     ports:
-      - "3306:3306"
+      - "3307:3306"
     env_file: .env
     command:
       - --character-set-server=utf8mb4

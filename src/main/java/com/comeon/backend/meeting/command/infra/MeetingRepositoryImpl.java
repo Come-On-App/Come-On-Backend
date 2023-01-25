@@ -5,6 +5,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import javax.persistence.EntityManager;
 import java.util.Optional;
 
 import static com.comeon.backend.meeting.command.domain.QMeetingEntryCode.meetingEntryCode;
@@ -13,6 +14,7 @@ import static com.comeon.backend.meeting.command.domain.QMeetingEntryCode.meetin
 @RequiredArgsConstructor
 public class MeetingRepositoryImpl implements MeetingRepository {
 
+    private final EntityManager em;
     private final JPAQueryFactory jpaQueryFactory;
     private final MeetingJpaRepository meetingJpaRepository;
     private final MeetingMemberJpaRepository meetingMemberJpaRepository;
@@ -67,5 +69,15 @@ public class MeetingRepositoryImpl implements MeetingRepository {
     @Override
     public MeetingEntryCode saveEntryCodeAndFlush(MeetingEntryCode entryCode) {
         return meetingEntryCodeJpaRepository.saveAndFlush(entryCode);
+    }
+
+    @Override
+    public Optional<Meeting> findMeetingFetchPlacesBy(Long meetingId) {
+        return meetingJpaRepository.findByIdFetchPlaces(meetingId);
+    }
+
+    @Override
+    public void flush() {
+        em.flush();
     }
 }

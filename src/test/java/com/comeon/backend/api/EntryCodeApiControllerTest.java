@@ -3,7 +3,7 @@ package com.comeon.backend.api;
 import com.comeon.backend.api.utils.RestDocsTestSupport;
 import com.comeon.backend.meeting.command.application.dto.EntryCodeDetails;
 import com.comeon.backend.meeting.command.application.MeetingFacade;
-import com.comeon.backend.meeting.presentation.MeetingEntryCodeController;
+import com.comeon.backend.meeting.presentation.EntryCodeApiController;
 import com.comeon.backend.meeting.query.application.MeetingQueryService;
 import com.comeon.backend.meeting.query.application.dto.MeetingEntryCodeDetails;
 import org.junit.jupiter.api.DisplayName;
@@ -26,8 +26,8 @@ import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-@WebMvcTest(MeetingEntryCodeController.class)
-public class MeetingEntryCodeControllerTest extends RestDocsTestSupport {
+@WebMvcTest(EntryCodeApiController.class)
+public class EntryCodeApiControllerTest extends RestDocsTestSupport {
 
     @MockBean
     MeetingFacade meetingFacade;

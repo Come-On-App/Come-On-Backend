@@ -2,7 +2,7 @@ package com.comeon.backend.api;
 
 import com.comeon.backend.api.utils.RestDocsTestSupport;
 import com.comeon.backend.jwt.application.*;
-import com.comeon.backend.jwt.presentation.JwtReissueController;
+import com.comeon.backend.jwt.presentation.JwtReissueApiController;
 import com.comeon.backend.jwt.presentation.request.JwtReissueRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -20,8 +20,8 @@ import java.nio.charset.StandardCharsets;
 
 import static org.mockito.BDDMockito.*;
 
-@WebMvcTest({JwtReissueController.class})
-public class JwtReissueControllerTest extends RestDocsTestSupport {
+@WebMvcTest({JwtReissueApiController.class})
+public class JwtReissueApiControllerTest extends RestDocsTestSupport {
 
     @MockBean
     JwtReissueFacade jwtReissueFacade;
