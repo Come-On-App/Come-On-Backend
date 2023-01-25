@@ -4,8 +4,10 @@ import com.comeon.backend.common.api.ListResponse;
 import com.comeon.backend.common.security.JwtPrincipal;
 import com.comeon.backend.meeting.command.application.MeetingPlaceFacade;
 import com.comeon.backend.meeting.presentation.request.PlaceAddRequest;
+import com.comeon.backend.meeting.presentation.request.PlaceModifyRequest;
 import com.comeon.backend.meeting.presentation.response.PlaceAddResponse;
 import com.comeon.backend.meeting.presentation.response.PlaceListResponse;
+import com.comeon.backend.meeting.presentation.response.PlaceModifyResponse;
 import com.comeon.backend.meeting.presentation.response.PlaceRemoveResponse;
 import com.comeon.backend.meeting.query.dao.MeetingPlaceDao;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +28,7 @@ public class MeetingPlaceApiController {
 
     @GetMapping
     public ListResponse<PlaceListResponse> placeList(@AuthenticationPrincipal JwtPrincipal jwtPrincipal,
-                                     @PathVariable Long meetingId) {
+                                                     @PathVariable Long meetingId) {
         return ListResponse.toListResponse(
                 meetingPlaceDao.findPlaceList(meetingId).stream()
                         .map(
@@ -58,6 +60,19 @@ public class MeetingPlaceApiController {
                 request.getGooglePlaceId()
         );
         return new PlaceAddResponse(meetingPlaceId);
+    }
+
+    @PatchMapping("/{meetingPlaceId}")
+    public PlaceModifyResponse placeModify(@AuthenticationPrincipal JwtPrincipal jwtPrincipal,
+                                           @PathVariable Long meetingId,
+                                           @PathVariable Long meetingPlaceId,
+                                           @RequestBody PlaceModifyRequest request) {
+        meetingPlaceFacade.modifyPlace(
+                jwtPrincipal.getUserId(), meetingId, meetingPlaceId,
+                request.getName(), request.getMemo(), request.getLat(), request.getLng(),
+                request.getAddress(), request.getCategory(), request.getGooglePlaceId()
+        );
+        return new PlaceModifyResponse();
     }
 
     @DeleteMapping("/{meetingPlaceId}")

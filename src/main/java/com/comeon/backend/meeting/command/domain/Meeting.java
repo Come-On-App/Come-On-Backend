@@ -67,10 +67,9 @@ public class Meeting extends BaseTimeEntity {
         return place;
     }
 
-    public void removePlaceByPlaceId(Long placeId) {
+    public void modifyPlaceByPlaceId(Long placeId, Long userId, PlaceInfo placeInfo) {
         MeetingPlace mp = getPlaceByPlaceId(placeId);
-        this.places.remove(mp);
-        arrangeOrder(mp.getOrder());
+        mp.update(userId, placeInfo);
     }
 
     private MeetingPlace getPlaceByPlaceId(Long placeId) {
@@ -78,6 +77,12 @@ public class Meeting extends BaseTimeEntity {
                 .filter(place -> place.getId() == placeId)
                 .findFirst()
                 .orElseThrow(() -> new PlaceNotExistException(placeId));
+    }
+
+    public void removePlaceByPlaceId(Long placeId) {
+        MeetingPlace mp = getPlaceByPlaceId(placeId);
+        this.places.remove(mp);
+        arrangeOrder(mp.getOrder());
     }
 
     private void arrangeOrder(int startOrder) {

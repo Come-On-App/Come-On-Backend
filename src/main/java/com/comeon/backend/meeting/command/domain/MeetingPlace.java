@@ -12,7 +12,8 @@ import javax.persistence.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MeetingPlace extends BaseTimeEntity {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "meeting_place_id")
     private Long id;
 
@@ -58,5 +59,61 @@ public class MeetingPlace extends BaseTimeEntity {
 
     public void decreaseOrder() {
         --this.order;
+    }
+
+    public void update(Long userId, PlaceInfo placeInfo) {
+        updateName(placeInfo.getPlaceName());
+        updateMemo(placeInfo.getPlaceMemo());
+        updateAddress(placeInfo.getAddress());
+        updateLat(placeInfo.getLat());
+        updateLng(placeInfo.getLng());
+        updateCategory(placeInfo.getCategory());
+        updateGooglePlaceId(placeInfo.getGooglePlaceId());
+
+        updateLastModifiedUserId(userId);
+    }
+
+    private void updateName(String name) {
+        if (name != null) {
+            this.name = name;
+        }
+    }
+
+    private void updateMemo(String memo) {
+        this.memo = memo;
+    }
+
+    private void updateAddress(String address) {
+        if (address != null) {
+            this.address = address;
+        }
+    }
+
+    private void updateLat(Double lat) {
+        if (lat != null) {
+            this.lat = lat;
+        }
+    }
+
+    private void updateLng(Double lng) {
+        if (lng != null) {
+            this.lng = lng;
+        }
+    }
+
+    private void updateCategory(PlaceCategory category) {
+        if (category != null) {
+            this.category = category;
+        }
+    }
+
+    private void updateGooglePlaceId(String googlePlaceId) {
+        this.googlePlaceId = googlePlaceId;
+    }
+
+    private void updateLastModifiedUserId(Long userId) {
+        if (userId != null) {
+            this.lastModifiedUserId = userId;
+        }
     }
 }

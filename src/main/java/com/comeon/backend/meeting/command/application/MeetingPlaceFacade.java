@@ -21,9 +21,20 @@ public class MeetingPlaceFacade {
                 userId, placeName, placeMemo, lat, lng,
                 address, category, googlePlaceId
         );
+
         meetingRepository.flush();
 
         return place.getId();
+    }
+
+    public void modifyPlace(Long userId, Long meetingId, Long placeId,
+                            String placeName, String placeMemo, Double lat, Double lng,
+                            String address, String category, String googlePlaceId) {
+        Meeting meeting = meetingRepository.findMeetingFetchPlacesBy(meetingId)
+                .orElseThrow(() -> new MeetingNotExistException(meetingId));
+
+        PlaceInfo placeInfo = new PlaceInfo(placeName, placeMemo, lat, lng, address, category, googlePlaceId);
+        meeting.modifyPlaceByPlaceId(placeId, userId, placeInfo);
     }
 
     public void removePlace(Long meetingId, Long placeId) {
