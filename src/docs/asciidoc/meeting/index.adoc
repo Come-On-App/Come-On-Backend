@@ -21,3 +21,11 @@ include::meeting-join.adoc[]
 include::entry-code-details.adoc[]
 
 include::entry-code-renew.adoc[]
+
+include::meeting-place-list.adoc[]
+
+include::meeting-place-add.adoc[]
+
+include::meeting-place-modify.adoc[]
+
+include::meeting-place-remove.adoc[]

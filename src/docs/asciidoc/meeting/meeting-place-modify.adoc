@@ -1,0 +1,33 @@
+:doctype: book
+:icons: font
+:sectlinks:
+:docinfo: shared-head
+
+[[meeting-place-modify]]
+== 모임 장소 수정
+
+PUT /api/v1/meetings/{meeting-id}/places/{place-id}
+
+=== API Spec
+==== 요청 파라미터
+include::{snippets}/place-modify/success/path-parameters.adoc[]
+
+==== 요청 헤더
+include::{snippets}/place-modify/success/request-headers.adoc[]
+
+==== 요청 필드
+include::{snippets}/place-modify/success/request-fields.adoc[]
+
+==== 응답 필드
+include::{snippets}/place-modify/success/response-fields.adoc[]
+
+=== 요청/응답 예시
+==== 요청 예시
+include::{snippets}/place-modify/success/http-request.adoc[]
+
+==== 응답 예시
+include::{snippets}/place-modify/success/http-response.adoc[]
+
+오류 발생시 아래 "오류 코드 확인하기" 링크에서 모임 관련 오류(`3XXX`)를 확인해주세요.
+
+* link:../errors/error-code.html[오류 코드 확인하기,role="error-code-popup"]

@@ -1,6 +1,7 @@
 package com.comeon.backend.api.enums.controller;
 
 import com.comeon.backend.meeting.command.domain.MeetingMemberRole;
+import com.comeon.backend.meeting.command.domain.PlaceCategory;
 import com.comeon.backend.user.command.domain.OauthProvider;
 import com.comeon.backend.user.command.domain.Role;
 import com.comeon.backend.user.command.domain.UserStatus;
@@ -38,5 +39,11 @@ public class EnumRestDocsController {
     public Map<String, String> userStatus() {
         return Arrays.stream(UserStatus.values())
                 .collect(Collectors.toMap(UserStatus::name, UserStatus::getDescription));
+    }
+
+    @GetMapping("/place-category")
+    public Map<String, String> placeCategory() {
+        return Arrays.stream(PlaceCategory.values())
+                .collect(Collectors.toMap(PlaceCategory::name, PlaceCategory::getDescription));
     }
 }

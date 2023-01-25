@@ -13,3 +13,5 @@ ifndef::snippets[]
 endif::[]
 
 include::slice-response.adoc[]
+
+include::list-response.adoc[]
