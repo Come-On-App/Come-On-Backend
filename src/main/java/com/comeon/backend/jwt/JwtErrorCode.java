@@ -1,4 +1,4 @@
-package com.comeon.backend.jwt.common;
+package com.comeon.backend.jwt;
 
 import com.comeon.backend.common.exception.ErrorCode;
 import org.springframework.http.HttpStatus;

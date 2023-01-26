@@ -1,10 +1,8 @@
 package com.comeon.backend.jwt.application;
 
 import com.comeon.backend.common.exception.RestApiException;
-import com.comeon.backend.jwt.common.JwtErrorCode;
+import com.comeon.backend.jwt.JwtErrorCode;
 import com.comeon.backend.jwt.domain.*;
-import com.comeon.backend.user.command.domain.User;
-import com.comeon.backend.user.command.domain.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +17,7 @@ public class JwtReissueFacade {
     private final JwtValidator jwtValidator;
     private final ReissueCondition reissueCondition;
     private final RefreshTokenRepository rtkRepository;
-    private final UserRepository userRepository;
+    private final UserSimpleService userSimpleService;
 
     public Tokens reissue(String oldRtkValue, boolean rtkReissueCond) {
         if (!jwtValidator.verifyRtk(oldRtkValue)) {
@@ -29,12 +27,13 @@ public class JwtReissueFacade {
         Long userId = rtkRepository.findUserIdBy(oldRtkValue).orElseThrow(
                 () -> new RestApiException("세션에 해당 리프레시 토큰이 존재하지 않습니다.\nrequest rtk : " + oldRtkValue, JwtErrorCode.NO_SESSION)
         );
-        // TODO 유저 조회 Dao
-        User user = userRepository.findBy(userId).orElseThrow();
-        String nickname = user.getNickname();
-        String authorities = user.getRole().getValue();
+        UserSimple userSimple = userSimpleService.loadUserSimple(userId);
 
-        String atkValue = jwtBuilder.buildAtk(userId, nickname, authorities);
+        String atkValue = jwtBuilder.buildAtk(
+                userSimple.getUserId(),
+                userSimple.getNickname(),
+                userSimple.getAuthorities()
+        );
         Payload atkPayload = new Payload(jwtParser.parse(atkValue));
         JwtToken atk = new JwtToken(atkValue, atkPayload);
 
