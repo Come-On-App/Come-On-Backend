@@ -1,4 +1,4 @@
-package com.comeon.backend.meeting.common;
+package com.comeon.backend.meeting;
 
 import com.comeon.backend.common.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;

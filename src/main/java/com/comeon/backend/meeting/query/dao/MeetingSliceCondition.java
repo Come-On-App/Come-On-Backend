@@ -1,17 +1,16 @@
-package com.comeon.backend.meeting.presentation.request;
+package com.comeon.backend.meeting.query.dao;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 
-@Getter @Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class MeetingSummaryListParam {
+public class MeetingSliceCondition {
 
     private String searchWords;
 

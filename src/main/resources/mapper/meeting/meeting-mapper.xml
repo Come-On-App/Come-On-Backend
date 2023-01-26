@@ -2,21 +2,29 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="meetingDao">
-    <resultMap id="MeetingSummary" type="com.comeon.backend.meeting.query.dao.result.FindMeetingSliceResult">
+<mapper namespace="com.comeon.backend.meeting.query.infra.mapper.MeetingMapper">
+    <resultMap id="MeetingMap" type="com.comeon.backend.meeting.query.dao.dto.MeetingSliceResponse">
         <result column="meeting_id" property="meetingId"/>
-        <result column="host_user_user_id" property="hostUserId"/>
-        <result column="host_user_nickname" property="hostUserNickname"/>
-        <result column="host_user_profile_image" property="hostUserProfileImageUrl"/>
         <result column="member_count" property="memberCount"/>
         <result column="my_meeting_role" property="myMeetingRole"/>
         <result column="meeting_name" property="meetingName"/>
         <result column="calendar_start_from" property="calendarStartFrom"/>
         <result column="calendar_end_to" property="calendarEndTo"/>
         <result column="meeting_image_url" property="meetingImageUrl"/>
+        <association property="hostUser" javaType="com.comeon.backend.meeting.query.dao.dto.MeetingSliceResponse$UserSimple" >
+            <result column="host_user_user_id" property="userId"/>
+            <result column="host_user_nickname" property="nickname"/>
+            <result column="host_user_profile_image" property="profileImageUrl"/>
+        </association>
     </resultMap>
 
-    <select id="findMeetingSlice" parameterType="com.comeon.backend.meeting.query.dao.param.FindMeetingSliceParam" resultMap="MeetingSummary">
+    <resultMap id="entryCodeDetailsMap" type="com.comeon.backend.meeting.query.dao.dto.EntryCodeDetailsResponse">
+        <result column="meeting_id" property="meetingId"/>
+        <result column="code" property="entryCode"/>
+        <result column="expired_at" property="expiredAt"/>
+    </resultMap>
+
+    <select id="selectMeetingSlice" parameterType="com.comeon.backend.meeting.query.infra.mapper.MeetingSliceParam" resultMap="MeetingMap">
         select m.meeting_id as meeting_id,
                host_member.user_id as host_user_user_id,
                host_member.user_nickname as host_user_nickname,
@@ -58,5 +66,14 @@
         </where>
         order by m.calendar_start_from desc, m.calendar_end_to desc
         limit #{pageSize} offset #{offset}
+    </select>
+
+    <select id="selectEntryCodeDetails" resultMap="entryCodeDetailsMap">
+        select m.meeting_id,
+               mec.code,
+               date_add(mec.last_modified_date, interval 7 DAY) as 'expired_at'
+        from meeting m
+                 left join meeting_entry_code mec on m.meeting_id = mec.meeting_id
+        where m.meeting_id = 2;
     </select>
 </mapper>

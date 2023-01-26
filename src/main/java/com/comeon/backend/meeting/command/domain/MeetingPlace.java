@@ -42,18 +42,16 @@ public class MeetingPlace extends BaseTimeEntity {
     private Long lastModifiedUserId;
 
     @Builder
-    public MeetingPlace(Meeting meeting, String name, String memo,
-                        String address, Double lng, Double lat, PlaceCategory category,
-                        int order, String googlePlaceId, Long userId) {
+    public MeetingPlace(Meeting meeting, Long userId, PlaceInfo placeInfo, int placeOrder) {
         this.meeting = meeting;
-        this.name = name;
-        this.memo = memo;
-        this.address = address;
-        this.lng = lng;
-        this.lat = lat;
-        this.category = category;
-        this.order = order;
-        this.googlePlaceId = googlePlaceId;
+        this.name = placeInfo.getPlaceName();
+        this.memo = placeInfo.getPlaceMemo();
+        this.address = placeInfo.getAddress();
+        this.lng = placeInfo.getLng();
+        this.lat = placeInfo.getLat();
+        this.category = placeInfo.getCategory();
+        this.googlePlaceId = placeInfo.getGooglePlaceId();
+        this.order = placeOrder;
         this.lastModifiedUserId = userId;
     }
 

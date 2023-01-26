@@ -1,6 +1,6 @@
-package com.comeon.backend.meeting.query.dao.param;
+package com.comeon.backend.meeting.query.infra.mapper;
 
-import com.comeon.backend.meeting.query.dao.MeetingCondition;
+import com.comeon.backend.meeting.query.dao.MeetingSliceCondition;
 import lombok.Getter;
 import org.springframework.data.domain.Pageable;
 
@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Getter
-public class FindMeetingSliceParam {
+public class MeetingSliceParam {
 
     private Long userId;
 
@@ -21,7 +21,7 @@ public class FindMeetingSliceParam {
     private int pageSize;
     private long offset;
 
-    public FindMeetingSliceParam(Long userId, MeetingCondition cond, Pageable pageable) {
+    public MeetingSliceParam(Long userId, MeetingSliceCondition cond, Pageable pageable) {
         this.userId = userId;
         this.dateFrom = cond.getDateFrom();
         this.dateTo = cond.getDateTo();

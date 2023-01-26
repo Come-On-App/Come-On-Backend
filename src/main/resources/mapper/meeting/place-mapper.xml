@@ -2,8 +2,8 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="meetingPlaceDao">
-    <resultMap id="PlaceResultMap" type="com.comeon.backend.meeting.query.dao.result.PlaceListResult">
+<mapper namespace="com.comeon.backend.meeting.query.infra.mapper.MeetingPlaceMapper">
+    <resultMap id="PlaceMap" type="com.comeon.backend.meeting.query.dao.dto.PlaceListResponse">
         <result column="place_id" property="meetingPlaceId"/>
         <result column="name" property="placeName"/>
         <result column="memo" property="memo"/>
@@ -15,7 +15,7 @@
         <result column="google_place_id" property="googlePlaceId"/>
     </resultMap>
 
-    <select id="findPlaceList" resultMap="PlaceResultMap">
+    <select id="selectPlacesByMeetingId" resultMap="PlaceMap">
         select mp.meeting_place_id as place_id,
                mp.name             as name,
                mp.memo             as memo,

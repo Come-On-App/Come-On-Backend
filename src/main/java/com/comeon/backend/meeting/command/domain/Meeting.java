@@ -25,6 +25,9 @@ public class Meeting extends BaseTimeEntity {
     private LocalDate calendarStartFrom;
     private LocalDate calendarEndTo;
 
+    @OneToOne(mappedBy = "meeting", cascade = CascadeType.ALL, orphanRemoval = true)
+    private MeetingEntryCode entryCode;
+
     @OneToMany(mappedBy = "meeting", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MeetingMember> members = new ArrayList<>();
 
@@ -48,19 +51,12 @@ public class Meeting extends BaseTimeEntity {
         return participantMember;
     }
 
-    public MeetingPlace createPlace(Long userId, String placeName, String placeMemo, Double lat, Double lng,
-                                    String address, String placeCategory, String googlePlaceId) {
+    public MeetingPlace createPlace(Long userId, PlaceInfo placeInfo) {
         MeetingPlace place = MeetingPlace.builder()
                 .meeting(this)
-                .name(placeName)
-                .memo(placeMemo)
-                .lat(lat)
-                .lng(lng)
-                .address(address)
-                .category(PlaceCategory.of(placeCategory))
-                .order(this.places.size() + 1)
                 .userId(userId)
-                .googlePlaceId(googlePlaceId)
+                .placeInfo(placeInfo)
+                .placeOrder(this.places.size() + 1)
                 .build();
         places.add(place);
 
@@ -89,5 +85,12 @@ public class Meeting extends BaseTimeEntity {
         this.places.stream()
                 .filter(place -> place.getOrder() > startOrder)
                 .forEach(MeetingPlace::decreaseOrder);
+    }
+
+    public MeetingEntryCode renewEntryCodeAndGet() {
+        if (this.entryCode == null) this.entryCode = MeetingEntryCode.createWithRandomCode(this);
+        else entryCode.renewCode();
+
+        return this.entryCode;
     }
 }

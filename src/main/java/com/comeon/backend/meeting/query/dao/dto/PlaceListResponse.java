@@ -1,4 +1,4 @@
-package com.comeon.backend.meeting.query.dao.result;
+package com.comeon.backend.meeting.query.dao.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class PlaceListResult {
+public class PlaceListResponse {
 
     private Long meetingPlaceId;
     private String placeName;
