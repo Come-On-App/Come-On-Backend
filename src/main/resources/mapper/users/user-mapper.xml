@@ -12,6 +12,12 @@
         <result column="name" property="name"/>
     </resultMap>
 
+    <resultMap id="UserSimpleMap" type="com.comeon.backend.user.query.dao.dto.UserSimpleResponse">
+        <result column="user_id" property="userId"/>
+        <result column="nickname" property="nickname"/>
+        <result column="role" property="role"/>
+    </resultMap>
+
     <select id="selectUserDetailsByUserId" resultMap="UserDetailsMap">
         select user_id,
                nickname,
@@ -21,5 +27,13 @@
                name
         from users
         where user_id = #{userId}
+    </select>
+
+    <select id="selectUserSimpleByUserId" resultMap="UserSimpleMap">
+        select u.user_id as user_id,
+               u.nickname as nickname,
+               u.role as role
+        from users u
+        where u.user_id = #{userId}
     </select>
 </mapper>
