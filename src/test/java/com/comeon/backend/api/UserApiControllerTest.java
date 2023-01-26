@@ -3,10 +3,10 @@ package com.comeon.backend.api;
 import com.comeon.backend.api.utils.RestDocsTestSupport;
 import com.comeon.backend.api.utils.RestDocsUtil;
 import com.comeon.backend.user.command.application.UserFacade;
+import com.comeon.backend.user.command.application.dto.UserDto;
 import com.comeon.backend.user.presentation.UserApiController;
-import com.comeon.backend.user.presentation.request.UserModifyRequest;
-import com.comeon.backend.user.query.application.UserQueryService;
-import com.comeon.backend.user.query.dto.UserDetails;
+import com.comeon.backend.user.query.dao.UserDao;
+import com.comeon.backend.user.query.dao.dto.UserDetailsResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -31,7 +31,7 @@ public class UserApiControllerTest extends RestDocsTestSupport {
     UserFacade userFacade;
 
     @MockBean
-    UserQueryService userQueryService;
+    UserDao userDao;
 
     @Nested
     @DisplayName("내 정보 조회 API")
@@ -43,9 +43,9 @@ public class UserApiControllerTest extends RestDocsTestSupport {
         @DisplayName("given: 인증 필요, -> then: HTTP 200, 요청한 유저 식별값에 매칭되는 유저 정보를 반환")
         void success() throws Exception {
             //given
-            BDDMockito.given(userQueryService.findUserDetails(BDDMockito.anyLong()))
+            BDDMockito.given(userDao.findUserDetails(BDDMockito.anyLong()))
                     .willReturn(
-                            new UserDetails(
+                            new UserDetailsResponse(
                                     currentRequestATK.getPayload().getUserId(),
                                     currentRequestATK.getPayload().getNickname(),
                                     "https://xxx.xxxx.xxx/xxxxxxxxxxxxxx",
@@ -103,10 +103,10 @@ public class UserApiControllerTest extends RestDocsTestSupport {
         @DisplayName("given: 인증 필요, 유저 닉네임과 프로필 이미지 URL -> then: HTTP 200, success true 응답")
         void success() throws Exception {
             //given
-            UserModifyRequest request = new UserModifyRequest("new_nickname", "https://xxx.xxxx.xxxx/new-profile-image-url");
+            UserDto.ModifyRequest request = new UserDto.ModifyRequest("new_nickname", "https://xxx.xxxx.xxxx/new-profile-image-url");
 
             BDDMockito.willDoNothing()
-                    .given(userFacade).modifyUser(BDDMockito.anyLong(), BDDMockito.anyString(), BDDMockito.anyString());
+                    .given(userFacade).modifyUser(BDDMockito.anyLong(), BDDMockito.any());
 
             //when
             ResultActions perform = mockMvc.perform(

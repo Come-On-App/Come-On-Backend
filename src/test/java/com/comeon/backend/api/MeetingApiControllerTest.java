@@ -3,14 +3,11 @@ package com.comeon.backend.api;
 import com.comeon.backend.api.utils.RestDocsTestSupport;
 import com.comeon.backend.api.utils.RestDocsUtil;
 import com.comeon.backend.meeting.command.application.MeetingFacade;
-import com.comeon.backend.meeting.command.application.MeetingMemberFacade;
-import com.comeon.backend.meeting.command.application.dto.MeetingMemberSummary;
+import com.comeon.backend.meeting.command.application.dto.MeetingCommandDto;
 import com.comeon.backend.meeting.command.domain.MeetingMemberRole;
 import com.comeon.backend.meeting.presentation.MeetingApiController;
-import com.comeon.backend.meeting.presentation.request.MeetingAddRequest;
-import com.comeon.backend.meeting.presentation.request.MeetingJoinRequest;
 import com.comeon.backend.meeting.query.dao.MeetingDao;
-import com.comeon.backend.meeting.query.dao.result.FindMeetingSliceResult;
+import com.comeon.backend.meeting.query.dao.dto.MeetingSliceResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -33,6 +30,7 @@ import org.springframework.util.MultiValueMap;
 
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @WebMvcTest({MeetingApiController.class})
@@ -40,9 +38,6 @@ public class MeetingApiControllerTest extends RestDocsTestSupport {
 
     @MockBean
     MeetingFacade meetingFacade;
-
-    @MockBean
-    MeetingMemberFacade meetingMemberFacade;
 
     @MockBean
     MeetingDao meetingDao;
@@ -57,15 +52,15 @@ public class MeetingApiControllerTest extends RestDocsTestSupport {
         @DisplayName("given: 인증 필요, 모임 이름, 모임 썸네일 이미지, 달력 시작일, 달력 종료일 -> then: HTTP 200, 생성된 모임 식별값 반환")
         void success() throws Exception {
             //given
-            MeetingAddRequest request = new MeetingAddRequest(
+            MeetingCommandDto.AddRequest request = new MeetingCommandDto.AddRequest(
                     "Come-On 모임",
                     "https://xxx.xxxxx.xxx/meeting-thumbnail-image-url",
                     LocalDate.of(2023, 1, 20),
-                    LocalDate.of(2023,2,28)
+                    LocalDate.of(2023, 2, 28)
             );
 
             long meetingId = 28L;
-            BDDMockito.given(meetingFacade.addMeeting(BDDMockito.anyLong(), BDDMockito.anyString(), BDDMockito.anyString(), BDDMockito.any(), BDDMockito.any()))
+            BDDMockito.given(meetingFacade.addMeeting(BDDMockito.anyLong(), BDDMockito.any()))
                     .willReturn(meetingId);
 
             //when
@@ -114,16 +109,14 @@ public class MeetingApiControllerTest extends RestDocsTestSupport {
         @DisplayName("given: 인증 필요, 유효한 모임 코드 -> then: HTTP 200, meetingId, meetingMember(memberId, role)")
         void join() throws Exception {
             //given
-            MeetingJoinRequest request = new MeetingJoinRequest("EF25FK");
+            MeetingCommandDto.JoinRequest request = new MeetingCommandDto.JoinRequest("EF25FK");
 
             // mocking
             long meetingIdMock = 300L;
             long memberIdMock = 4777L;
             String memberRoleMock = MeetingMemberRole.PARTICIPANT.name();
-            BDDMockito.given(meetingMemberFacade.joinMeeting(BDDMockito.anyLong(), BDDMockito.anyString()))
-                    .willReturn(
-                            new MeetingMemberSummary(meetingIdMock, memberIdMock, memberRoleMock)
-                    );
+            BDDMockito.given(meetingFacade.joinMeeting(BDDMockito.anyLong(), BDDMockito.any()))
+                    .willReturn(new MeetingCommandDto.JoinResponse(meetingIdMock, memberIdMock, memberRoleMock));
 
             //when
             ResultActions perform = mockMvc.perform(
@@ -139,7 +132,7 @@ public class MeetingApiControllerTest extends RestDocsTestSupport {
                     .andExpect(MockMvcResultMatchers.jsonPath("$.meetingId").value(meetingIdMock))
                     .andExpect(MockMvcResultMatchers.jsonPath("$.meetingMember").exists())
                     .andExpect(MockMvcResultMatchers.jsonPath("$.meetingMember.memberId").value(memberIdMock))
-                    .andExpect(MockMvcResultMatchers.jsonPath("$.meetingMember.role").value(memberRoleMock));
+                    .andExpect(MockMvcResultMatchers.jsonPath("$.meetingMember.memberRole").value(memberRoleMock));
 
             // docs
             perform.andDo(
@@ -161,7 +154,7 @@ public class MeetingApiControllerTest extends RestDocsTestSupport {
                                     PayloadDocumentation.beneathPath("meetingMember").withSubsectionId("MEETING-MEMBER"),
                                     getTitleAttributes("meetingMember의 각 필드"),
                                     PayloadDocumentation.fieldWithPath("memberId").type(JsonFieldType.NUMBER).description("해당 모임에서의 회원 번호. 유저 식별값인 user-id와 회원 번호인 member-id는 서로 다른 값 입니다."),
-                                    PayloadDocumentation.fieldWithPath("role").type(JsonFieldType.STRING).description("해당 모임에서 유저의 권한 +\n" + RestDocsUtil.generateLinkCode(RestDocsUtil.DocUrl.MEETING_MEMBER_ROLE))
+                                    PayloadDocumentation.fieldWithPath("memberRole").type(JsonFieldType.STRING).description("해당 모임에서 유저의 권한 +\n" + RestDocsUtil.generateLinkCode(RestDocsUtil.DocUrl.MEETING_MEMBER_ROLE))
                             )
                     )
             );
@@ -182,23 +175,19 @@ public class MeetingApiControllerTest extends RestDocsTestSupport {
             params.add("size", String.valueOf(3));
             params.add("page", String.valueOf(0));
             params.add("searchWords", "ex");
-            params.add("dateFrom", "2023-03-01");
-            params.add("dateTo", "2023-03-31");
+            LocalDate dateFrom = LocalDate.of(2023, 3, 01);
+            params.add("dateFrom", dateFrom.format(DateTimeFormatter.ISO_DATE));
+            LocalDate dateTo = LocalDate.of(2023, 3, 31);
+            params.add("dateTo", dateTo.format(DateTimeFormatter.ISO_DATE));
 
             // mocking
-            List<FindMeetingSliceResult> sliceResults = List.of(
-                    new FindMeetingSliceResult(10L, 31L, "user31", null, 10, MeetingMemberRole.PARTICIPANT.name(), "ex meeting 10", "2023-03-01", "2023-03-23", "https://xxxx.xxxxxxx.xxxx/xxxxxxxxxxx"),
-                    new FindMeetingSliceResult(14L, currentRequestATK.getPayload().getUserId(), currentRequestATK.getPayload().getNickname(), "https://xxx.xxxx.xxxxxx/xxxxxx", 4, MeetingMemberRole.HOST.name(), "meeting 14 ex", "2023-03-10", "2023-03-18", "https://xxxx.xxxxxxx.xxxx/xxxxxxxxx"),
-                    new FindMeetingSliceResult(23L, 11L, "user 11", null, 6, MeetingMemberRole.PARTICIPANT.name(), "meeting ex 23", "2023-03-22", "2023-03-30", "https://xxxx.xxxxxxx.xxxx/xxxxxxxxx")
+            List<MeetingSliceResponse> sliceResults = List.of(
+                    new MeetingSliceResponse(10L, new MeetingSliceResponse.UserSimple(31L, "user31", null), 10, MeetingMemberRole.PARTICIPANT.name(), "ex meeting 10", LocalDate.of(2023, 3, 1), LocalDate.of(2023, 3, 23), "https://xxxx.xxxxxxx.xxxx/xxxxxxxxxxx", null, null),
+                    new MeetingSliceResponse(14L, new MeetingSliceResponse.UserSimple(currentRequestATK.getPayload().getUserId(), currentRequestATK.getPayload().getNickname(), "https://xxx.xxxx.xxxxxx/xxxxxx"), 4, MeetingMemberRole.HOST.name(), "meeting 14 ex", LocalDate.of(2023, 3, 10), LocalDate.of(2023, 3, 18), "https://xxxx.xxxxxxx.xxxx/xxxxxxxxxxx", null, null),
+                    new MeetingSliceResponse(23L, new MeetingSliceResponse.UserSimple(11L, "user 11", null), 6, MeetingMemberRole.PARTICIPANT.name(), "meeting ex 23", LocalDate.of(2023, 3, 22), LocalDate.of(2023, 3, 30), "https://xxxx.xxxxxxx.xxxx/xxxxxxxxx", null, null)
             );
             BDDMockito.given(meetingDao.findMeetingSlice(BDDMockito.anyLong(), BDDMockito.any(), BDDMockito.any()))
-                    .willReturn(
-                            new SliceImpl<>(
-                                    sliceResults,
-                                    Pageable.ofSize(3),
-                                    true
-                            )
-                    );
+                    .willReturn(new SliceImpl<>(sliceResults, Pageable.ofSize(3), true));
 
             //when
             ResultActions perform = mockMvc.perform(

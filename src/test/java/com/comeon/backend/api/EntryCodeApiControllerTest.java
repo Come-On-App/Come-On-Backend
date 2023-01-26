@@ -1,11 +1,11 @@
 package com.comeon.backend.api;
 
 import com.comeon.backend.api.utils.RestDocsTestSupport;
-import com.comeon.backend.meeting.command.application.dto.EntryCodeDetails;
 import com.comeon.backend.meeting.command.application.MeetingFacade;
+import com.comeon.backend.meeting.command.application.dto.MeetingCommandDto;
 import com.comeon.backend.meeting.presentation.EntryCodeApiController;
-import com.comeon.backend.meeting.query.application.MeetingQueryService;
-import com.comeon.backend.meeting.query.application.dto.MeetingEntryCodeDetails;
+import com.comeon.backend.meeting.query.dao.MeetingDao;
+import com.comeon.backend.meeting.query.dao.dto.EntryCodeDetailsResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -33,7 +33,7 @@ public class EntryCodeApiControllerTest extends RestDocsTestSupport {
     MeetingFacade meetingFacade;
 
     @MockBean
-    MeetingQueryService meetingQueryService;
+    MeetingDao meetingDao;
 
     @Nested
     @DisplayName("입장 코드 조회 API")
@@ -49,10 +49,8 @@ public class EntryCodeApiControllerTest extends RestDocsTestSupport {
             String entryCodeMock = "DJE52P";
             LocalDateTime expirationMock = LocalDateTime.of(2023, 1, 30, 23, 11, 30);
 
-            BDDMockito.given(meetingQueryService.findMeetingEntryCodeDetails(BDDMockito.anyLong(), BDDMockito.anyLong()))
-                    .willReturn(
-                            new MeetingEntryCodeDetails(meetingIdMock, entryCodeMock, expirationMock)
-                    );
+            BDDMockito.given(meetingDao.findEntryCodeDetails(BDDMockito.anyLong()))
+                    .willReturn(new EntryCodeDetailsResponse(meetingIdMock, entryCodeMock, expirationMock));
 
             //when
             ResultActions perform = mockMvc.perform(
@@ -105,7 +103,7 @@ public class EntryCodeApiControllerTest extends RestDocsTestSupport {
             LocalDateTime expirationMock = LocalDateTime.now().plusDays(7);
 
             BDDMockito.given(meetingFacade.renewEntryCode(BDDMockito.anyLong(), BDDMockito.anyLong()))
-                    .willReturn(new EntryCodeDetails(meetingIdMock, entryCodeMock, expirationMock));
+                    .willReturn(new MeetingCommandDto.RenewEntryCodeResponse(meetingIdMock, entryCodeMock, expirationMock));
 
             //when
             ResultActions perform = mockMvc.perform(

@@ -6,7 +6,7 @@ import com.comeon.backend.common.exception.ErrorCode;
 import com.comeon.backend.image.common.ImageErrorCode;
 import com.comeon.backend.jwt.common.JwtErrorCode;
 import com.comeon.backend.meeting.MeetingErrorCode;
-import com.comeon.backend.user.common.UserErrorCode;
+import com.comeon.backend.user.UserErrorCode;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
