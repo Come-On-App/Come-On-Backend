@@ -42,7 +42,6 @@ public class ImageApiControllerTest extends RestDocsTestSupport {
         @DisplayName("given: 인증 필요, image 파라미터에 이미지 전송 -> then: HTTP 200, 업로드된 이미지 URL 반환")
         void upload() throws Exception {
             //given
-
             MockMultipartFile mockMultipartFile = new MockMultipartFile(
                     "image",
                     "test-img.png",
