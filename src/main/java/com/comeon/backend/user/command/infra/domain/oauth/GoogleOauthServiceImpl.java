@@ -1,9 +1,9 @@
-package com.comeon.backend.user.command.infra.oauth;
+package com.comeon.backend.user.command.infra.domain.oauth;
 
 import com.comeon.backend.common.exception.RestApiException;
 import com.comeon.backend.user.command.domain.GoogleOauthService;
 import com.comeon.backend.user.command.domain.OauthUserInfo;
-import com.comeon.backend.user.command.infra.oauth.feign.GoogleAuthFeignClient;
+import com.comeon.backend.user.command.infra.domain.oauth.feign.GoogleAuthFeignClient;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cloud.client.circuitbreaker.CircuitBreaker;
 import org.springframework.cloud.client.circuitbreaker.CircuitBreakerFactory;

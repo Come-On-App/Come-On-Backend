@@ -1,6 +1,6 @@
-package com.comeon.backend.user.command.infra.oauth.feign;
+package com.comeon.backend.user.command.infra.domain.oauth.feign;
 
-import com.comeon.backend.user.command.infra.oauth.feign.response.KakaoOauthTokenResponse;
+import com.comeon.backend.user.command.infra.domain.oauth.feign.response.KakaoOauthTokenResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;

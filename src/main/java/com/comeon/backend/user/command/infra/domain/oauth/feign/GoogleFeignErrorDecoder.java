@@ -1,8 +1,8 @@
-package com.comeon.backend.user.command.infra.oauth.feign;
+package com.comeon.backend.user.command.infra.domain.oauth.feign;
 
 import com.comeon.backend.common.exception.CommonErrorCode;
 import com.comeon.backend.common.exception.RestApiException;
-import com.comeon.backend.user.common.UserErrorCode;
+import com.comeon.backend.user.UserErrorCode;
 import feign.Response;
 import feign.codec.ErrorDecoder;
 import lombok.extern.slf4j.Slf4j;

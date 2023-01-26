@@ -1,4 +1,4 @@
-package com.comeon.backend.user.common;
+package com.comeon.backend.user;
 
 import com.comeon.backend.common.exception.ErrorCode;
 import org.springframework.http.HttpStatus;

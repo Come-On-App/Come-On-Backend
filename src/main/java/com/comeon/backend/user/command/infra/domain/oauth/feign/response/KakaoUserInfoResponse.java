@@ -1,4 +1,4 @@
-package com.comeon.backend.user.command.infra.oauth.feign.response;
+package com.comeon.backend.user.command.infra.domain.oauth.feign.response;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;

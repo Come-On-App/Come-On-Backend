@@ -1,4 +1,4 @@
-package com.comeon.backend.user.command.infra.repository;
+package com.comeon.backend.user.command.infra.domain.repository;
 
 import com.comeon.backend.user.command.domain.OauthProvider;
 import com.comeon.backend.user.command.domain.User;

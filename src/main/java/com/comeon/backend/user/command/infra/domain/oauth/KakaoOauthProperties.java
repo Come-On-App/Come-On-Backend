@@ -1,4 +1,4 @@
-package com.comeon.backend.user.command.infra.oauth;
+package com.comeon.backend.user.command.infra.domain.oauth;
 
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;

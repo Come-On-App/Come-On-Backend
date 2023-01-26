@@ -1,12 +1,12 @@
-package com.comeon.backend.user.command.infra.oauth;
+package com.comeon.backend.user.command.infra.domain.oauth;
 
 import com.comeon.backend.common.exception.RestApiException;
 import com.comeon.backend.user.command.domain.KakaoOauthService;
 import com.comeon.backend.user.command.domain.OauthUserInfo;
-import com.comeon.backend.user.command.infra.oauth.feign.KakaoApiFeignClient;
-import com.comeon.backend.user.command.infra.oauth.feign.KakaoAuthFeignClient;
-import com.comeon.backend.user.command.infra.oauth.feign.response.KakaoOauthTokenResponse;
-import com.comeon.backend.user.command.infra.oauth.feign.response.KakaoUserInfoResponse;
+import com.comeon.backend.user.command.infra.domain.oauth.feign.KakaoApiFeignClient;
+import com.comeon.backend.user.command.infra.domain.oauth.feign.KakaoAuthFeignClient;
+import com.comeon.backend.user.command.infra.domain.oauth.feign.response.KakaoOauthTokenResponse;
+import com.comeon.backend.user.command.infra.domain.oauth.feign.response.KakaoUserInfoResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cloud.client.circuitbreaker.CircuitBreaker;
 import org.springframework.cloud.client.circuitbreaker.CircuitBreakerFactory;

@@ -56,9 +56,14 @@ public class User extends BaseTimeEntity {
         this.status = UserStatus.ACTIVATE;
     }
 
-    public void update(OauthUserInfo oauthUserInfo) {
+    public void updateOauthInfo(OauthUserInfo oauthUserInfo) {
         updateEmail(oauthUserInfo.getEmail());
         updateName(oauthUserInfo.getName());
+    }
+
+    public void updateProfile(String nickname, String profileImageUrl) {
+        updateNickname(nickname);
+        updateProfileImage(profileImageUrl);
     }
 
     public void updateEmail(String email) {
@@ -69,11 +74,11 @@ public class User extends BaseTimeEntity {
         this.name = name;
     }
 
-    public void updateNickname(String nickname) {
+    private void updateNickname(String nickname) {
         this.nickname = nickname;
     }
 
-    public void updateProfileImage(String profileImageUrl) {
+    private void updateProfileImage(String profileImageUrl) {
         this.profileImageUrl = profileImageUrl;
     }
 }
