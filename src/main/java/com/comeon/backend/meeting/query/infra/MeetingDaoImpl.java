@@ -4,6 +4,7 @@ import com.comeon.backend.common.util.SliceUtils;
 import com.comeon.backend.meeting.query.dao.MeetingDao;
 import com.comeon.backend.meeting.query.dao.MeetingSliceCondition;
 import com.comeon.backend.meeting.query.dao.dto.EntryCodeDetailsResponse;
+import com.comeon.backend.meeting.query.dao.dto.MeetingDetailsResponse;
 import com.comeon.backend.meeting.query.dao.dto.MeetingSliceResponse;
 import com.comeon.backend.meeting.query.infra.mapper.MeetingMapper;
 import com.comeon.backend.meeting.query.infra.mapper.MeetingSliceParam;
@@ -31,6 +32,11 @@ public class MeetingDaoImpl implements MeetingDao {
     @Override
     public EntryCodeDetailsResponse findEntryCodeDetails(Long meetingId) {
         return meetingMapper.selectEntryCodeDetails(meetingId);
+    }
+
+    @Override
+    public MeetingDetailsResponse findMeetingDetails(Long meetingId) {
+        return meetingMapper.selectMeetingDetails(meetingId);
     }
     /*
     private DateTimeFormatter getDateTimeFormatter() {

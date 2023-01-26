@@ -3,7 +3,8 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.comeon.backend.meeting.query.infra.mapper.MeetingMapper">
-    <resultMap id="MeetingMap" type="com.comeon.backend.meeting.query.dao.dto.MeetingSliceResponse">
+    <!--  모임 리스트(Slice) 조회  -->
+    <resultMap id="MeetingSliceMap" type="com.comeon.backend.meeting.query.dao.dto.MeetingSliceResponse">
         <result column="meeting_id" property="meetingId"/>
         <result column="member_count" property="memberCount"/>
         <result column="my_meeting_role" property="myMeetingRole"/>
@@ -11,46 +12,42 @@
         <result column="calendar_start_from" property="calendarStartFrom"/>
         <result column="calendar_end_to" property="calendarEndTo"/>
         <result column="meeting_image_url" property="meetingImageUrl"/>
-        <association property="hostUser" javaType="com.comeon.backend.meeting.query.dao.dto.MeetingSliceResponse$UserSimple" >
+        <association property="hostUser"
+                     javaType="com.comeon.backend.meeting.query.dao.dto.MeetingSliceResponse$UserSimple">
             <result column="host_user_user_id" property="userId"/>
             <result column="host_user_nickname" property="nickname"/>
             <result column="host_user_profile_image" property="profileImageUrl"/>
         </association>
     </resultMap>
 
-    <resultMap id="entryCodeDetailsMap" type="com.comeon.backend.meeting.query.dao.dto.EntryCodeDetailsResponse">
-        <result column="meeting_id" property="meetingId"/>
-        <result column="code" property="entryCode"/>
-        <result column="expired_at" property="expiredAt"/>
-    </resultMap>
-
-    <select id="selectMeetingSlice" parameterType="com.comeon.backend.meeting.query.infra.mapper.MeetingSliceParam" resultMap="MeetingMap">
+    <select id="selectMeetingSlice" parameterType="com.comeon.backend.meeting.query.infra.mapper.MeetingSliceParam"
+            resultMap="MeetingSliceMap">
         select m.meeting_id as meeting_id,
-               host_member.user_id as host_user_user_id,
-               host_member.user_nickname as host_user_nickname,
-               host_member.user_profile_image as host_user_profile_image,
-               (select count(*) from meeting_member where m.meeting_id = `meeting_id`) as member_count,
-               mm.role as my_meeting_role,
-               m.name as meeting_name,
-               m.calendar_start_from as calendar_start_from,
-               m.calendar_end_to as calendar_end_to,
-               m.thumbnail_image_url as meeting_image_url
+        host_member.user_id as host_user_user_id,
+        host_member.user_nickname as host_user_nickname,
+        host_member.user_profile_image as host_user_profile_image,
+        (select count(*) from meeting_member where m.meeting_id = `meeting_id`) as member_count,
+        mm.role as my_meeting_role,
+        m.name as meeting_name,
+        m.calendar_start_from as calendar_start_from,
+        m.calendar_end_to as calendar_end_to,
+        m.thumbnail_image_url as meeting_image_url
         from meeting_member mm
-                 left join meeting m on m.meeting_id = mm.meeting_id
-                 left join (select mm.meeting_id       as meeting_id,
-                                   u.user_id           as user_id,
-                                   u.nickname          as user_nickname,
-                                   u.profile_image_url as user_profile_image,
-                                   mm.role             as host_role
-                            from meeting_member mm
-                                     left join users u on mm.user_id = u.user_id
-                            where mm.role = 'HOST') host_member on m.meeting_id = host_member.meeting_id
+        left join meeting m on m.meeting_id = mm.meeting_id
+        left join (select mm.meeting_id as meeting_id,
+        u.user_id as user_id,
+        u.nickname as user_nickname,
+        u.profile_image_url as user_profile_image,
+        mm.role as host_role
+        from meeting_member mm
+        left join users u on mm.user_id = u.user_id
+        where mm.role = 'HOST') host_member on m.meeting_id = host_member.meeting_id
         <where>
             mm.user_id = #{userId}
             <if test="words != null and words.size > 0">
                 and
                 <foreach collection="words" item="word" separator="or" open="(" close=")">
-                        lower(replace(m.name, ' ', '')) like concat('%', #{word}, '%')
+                    lower(replace(m.name, ' ', '')) like concat('%', #{word}, '%')
                 </foreach>
             </if>
             <if test="dateFrom != null">
@@ -68,12 +65,101 @@
         limit #{pageSize} offset #{offset}
     </select>
 
+
+    <!--  모임 입장 코드 상세 조회  -->
+    <resultMap id="entryCodeDetailsMap" type="com.comeon.backend.meeting.query.dao.dto.EntryCodeDetailsResponse">
+        <result column="meeting_id" property="meetingId"/>
+        <result column="code" property="entryCode"/>
+        <result column="expired_at" property="expiredAt"/>
+    </resultMap>
+
     <select id="selectEntryCodeDetails" resultMap="entryCodeDetailsMap">
         select m.meeting_id,
                mec.code,
                date_add(mec.last_modified_date, interval 7 DAY) as 'expired_at'
         from meeting m
                  left join meeting_entry_code mec on m.meeting_id = mec.meeting_id
-        where m.meeting_id = 2;
+        where m.meeting_id = #{meetingId};
+    </select>
+
+
+    <!--  모임 상세 조회  -->
+    <resultMap id="MeetingDetailsMap" type="com.comeon.backend.meeting.query.dao.dto.MeetingDetailsResponse">
+        <association property="meetingMetaData"
+                     javaType="com.comeon.backend.meeting.query.dao.dto.MeetingDetailsResponse$MeetingMetaData">
+            <id column="meeting_id" property="meetingId"/>
+            <result column="meeting_image_url" property="thumbnailImageUrl"/>
+            <result column="meeting_name" property="meetingName"/>
+            <association property="calendar"
+                         javaType="com.comeon.backend.meeting.query.dao.dto.MeetingDetailsResponse$MeetingCalendar">
+                <result column="calendar_start_from" property="startFrom"/>
+                <result column="calendar_end_to" property="endTo"/>
+            </association>
+            <association property="fixedDate"
+                         javaType="com.comeon.backend.meeting.query.dao.dto.MeetingDetailsResponse$FixedDate">
+                <result column="fixed_date_start_from" property="startFrom"/>
+                <result column="fixed_date_end_to" property="endTo"/>
+            </association>
+        </association>
+        <collection property="members" column="meetingId = meeting_id" javaType="List" select="selectMembers"/>
+        <collection property="places" column="meetingId = meeting_id" javaType="List" select="selectPlaces"/>
+    </resultMap>
+
+    <resultMap id="MemberListMap" type="com.comeon.backend.meeting.query.dao.dto.MemberListResponse">
+        <id column="members_member_id" property="memberId"/>
+        <id column="members_user_id" property="userId"/>
+        <id column="members_nickname" property="nickname"/>
+        <id column="members_profile_image_url" property="profileImageUrl"/>
+        <id column="members_member_role" property="memberRole"/>
+    </resultMap>
+
+    <resultMap id="PlaceListMap" type="com.comeon.backend.meeting.query.dao.dto.PlaceListResponse">
+        <id column="places_meeting_place_id" property="meetingPlaceId"/>
+        <id column="places_name" property="placeName"/>
+        <id column="places_memo" property="memo"/>
+        <id column="places_lat" property="lat"/>
+        <id column="places_lng" property="lng"/>
+        <id column="places_address" property="address"/>
+        <id column="places_order" property="order"/>
+        <id column="places_category" property="category"/>
+        <id column="places_google_place_id" property="googlePlaceId"/>
+    </resultMap>
+
+    <select id="selectMeetingDetails" resultMap="MeetingDetailsMap">
+        select m.meeting_id          as meeting_id,
+               m.thumbnail_image_url as meeting_image_url,
+               m.name                as meeting_name,
+               m.calendar_start_from as calendar_start_from,
+               m.calendar_end_to     as calendar_end_to
+               # TODO fixed_date
+        from meeting m
+        where m.meeting_id = #{meetingId};
+    </select>
+
+    <select id="selectMembers" resultMap="MemberListMap">
+        select mm.meeting_member_id as members_member_id,
+               u.user_id            as members_user_id,
+               u.nickname           as members_nickname,
+               u.profile_image_url  as members_profile_image_url,
+               mm.role              as members_member_role
+        from meeting_member mm
+                 left join users u on mm.user_id = u.user_id
+        where mm.meeting_id = #{meetingId}
+        order by u.nickname
+    </select>
+
+    <select id="selectPlaces" resultMap="PlaceListMap">
+        select mp.meeting_place_id as places_meeting_place_id,
+               mp.name             as places_name,
+               mp.memo             as places_memo,
+               mp.lat              as places_lat,
+               mp.lng              as places_lng,
+               mp.address          as places_adress,
+               mp.place_order      as places_order,
+               mp.category         as places_category,
+               mp.google_place_id  as places_google_place_id
+        from meeting_place mp
+        where mp.meeting_id = #{meetingId}
+        order by mp.place_order
     </select>
 </mapper>

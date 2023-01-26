@@ -6,6 +6,7 @@ import com.comeon.backend.meeting.command.application.MeetingFacade;
 import com.comeon.backend.meeting.command.application.dto.MeetingCommandDto;
 import com.comeon.backend.meeting.presentation.response.MeetingAddResponse;
 import com.comeon.backend.meeting.query.dao.MeetingDao;
+import com.comeon.backend.meeting.query.dao.dto.MeetingDetailsResponse;
 import com.comeon.backend.meeting.query.dao.dto.MeetingSliceResponse;
 import com.comeon.backend.meeting.query.dao.MeetingSliceCondition;
 import lombok.RequiredArgsConstructor;
@@ -45,6 +46,13 @@ public class MeetingApiController {
     ) {
         Slice<MeetingSliceResponse> meetingSlice = meetingDao.findMeetingSlice(jwtPrincipal.getUserId(), pageable, param);
         return SliceResponse.toSliceResponse(meetingSlice);
+    }
+
+    @GetMapping("/{meetingId}")
+    public MeetingDetailsResponse meetingDetails(
+            @PathVariable Long meetingId
+    ) {
+        return meetingDao.findMeetingDetails(meetingId);
     }
 
     @PostMapping("/join")
