@@ -1,4 +1,4 @@
-package com.comeon.backend.image.common;
+package com.comeon.backend.image;
 
 import com.comeon.backend.common.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;

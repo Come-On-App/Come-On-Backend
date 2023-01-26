@@ -7,8 +7,9 @@ import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.comeon.backend.common.exception.CommonErrorCode;
 import com.comeon.backend.common.exception.RestApiException;
-import com.comeon.backend.image.common.ImageErrorCode;
-import com.comeon.backend.image.domain.FileManager;
+import com.comeon.backend.image.ImageErrorCode;
+import com.comeon.backend.image.application.FileManager;
+import com.comeon.backend.image.application.ImageDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -34,7 +35,7 @@ public class S3FileManager implements FileManager {
     private String region;
 
     @Override
-    public String upload(MultipartFile multipartFile, Long userId) {
+    public ImageDto.UploadResponse upload(MultipartFile multipartFile, Long userId) {
         if (multipartFile == null || multipartFile.isEmpty()) {
             throw new RestApiException("이미지 파일이 비어있습니다.", ImageErrorCode.NO_IMAGE_FILE);
         }
@@ -51,7 +52,7 @@ public class S3FileManager implements FileManager {
             throw new RestApiException(e, CommonErrorCode.INTERNAL_SERVER_ERROR);
         }
 
-        return amazonS3.getUrl(bucket, fullPath).toString();
+        return new ImageDto.UploadResponse(amazonS3.getUrl(bucket, fullPath).toString());
     }
 
     private String getFilenameToStore(MultipartFile multipartFile) {
@@ -73,8 +74,8 @@ public class S3FileManager implements FileManager {
     }
 
     @Override
-    public void delete(String imageUrl) {
-        amazonS3.deleteObject(new DeleteObjectRequest(bucket, getStoredPathFrom(imageUrl)));
+    public void delete(ImageDto.RemoveRequest request) {
+        amazonS3.deleteObject(new DeleteObjectRequest(bucket, getStoredPathFrom(request.getImageUrl())));
     }
 
     private String getStoredPathFrom(String imageUrl) {
