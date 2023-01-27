@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.comeon.backend.meeting.query.infra.mapper.MeetingPlaceMapper">
+<mapper namespace="com.comeon.backend.meeting.infrastructure.dao.mapper.MeetingPlaceMapper">
     <resultMap id="PlaceMap" type="com.comeon.backend.meeting.query.dao.dto.PlaceListResponse">
         <result column="place_id" property="meetingPlaceId"/>
         <result column="name" property="placeName"/>

@@ -1,7 +1,7 @@
 package com.comeon.backend.api.response.controller;
 
-import com.comeon.backend.common.api.ListResponse;
-import com.comeon.backend.common.api.SliceResponse;
+import com.comeon.backend.common.response.ListResponse;
+import com.comeon.backend.common.response.SliceResponse;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.SliceImpl;
 import org.springframework.web.bind.annotation.GetMapping;

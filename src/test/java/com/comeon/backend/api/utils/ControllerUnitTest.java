@@ -3,6 +3,10 @@ package com.comeon.backend.api.utils;
 import com.comeon.backend.jwt.application.JwtManager;
 import com.comeon.backend.jwt.domain.RefreshTokenRepository;
 import com.comeon.backend.jwt.infra.*;
+import com.comeon.backend.meeting.MemberRole;
+import com.comeon.backend.meeting.infrastructure.presentation.SecurityContextUserProvider;
+import com.comeon.backend.meeting.query.dao.MeetingMemberDao;
+import com.comeon.backend.meeting.query.dao.dto.MemberSimpleResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,7 +27,8 @@ import java.util.Optional;
         JwtParserImpl.class,
         JwtProperties.class,
         JwtValidatorImpl.class,
-        ReissueConditionImpl.class
+        ReissueConditionImpl.class,
+        SecurityContextUserProvider.class
 })
 @MockBean(JpaMetamodelMappingContext.class)
 public abstract class ControllerUnitTest {
@@ -38,14 +43,29 @@ public abstract class ControllerUnitTest {
     protected JwtManager jwtManager;
 
     @MockBean
-    RefreshTokenRepository refreshTokenRepository;
+    protected RefreshTokenRepository refreshTokenRepository;
+
+    @MockBean
+    protected MeetingMemberDao meetingMemberDao;
 
     protected Long currentUserId = 123L;
+    protected Long currentMemberId = 489L;
 
     @BeforeEach
-    void setUp() {
+    void setUpUnitTest() {
         BDDMockito.given(refreshTokenRepository.findUserIdBy(BDDMockito.anyString()))
                 .willReturn(Optional.of(currentUserId));
+        grantParticipant();
+    }
+
+    protected void grantHost() {
+        BDDMockito.given(meetingMemberDao.findMemberSimple(BDDMockito.anyLong(), BDDMockito.anyLong()))
+                .willReturn(new MemberSimpleResponse(currentUserId, currentMemberId, MemberRole.HOST));
+    }
+
+    protected void grantParticipant() {
+        BDDMockito.given(meetingMemberDao.findMemberSimple(BDDMockito.anyLong(), BDDMockito.anyLong()))
+                .willReturn(new MemberSimpleResponse(currentUserId, currentMemberId, MemberRole.PARTICIPANT));
     }
 
     protected String createJson(Object dto) throws JsonProcessingException {

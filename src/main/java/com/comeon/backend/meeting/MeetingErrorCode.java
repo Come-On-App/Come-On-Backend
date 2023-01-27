@@ -1,6 +1,6 @@
 package com.comeon.backend.meeting;
 
-import com.comeon.backend.common.exception.ErrorCode;
+import com.comeon.backend.common.error.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 

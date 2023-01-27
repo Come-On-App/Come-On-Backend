@@ -3,7 +3,7 @@ package com.comeon.backend.api;
 import com.comeon.backend.api.utils.RestDocsTestSupport;
 import com.comeon.backend.meeting.command.application.MeetingFacade;
 import com.comeon.backend.meeting.command.application.dto.MeetingCommandDto;
-import com.comeon.backend.meeting.presentation.EntryCodeApiController;
+import com.comeon.backend.meeting.presentation.api.EntryCodeApiController;
 import com.comeon.backend.meeting.query.dao.MeetingDao;
 import com.comeon.backend.meeting.query.dao.dto.EntryCodeDetailsResponse;
 import org.junit.jupiter.api.DisplayName;
@@ -102,7 +102,8 @@ public class EntryCodeApiControllerTest extends RestDocsTestSupport {
             String entryCodeMock = "AJ4ER9";
             LocalDateTime expirationMock = LocalDateTime.now().plusDays(7);
 
-            BDDMockito.given(meetingFacade.renewEntryCode(BDDMockito.anyLong(), BDDMockito.anyLong()))
+            grantHost();
+            BDDMockito.given(meetingFacade.renewEntryCode(BDDMockito.anyLong()))
                     .willReturn(new MeetingCommandDto.RenewEntryCodeResponse(meetingIdMock, entryCodeMock, expirationMock));
 
             //when

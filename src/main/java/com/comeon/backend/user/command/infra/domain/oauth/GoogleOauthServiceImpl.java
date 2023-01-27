@@ -1,6 +1,6 @@
 package com.comeon.backend.user.command.infra.domain.oauth;
 
-import com.comeon.backend.common.exception.RestApiException;
+import com.comeon.backend.common.error.RestApiException;
 import com.comeon.backend.user.command.domain.GoogleOauthService;
 import com.comeon.backend.user.command.domain.OauthUserInfo;
 import com.comeon.backend.user.command.infra.domain.oauth.feign.GoogleAuthFeignClient;

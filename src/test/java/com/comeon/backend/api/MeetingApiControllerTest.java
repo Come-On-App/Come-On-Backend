@@ -2,11 +2,11 @@ package com.comeon.backend.api;
 
 import com.comeon.backend.api.utils.RestDocsTestSupport;
 import com.comeon.backend.api.utils.RestDocsUtil;
+import com.comeon.backend.meeting.MemberRole;
 import com.comeon.backend.meeting.command.application.MeetingFacade;
 import com.comeon.backend.meeting.command.application.dto.MeetingCommandDto;
-import com.comeon.backend.meeting.command.domain.MeetingMemberRole;
 import com.comeon.backend.meeting.command.domain.PlaceCategory;
-import com.comeon.backend.meeting.presentation.MeetingApiController;
+import com.comeon.backend.meeting.presentation.api.MeetingApiController;
 import com.comeon.backend.meeting.query.dao.MeetingDao;
 import com.comeon.backend.meeting.query.dao.dto.MeetingDetailsResponse;
 import com.comeon.backend.meeting.query.dao.dto.MeetingSliceResponse;
@@ -118,7 +118,7 @@ public class MeetingApiControllerTest extends RestDocsTestSupport {
             // mocking
             long meetingIdMock = 300L;
             long memberIdMock = 4777L;
-            String memberRoleMock = MeetingMemberRole.PARTICIPANT.name();
+            String memberRoleMock = MemberRole.PARTICIPANT.name();
             BDDMockito.given(meetingFacade.joinMeeting(BDDMockito.anyLong(), BDDMockito.any()))
                     .willReturn(new MeetingCommandDto.JoinResponse(meetingIdMock, memberIdMock, memberRoleMock));
 
@@ -186,9 +186,9 @@ public class MeetingApiControllerTest extends RestDocsTestSupport {
 
             // mocking
             List<MeetingSliceResponse> sliceResults = List.of(
-                    new MeetingSliceResponse(10L, new MeetingSliceResponse.UserSimple(31L, "user31", null), 10, MeetingMemberRole.PARTICIPANT.name(), "ex meeting 10", LocalDate.of(2023, 3, 1), LocalDate.of(2023, 3, 23), "https://xxxx.xxxxxxx.xxxx/xxxxxxxxxxx", null, null),
-                    new MeetingSliceResponse(14L, new MeetingSliceResponse.UserSimple(currentRequestATK.getPayload().getUserId(), currentRequestATK.getPayload().getNickname(), "https://xxx.xxxx.xxxxxx/xxxxxx"), 4, MeetingMemberRole.HOST.name(), "meeting 14 ex", LocalDate.of(2023, 3, 10), LocalDate.of(2023, 3, 18), "https://xxxx.xxxxxxx.xxxx/xxxxxxxxxxx", null, null),
-                    new MeetingSliceResponse(23L, new MeetingSliceResponse.UserSimple(11L, "user 11", null), 6, MeetingMemberRole.PARTICIPANT.name(), "meeting ex 23", LocalDate.of(2023, 3, 22), LocalDate.of(2023, 3, 30), "https://xxxx.xxxxxxx.xxxx/xxxxxxxxx", null, null)
+                    new MeetingSliceResponse(10L, new MeetingSliceResponse.UserSimple(31L, "user31", null), 10, MemberRole.PARTICIPANT.name(), "ex meeting 10", LocalDate.of(2023, 3, 1), LocalDate.of(2023, 3, 23), "https://xxxx.xxxxxxx.xxxx/xxxxxxxxxxx", null, null),
+                    new MeetingSliceResponse(14L, new MeetingSliceResponse.UserSimple(currentRequestATK.getPayload().getUserId(), currentRequestATK.getPayload().getNickname(), "https://xxx.xxxx.xxxxxx/xxxxxx"), 4, MemberRole.HOST.name(), "meeting 14 ex", LocalDate.of(2023, 3, 10), LocalDate.of(2023, 3, 18), "https://xxxx.xxxxxxx.xxxx/xxxxxxxxxxx", null, null),
+                    new MeetingSliceResponse(23L, new MeetingSliceResponse.UserSimple(11L, "user 11", null), 6, MemberRole.PARTICIPANT.name(), "meeting ex 23", LocalDate.of(2023, 3, 22), LocalDate.of(2023, 3, 30), "https://xxxx.xxxxxxx.xxxx/xxxxxxxxx", null, null)
             );
             BDDMockito.given(meetingDao.findMeetingSlice(BDDMockito.anyLong(), BDDMockito.any(), BDDMockito.any()))
                     .willReturn(new SliceImpl<>(sliceResults, Pageable.ofSize(3), true));
@@ -270,8 +270,8 @@ public class MeetingApiControllerTest extends RestDocsTestSupport {
                             )
                     ),
                     List.of(
-                            new MemberListResponse(88L, 112L, "user112", "https://xxx.xxx.xxxx/xxxxx", MeetingMemberRole.HOST.name()),
-                            new MemberListResponse(109L, 134L, "user134", null, MeetingMemberRole.PARTICIPANT.name())
+                            new MemberListResponse(88L, 112L, "user112", "https://xxx.xxx.xxxx/xxxxx", MemberRole.HOST.name()),
+                            new MemberListResponse(109L, 134L, "user134", null, MemberRole.PARTICIPANT.name())
                     ),
                     List.of(
                             new PlaceListResponse(3323L, "홍대역", "여기서 모이자", 68.123, 127.31561, "XXX-YYYY", 1, PlaceCategory.ETC.name(), "asd23234tabn4tav"),

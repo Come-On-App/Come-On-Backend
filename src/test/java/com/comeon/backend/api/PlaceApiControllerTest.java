@@ -5,7 +5,7 @@ import com.comeon.backend.api.utils.RestDocsUtil;
 import com.comeon.backend.meeting.command.application.MeetingPlaceFacade;
 import com.comeon.backend.meeting.command.application.dto.PlaceCommandDto;
 import com.comeon.backend.meeting.command.domain.PlaceCategory;
-import com.comeon.backend.meeting.presentation.PlaceApiController;
+import com.comeon.backend.meeting.presentation.api.PlaceApiController;
 import com.comeon.backend.meeting.query.dao.MeetingPlaceDao;
 import com.comeon.backend.meeting.query.dao.dto.PlaceListResponse;
 import org.junit.jupiter.api.DisplayName;

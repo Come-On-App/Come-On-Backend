@@ -1,6 +1,7 @@
 package com.comeon.backend.meeting.command.domain;
 
 import com.comeon.backend.common.model.BaseTimeEntity;
+import com.comeon.backend.meeting.MemberRole;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,23 +23,23 @@ public class MeetingMember extends BaseTimeEntity {
     private Meeting meeting;
 
     @Enumerated(EnumType.STRING)
-    private MeetingMemberRole role;
+    private MemberRole role;
 
-    private MeetingMember(Long userId, Meeting meeting, MeetingMemberRole role) {
+    private MeetingMember(Long userId, Meeting meeting, MemberRole role) {
         this.userId = userId;
         this.meeting = meeting;
         this.role = role;
     }
 
     public static MeetingMember createHostMember(Long userId, Meeting meeting) {
-        return new MeetingMember(userId, meeting, MeetingMemberRole.HOST);
+        return new MeetingMember(userId, meeting, MemberRole.HOST);
     }
 
     public static MeetingMember createParticipantMember(Long userId, Meeting meeting) {
-        return new MeetingMember(userId, meeting, MeetingMemberRole.PARTICIPANT);
+        return new MeetingMember(userId, meeting, MemberRole.PARTICIPANT);
     }
 
     public boolean isHost() {
-        return this.role == MeetingMemberRole.HOST;
+        return this.role == MemberRole.HOST;
     }
 }
