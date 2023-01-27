@@ -1,6 +1,6 @@
 package com.comeon.backend.jwt;
 
-import com.comeon.backend.common.exception.ErrorCode;
+import com.comeon.backend.common.error.ErrorCode;
 import org.springframework.http.HttpStatus;
 
 public enum JwtErrorCode implements ErrorCode {

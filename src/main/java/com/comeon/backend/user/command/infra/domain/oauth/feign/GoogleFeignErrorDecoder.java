@@ -1,7 +1,7 @@
 package com.comeon.backend.user.command.infra.domain.oauth.feign;
 
-import com.comeon.backend.common.exception.CommonErrorCode;
-import com.comeon.backend.common.exception.RestApiException;
+import com.comeon.backend.common.error.CommonErrorCode;
+import com.comeon.backend.common.error.RestApiException;
 import com.comeon.backend.user.UserErrorCode;
 import feign.Response;
 import feign.codec.ErrorDecoder;

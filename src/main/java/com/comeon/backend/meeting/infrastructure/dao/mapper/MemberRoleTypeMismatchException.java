@@ -1,7 +1,7 @@
 package com.comeon.backend.meeting.infrastructure.dao.mapper;
 
-import com.comeon.backend.common.exception.CommonErrorCode;
-import com.comeon.backend.common.exception.RestApiException;
+import com.comeon.backend.common.error.CommonErrorCode;
+import com.comeon.backend.common.error.RestApiException;
 
 public class MemberRoleTypeMismatchException extends RestApiException {
 

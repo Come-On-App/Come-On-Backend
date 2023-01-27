@@ -1,6 +1,6 @@
 package com.comeon.backend.user;
 
-import com.comeon.backend.common.exception.ErrorCode;
+import com.comeon.backend.common.error.ErrorCode;
 import org.springframework.http.HttpStatus;
 
 public enum UserErrorCode implements ErrorCode {

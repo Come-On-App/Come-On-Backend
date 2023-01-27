@@ -1,6 +1,6 @@
 package com.comeon.backend.meeting.presentation.api;
 
-import com.comeon.backend.common.api.SliceResponse;
+import com.comeon.backend.common.response.SliceResponse;
 import com.comeon.backend.common.security.JwtPrincipal;
 import com.comeon.backend.meeting.command.application.MeetingFacade;
 import com.comeon.backend.meeting.command.application.dto.MeetingCommandDto;

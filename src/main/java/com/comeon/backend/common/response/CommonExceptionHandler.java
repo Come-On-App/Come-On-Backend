@@ -1,10 +1,6 @@
-package com.comeon.backend.common.api;
+package com.comeon.backend.common.response;
 
-import com.comeon.backend.common.exception.CommonErrorCode;
-import com.comeon.backend.common.exception.ErrorCode;
-import com.comeon.backend.common.exception.RestApiException;
-import com.comeon.backend.common.exception.TypeMismatchException;
-import com.comeon.backend.common.util.ResponseEntityUtils;
+import com.comeon.backend.common.error.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.ResponseEntity;

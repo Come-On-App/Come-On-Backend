@@ -1,6 +1,6 @@
 package com.comeon.backend.meeting.presentation;
 
-import com.comeon.backend.common.exception.TypeMismatchException;
+import com.comeon.backend.common.error.TypeMismatchException;
 import com.comeon.backend.meeting.MemberRole;
 import com.comeon.backend.meeting.query.dao.MeetingMemberDao;
 import com.comeon.backend.meeting.query.dao.dto.MemberSimpleResponse;

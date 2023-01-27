@@ -1,7 +1,7 @@
-package com.comeon.backend.common.api;
+package com.comeon.backend.common.response;
 
-import com.comeon.backend.common.exception.CommonErrorCode;
-import com.comeon.backend.common.exception.ErrorCode;
+import com.comeon.backend.common.error.CommonErrorCode;
+import com.comeon.backend.common.error.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.MessageSource;

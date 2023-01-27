@@ -1,7 +1,6 @@
-package com.comeon.backend.common.util;
+package com.comeon.backend.common.response;
 
-import com.comeon.backend.common.api.ErrorResponse;
-import com.comeon.backend.common.exception.ErrorCode;
+import com.comeon.backend.common.error.ErrorCode;
 import org.springframework.http.ResponseEntity;
 
 public class ResponseEntityUtils {

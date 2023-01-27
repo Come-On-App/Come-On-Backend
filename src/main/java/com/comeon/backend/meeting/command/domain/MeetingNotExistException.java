@@ -1,6 +1,6 @@
 package com.comeon.backend.meeting.command.domain;
 
-import com.comeon.backend.common.exception.RestApiException;
+import com.comeon.backend.common.error.RestApiException;
 import com.comeon.backend.meeting.MeetingErrorCode;
 
 public class MeetingNotExistException extends RestApiException {

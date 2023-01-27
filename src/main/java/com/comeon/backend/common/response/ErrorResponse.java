@@ -1,4 +1,4 @@
-package com.comeon.backend.common.api;
+package com.comeon.backend.common.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

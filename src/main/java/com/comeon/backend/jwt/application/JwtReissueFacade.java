@@ -1,6 +1,6 @@
 package com.comeon.backend.jwt.application;
 
-import com.comeon.backend.common.exception.RestApiException;
+import com.comeon.backend.common.error.RestApiException;
 import com.comeon.backend.jwt.JwtErrorCode;
 import com.comeon.backend.jwt.domain.*;
 import lombok.RequiredArgsConstructor;

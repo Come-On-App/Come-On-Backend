@@ -1,8 +1,8 @@
 package com.comeon.backend.common.security;
 
-import com.comeon.backend.common.api.ErrorResponse;
-import com.comeon.backend.common.exception.CommonErrorCode;
-import com.comeon.backend.common.exception.ErrorCode;
+import com.comeon.backend.common.response.ErrorResponse;
+import com.comeon.backend.common.error.CommonErrorCode;
+import com.comeon.backend.common.error.ErrorCode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -1,4 +1,4 @@
-package com.comeon.backend.common.exception;
+package com.comeon.backend.common.error;
 
 public class TypeMismatchException extends RestApiException {
 
