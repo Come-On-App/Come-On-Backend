@@ -1,4 +1,4 @@
-package com.comeon.backend.meeting.query.infra.mapper;
+package com.comeon.backend.meeting.infrastructure.dao.mapper;
 
 import com.comeon.backend.meeting.query.dao.dto.EntryCodeDetailsResponse;
 import com.comeon.backend.meeting.query.dao.dto.MeetingDetailsResponse;

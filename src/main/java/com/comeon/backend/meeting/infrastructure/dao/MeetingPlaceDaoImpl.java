@@ -1,8 +1,8 @@
-package com.comeon.backend.meeting.query.infra;
+package com.comeon.backend.meeting.infrastructure.dao;
 
+import com.comeon.backend.meeting.infrastructure.dao.mapper.MeetingPlaceMapper;
 import com.comeon.backend.meeting.query.dao.MeetingPlaceDao;
 import com.comeon.backend.meeting.query.dao.dto.PlaceListResponse;
-import com.comeon.backend.meeting.query.infra.mapper.MeetingPlaceMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

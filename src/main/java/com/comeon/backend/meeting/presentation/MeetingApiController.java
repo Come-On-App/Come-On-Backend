@@ -27,7 +27,6 @@ public class MeetingApiController {
     private final MeetingFacade meetingFacade;
     private final MeetingDao meetingDao;
 
-    // TODO 유저 접근 권한 관리 - Security
     @PostMapping
     public MeetingAddResponse meetingAdd(
             @AuthenticationPrincipal JwtPrincipal jwtPrincipal,
@@ -48,6 +47,7 @@ public class MeetingApiController {
         return SliceResponse.toSliceResponse(meetingSlice);
     }
 
+    @RequiredMemberRole
     @GetMapping("/{meetingId}")
     public MeetingDetailsResponse meetingDetails(
             @PathVariable Long meetingId

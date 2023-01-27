@@ -43,26 +43,8 @@ public class MeetingFacade {
     public MeetingCommandDto.RenewEntryCodeResponse renewEntryCode(Long meetingId, Long userId) {
         Meeting meeting = meetingRepository.findMeetingBy(meetingId)
                 .orElseThrow(() -> new RestApiException(MeetingErrorCode.MEETING_NOT_EXIST));
-        checkHostUser(meetingId, userId);
         MeetingEntryCode entryCode = meeting.renewEntryCodeAndGet();
 
         return new MeetingCommandDto.RenewEntryCodeResponse(entryCode);
-    }
-
-    private void checkHostUser(Long meetingId, Long userId) {
-        meetingRepository.findMeetingMemberBy(meetingId, userId)
-                .ifPresentOrElse(
-                        // 모임에 가입된 유저이면 권한 확인
-                        meetingMember -> {
-                            // 모임에 가입된 유저가 방장이 아니면 예외
-                            if (!meetingMember.isHost()) {
-                                throw new RestApiException(MeetingErrorCode.NO_AUTHORITIES);
-                            }
-                        },
-                        // 가입되지 않으면 예외
-                        () -> {
-                            throw new RestApiException(MeetingErrorCode.NOT_MEMBER);
-                        }
-                );
     }
 }

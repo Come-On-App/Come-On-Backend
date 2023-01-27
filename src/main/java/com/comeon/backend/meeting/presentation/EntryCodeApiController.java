@@ -1,6 +1,7 @@
 package com.comeon.backend.meeting.presentation;
 
 import com.comeon.backend.common.security.JwtPrincipal;
+import com.comeon.backend.meeting.MemberRole;
 import com.comeon.backend.meeting.command.application.MeetingFacade;
 import com.comeon.backend.meeting.command.application.dto.MeetingCommandDto;
 import com.comeon.backend.meeting.query.dao.MeetingDao;
@@ -19,6 +20,7 @@ public class EntryCodeApiController {
     private final MeetingFacade meetingFacade;
     private final MeetingDao meetingDao;
 
+    @RequiredMemberRole
     @GetMapping
     public EntryCodeDetailsResponse entryCodeDetails(
             @AuthenticationPrincipal JwtPrincipal jwtPrincipal,
@@ -27,6 +29,7 @@ public class EntryCodeApiController {
         return meetingDao.findEntryCodeDetails(meetingId);
     }
 
+    @RequiredMemberRole(MemberRole.HOST)
     @PostMapping
     public MeetingCommandDto.RenewEntryCodeResponse entryCodeRenew(
             @AuthenticationPrincipal JwtPrincipal jwtPrincipal,

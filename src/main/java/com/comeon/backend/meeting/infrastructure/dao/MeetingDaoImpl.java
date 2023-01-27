@@ -1,13 +1,13 @@
-package com.comeon.backend.meeting.query.infra;
+package com.comeon.backend.meeting.infrastructure.dao;
 
 import com.comeon.backend.common.util.SliceUtils;
+import com.comeon.backend.meeting.infrastructure.dao.mapper.MeetingMapper;
+import com.comeon.backend.meeting.infrastructure.dao.mapper.MeetingSliceParam;
 import com.comeon.backend.meeting.query.dao.MeetingDao;
 import com.comeon.backend.meeting.query.dao.MeetingSliceCondition;
 import com.comeon.backend.meeting.query.dao.dto.EntryCodeDetailsResponse;
 import com.comeon.backend.meeting.query.dao.dto.MeetingDetailsResponse;
 import com.comeon.backend.meeting.query.dao.dto.MeetingSliceResponse;
-import com.comeon.backend.meeting.query.infra.mapper.MeetingMapper;
-import com.comeon.backend.meeting.query.infra.mapper.MeetingSliceParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;

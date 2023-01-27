@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.comeon.backend.meeting.infrastructure.dao.mapper.MeetingMemberMapper">
+    <resultMap id="MemberSimpleMap" type="com.comeon.backend.meeting.query.dao.dto.MemberSimpleResponse">
+        <id column="user_id" property="userId"/>
+        <result column="member_id" property="memberId"/>
+        <result column="member_role" property="memberRole"/>
+    </resultMap>
+
+    <select id="selectMemberSimpleByMeetingIdAndUserId" resultMap="MemberSimpleMap">
+        select mm.user_id as user_id,
+               mm.meeting_member_id as member_id,
+               mm.role as member_role
+        from meeting_member mm
+            left join users u on u.user_id = mm.user_id
+        where mm.meeting_id = #{meetingId} and mm.user_id = #{userId}
+    </select>
+</mapper>

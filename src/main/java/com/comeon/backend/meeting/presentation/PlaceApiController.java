@@ -23,7 +23,7 @@ public class PlaceApiController {
     private final MeetingPlaceFacade meetingPlaceFacade;
     private final MeetingPlaceDao meetingPlaceDao;
 
-    // TODO 요청 클라이언트가 모임에 속해있는지 권한 확인
+    @RequiredMemberRole
     @GetMapping
     public ListResponse<PlaceListResponse> placeList(
             @AuthenticationPrincipal JwtPrincipal jwtPrincipal,
@@ -32,6 +32,7 @@ public class PlaceApiController {
         return ListResponse.toListResponse(meetingPlaceDao.findPlacesByMeetingId(meetingId));
     }
 
+    @RequiredMemberRole
     @PostMapping
     public PlaceAddResponse placeAdd(
             @AuthenticationPrincipal JwtPrincipal jwtPrincipal,
@@ -42,6 +43,7 @@ public class PlaceApiController {
         return new PlaceAddResponse(meetingPlaceId);
     }
 
+    @RequiredMemberRole
     @PutMapping("/{meetingPlaceId}")
     public PlaceModifyResponse placeModify(
             @AuthenticationPrincipal JwtPrincipal jwtPrincipal,
@@ -53,6 +55,7 @@ public class PlaceApiController {
         return new PlaceModifyResponse();
     }
 
+    @RequiredMemberRole
     @DeleteMapping("/{meetingPlaceId}")
     public PlaceRemoveResponse placeRemove(
             @AuthenticationPrincipal JwtPrincipal jwtPrincipal,
