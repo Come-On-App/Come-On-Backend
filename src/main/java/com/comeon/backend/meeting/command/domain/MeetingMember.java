@@ -37,4 +37,8 @@ public class MeetingMember extends BaseTimeEntity {
     public static MeetingMember createParticipantMember(Long userId, Meeting meeting) {
         return new MeetingMember(userId, meeting, MeetingMemberRole.PARTICIPANT);
     }
+
+    public boolean isHost() {
+        return this.role == MeetingMemberRole.HOST;
+    }
 }

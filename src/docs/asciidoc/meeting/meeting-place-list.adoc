@@ -9,7 +9,7 @@
 GET /api/v1/meetings/{meeting-id}/places
 
 === API Spec
-==== 요청 파라미터
+==== 경로 파라미터
 include::{snippets}/place-list/success/path-parameters.adoc[]
 
 ==== 요청 헤더

@@ -16,7 +16,7 @@ public class OauthUserService {
         if (user.getId() == null) {
             userRepository.save(user);
         } else {
-            user.update(oauthUserInfo);
+            user.updateOauthInfo(oauthUserInfo);
         }
         return user;
     }

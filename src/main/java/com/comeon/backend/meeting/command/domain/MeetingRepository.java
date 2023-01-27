@@ -7,11 +7,7 @@ public interface MeetingRepository {
     Meeting saveMeeting(Meeting meeting);
     Optional<Meeting> findMeetingBy(Long meetingId);
     Optional<Meeting> findMeetingBy(String entryCode);
-    MeetingMember saveMeetingMember(MeetingMember meetingMember);
     Optional<MeetingMember> findMeetingMemberBy(Long meetingId, Long userId);
-    Optional<MeetingEntryCode> findEntryCodeBy(Long meetingId);
-    MeetingEntryCode saveEntryCode(MeetingEntryCode entryCode);
-    MeetingEntryCode saveEntryCodeAndFlush(MeetingEntryCode entryCode);
     Optional<Meeting> findMeetingFetchPlacesBy(Long meetingId);
     void flush();
 }

@@ -1,17 +1,10 @@
 package com.comeon.backend.user.query.dao;
 
-import com.comeon.backend.user.query.dto.UserDetails;
-import lombok.RequiredArgsConstructor;
-import org.apache.ibatis.session.SqlSession;
-import org.springframework.stereotype.Repository;
+import com.comeon.backend.user.query.dao.dto.UserDetailsResponse;
+import com.comeon.backend.user.query.dao.dto.UserSimpleResponse;
 
-@Repository("userDao")
-@RequiredArgsConstructor
-public class UserDao {
+public interface UserDao {
 
-    private final SqlSession sqlSession;
-
-    public UserDetails findUserDetailsByUserId(Long userId) {
-        return sqlSession.selectOne("findUserDetailsByUserId", userId);
-    }
+    UserDetailsResponse findUserDetails(Long userId);
+    UserSimpleResponse findUserSimple(Long userId);
 }

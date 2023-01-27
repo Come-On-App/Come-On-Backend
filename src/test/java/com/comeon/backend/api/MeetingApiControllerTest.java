@@ -3,14 +3,15 @@ package com.comeon.backend.api;
 import com.comeon.backend.api.utils.RestDocsTestSupport;
 import com.comeon.backend.api.utils.RestDocsUtil;
 import com.comeon.backend.meeting.command.application.MeetingFacade;
-import com.comeon.backend.meeting.command.application.MeetingMemberFacade;
-import com.comeon.backend.meeting.command.application.dto.MeetingMemberSummary;
+import com.comeon.backend.meeting.command.application.dto.MeetingCommandDto;
 import com.comeon.backend.meeting.command.domain.MeetingMemberRole;
+import com.comeon.backend.meeting.command.domain.PlaceCategory;
 import com.comeon.backend.meeting.presentation.MeetingApiController;
-import com.comeon.backend.meeting.presentation.request.MeetingAddRequest;
-import com.comeon.backend.meeting.presentation.request.MeetingJoinRequest;
 import com.comeon.backend.meeting.query.dao.MeetingDao;
-import com.comeon.backend.meeting.query.dao.result.FindMeetingSliceResult;
+import com.comeon.backend.meeting.query.dao.dto.MeetingDetailsResponse;
+import com.comeon.backend.meeting.query.dao.dto.MeetingSliceResponse;
+import com.comeon.backend.meeting.query.dao.dto.MemberListResponse;
+import com.comeon.backend.meeting.query.dao.dto.PlaceListResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -33,6 +34,7 @@ import org.springframework.util.MultiValueMap;
 
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @WebMvcTest({MeetingApiController.class})
@@ -40,9 +42,6 @@ public class MeetingApiControllerTest extends RestDocsTestSupport {
 
     @MockBean
     MeetingFacade meetingFacade;
-
-    @MockBean
-    MeetingMemberFacade meetingMemberFacade;
 
     @MockBean
     MeetingDao meetingDao;
@@ -57,15 +56,15 @@ public class MeetingApiControllerTest extends RestDocsTestSupport {
         @DisplayName("given: 인증 필요, 모임 이름, 모임 썸네일 이미지, 달력 시작일, 달력 종료일 -> then: HTTP 200, 생성된 모임 식별값 반환")
         void success() throws Exception {
             //given
-            MeetingAddRequest request = new MeetingAddRequest(
+            MeetingCommandDto.AddRequest request = new MeetingCommandDto.AddRequest(
                     "Come-On 모임",
                     "https://xxx.xxxxx.xxx/meeting-thumbnail-image-url",
                     LocalDate.of(2023, 1, 20),
-                    LocalDate.of(2023,2,28)
+                    LocalDate.of(2023, 2, 28)
             );
 
             long meetingId = 28L;
-            BDDMockito.given(meetingFacade.addMeeting(BDDMockito.anyLong(), BDDMockito.anyString(), BDDMockito.anyString(), BDDMockito.any(), BDDMockito.any()))
+            BDDMockito.given(meetingFacade.addMeeting(BDDMockito.anyLong(), BDDMockito.any()))
                     .willReturn(meetingId);
 
             //when
@@ -114,16 +113,14 @@ public class MeetingApiControllerTest extends RestDocsTestSupport {
         @DisplayName("given: 인증 필요, 유효한 모임 코드 -> then: HTTP 200, meetingId, meetingMember(memberId, role)")
         void join() throws Exception {
             //given
-            MeetingJoinRequest request = new MeetingJoinRequest("EF25FK");
+            MeetingCommandDto.JoinRequest request = new MeetingCommandDto.JoinRequest("EF25FK");
 
             // mocking
             long meetingIdMock = 300L;
             long memberIdMock = 4777L;
             String memberRoleMock = MeetingMemberRole.PARTICIPANT.name();
-            BDDMockito.given(meetingMemberFacade.joinMeeting(BDDMockito.anyLong(), BDDMockito.anyString()))
-                    .willReturn(
-                            new MeetingMemberSummary(meetingIdMock, memberIdMock, memberRoleMock)
-                    );
+            BDDMockito.given(meetingFacade.joinMeeting(BDDMockito.anyLong(), BDDMockito.any()))
+                    .willReturn(new MeetingCommandDto.JoinResponse(meetingIdMock, memberIdMock, memberRoleMock));
 
             //when
             ResultActions perform = mockMvc.perform(
@@ -139,7 +136,7 @@ public class MeetingApiControllerTest extends RestDocsTestSupport {
                     .andExpect(MockMvcResultMatchers.jsonPath("$.meetingId").value(meetingIdMock))
                     .andExpect(MockMvcResultMatchers.jsonPath("$.meetingMember").exists())
                     .andExpect(MockMvcResultMatchers.jsonPath("$.meetingMember.memberId").value(memberIdMock))
-                    .andExpect(MockMvcResultMatchers.jsonPath("$.meetingMember.role").value(memberRoleMock));
+                    .andExpect(MockMvcResultMatchers.jsonPath("$.meetingMember.memberRole").value(memberRoleMock));
 
             // docs
             perform.andDo(
@@ -161,7 +158,7 @@ public class MeetingApiControllerTest extends RestDocsTestSupport {
                                     PayloadDocumentation.beneathPath("meetingMember").withSubsectionId("MEETING-MEMBER"),
                                     getTitleAttributes("meetingMember의 각 필드"),
                                     PayloadDocumentation.fieldWithPath("memberId").type(JsonFieldType.NUMBER).description("해당 모임에서의 회원 번호. 유저 식별값인 user-id와 회원 번호인 member-id는 서로 다른 값 입니다."),
-                                    PayloadDocumentation.fieldWithPath("role").type(JsonFieldType.STRING).description("해당 모임에서 유저의 권한 +\n" + RestDocsUtil.generateLinkCode(RestDocsUtil.DocUrl.MEETING_MEMBER_ROLE))
+                                    PayloadDocumentation.fieldWithPath("memberRole").type(JsonFieldType.STRING).description("해당 모임에서 유저의 권한 +\n" + RestDocsUtil.generateLinkCode(RestDocsUtil.DocUrl.MEETING_MEMBER_ROLE))
                             )
                     )
             );
@@ -182,23 +179,19 @@ public class MeetingApiControllerTest extends RestDocsTestSupport {
             params.add("size", String.valueOf(3));
             params.add("page", String.valueOf(0));
             params.add("searchWords", "ex");
-            params.add("dateFrom", "2023-03-01");
-            params.add("dateTo", "2023-03-31");
+            LocalDate dateFrom = LocalDate.of(2023, 3, 01);
+            params.add("dateFrom", dateFrom.format(DateTimeFormatter.ISO_DATE));
+            LocalDate dateTo = LocalDate.of(2023, 3, 31);
+            params.add("dateTo", dateTo.format(DateTimeFormatter.ISO_DATE));
 
             // mocking
-            List<FindMeetingSliceResult> sliceResults = List.of(
-                    new FindMeetingSliceResult(10L, 31L, "user31", null, 10, MeetingMemberRole.PARTICIPANT.name(), "ex meeting 10", "2023-03-01", "2023-03-23", "https://xxxx.xxxxxxx.xxxx/xxxxxxxxxxx"),
-                    new FindMeetingSliceResult(14L, currentRequestATK.getPayload().getUserId(), currentRequestATK.getPayload().getNickname(), "https://xxx.xxxx.xxxxxx/xxxxxx", 4, MeetingMemberRole.HOST.name(), "meeting 14 ex", "2023-03-10", "2023-03-18", "https://xxxx.xxxxxxx.xxxx/xxxxxxxxx"),
-                    new FindMeetingSliceResult(23L, 11L, "user 11", null, 6, MeetingMemberRole.PARTICIPANT.name(), "meeting ex 23", "2023-03-22", "2023-03-30", "https://xxxx.xxxxxxx.xxxx/xxxxxxxxx")
+            List<MeetingSliceResponse> sliceResults = List.of(
+                    new MeetingSliceResponse(10L, new MeetingSliceResponse.UserSimple(31L, "user31", null), 10, MeetingMemberRole.PARTICIPANT.name(), "ex meeting 10", LocalDate.of(2023, 3, 1), LocalDate.of(2023, 3, 23), "https://xxxx.xxxxxxx.xxxx/xxxxxxxxxxx", null, null),
+                    new MeetingSliceResponse(14L, new MeetingSliceResponse.UserSimple(currentRequestATK.getPayload().getUserId(), currentRequestATK.getPayload().getNickname(), "https://xxx.xxxx.xxxxxx/xxxxxx"), 4, MeetingMemberRole.HOST.name(), "meeting 14 ex", LocalDate.of(2023, 3, 10), LocalDate.of(2023, 3, 18), "https://xxxx.xxxxxxx.xxxx/xxxxxxxxxxx", null, null),
+                    new MeetingSliceResponse(23L, new MeetingSliceResponse.UserSimple(11L, "user 11", null), 6, MeetingMemberRole.PARTICIPANT.name(), "meeting ex 23", LocalDate.of(2023, 3, 22), LocalDate.of(2023, 3, 30), "https://xxxx.xxxxxxx.xxxx/xxxxxxxxx", null, null)
             );
             BDDMockito.given(meetingDao.findMeetingSlice(BDDMockito.anyLong(), BDDMockito.any(), BDDMockito.any()))
-                    .willReturn(
-                            new SliceImpl<>(
-                                    sliceResults,
-                                    Pageable.ofSize(3),
-                                    true
-                            )
-                    );
+                    .willReturn(new SliceImpl<>(sliceResults, Pageable.ofSize(3), true));
 
             //when
             ResultActions perform = mockMvc.perform(
@@ -243,6 +236,103 @@ public class MeetingApiControllerTest extends RestDocsTestSupport {
                                     PayloadDocumentation.fieldWithPath("meetingImageUrl").type(JsonFieldType.STRING).description("모임의 썸네일 이미지 URL"),
                                     PayloadDocumentation.fieldWithPath("fixedDates").type(JsonFieldType.NULL).description("임시"),
                                     PayloadDocumentation.fieldWithPath("meetingStatus").type(JsonFieldType.NULL).description("임시")
+                            )
+                    )
+            );
+        }
+    }
+
+    @Nested
+    @DisplayName("모임 상세 조회 API")
+    class meetingDetails {
+
+        String endpoint = "/api/v1/meetings/{meeting-id}";
+
+        @Test
+        @DisplayName("given: 인증 필요, 경로 변수에 모임 식별값 -> then: HTTP 200, 주어진 모임 식별값의 모임 상세 응답")
+        void success() throws Exception {
+            //given
+            Long mockMeetingId = 333L;
+
+            // mocking
+            MeetingDetailsResponse response = new MeetingDetailsResponse(
+                    new MeetingDetailsResponse.MeetingMetaData(
+                            mockMeetingId,
+                            "https://xxxx.xxxx.xxxx/xxxxxx",
+                            "예제 모임 1",
+                            new MeetingDetailsResponse.MeetingCalendar(
+                                    LocalDate.of(2023, 3,1),
+                                    LocalDate.of(2023, 3,31)
+                            ),
+                            new MeetingDetailsResponse.FixedDate(
+                                    LocalDate.of(2023, 3, 11),
+                                    LocalDate.of(2023, 3, 11)
+                            )
+                    ),
+                    List.of(
+                            new MemberListResponse(88L, 112L, "user112", "https://xxx.xxx.xxxx/xxxxx", MeetingMemberRole.HOST.name()),
+                            new MemberListResponse(109L, 134L, "user134", null, MeetingMemberRole.PARTICIPANT.name())
+                    ),
+                    List.of(
+                            new PlaceListResponse(3323L, "홍대역", "여기서 모이자", 68.123, 127.31561, "XXX-YYYY", 1, PlaceCategory.ETC.name(), "asd23234tabn4tav"),
+                            new PlaceListResponse(3642L, "홍대 마약 떡볶이", "점심식사", 68.4567, 127.1252346, "ZZZ-1231", 2, PlaceCategory.RESTAURANT.name(), "36m3w546hwh3w4gv")
+                    )
+            );
+            BDDMockito.given(meetingDao.findMeetingDetails(BDDMockito.anyLong()))
+                    .willReturn(response);
+
+            //when
+            ResultActions perform = mockMvc.perform(
+                    RestDocumentationRequestBuilders.get(endpoint, mockMeetingId)
+                            .header(HttpHeaders.AUTHORIZATION, "Bearer " + currentRequestATK.getToken())
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .characterEncoding(StandardCharsets.UTF_8)
+            );
+
+            //then
+            perform.andExpect(MockMvcResultMatchers.status().isOk());
+
+            // docs
+            perform.andDo(
+                    restDocs.document(
+                            RequestDocumentation.pathParameters(
+                                    getTitleAttributes(endpoint),
+                                    RequestDocumentation.parameterWithName("meeting-id").description("조회할 모임의 식별값")
+                            ),
+                            HeaderDocumentation.requestHeaders(
+                                    getTitleAttributes("요청 헤더"),
+                                    authorizationHeaderDescriptor
+                            ),
+                            PayloadDocumentation.responseFields(
+                                    getTitleAttributes("응답 필드"),
+                                    PayloadDocumentation.subsectionWithPath("meetingMetaData").type(JsonFieldType.OBJECT).description("모임의 기본 정보."),
+                                    PayloadDocumentation.fieldWithPath("meetingMetaData.meetingId").type(JsonFieldType.NUMBER).description("모임의 식별값."),
+                                    PayloadDocumentation.fieldWithPath("meetingMetaData.thumbnailImageUrl").type(JsonFieldType.STRING).description("모임 썸네일 이미지."),
+                                    PayloadDocumentation.fieldWithPath("meetingMetaData.meetingName").type(JsonFieldType.STRING).description("모임 이름."),
+                                    PayloadDocumentation.subsectionWithPath("meetingMetaData.calendar").type(JsonFieldType.OBJECT).description("모임 일자 투표가 가능한 캘린더 정보."),
+                                    PayloadDocumentation.fieldWithPath("meetingMetaData.calendar.startFrom").type(JsonFieldType.STRING).description("모임 일자 투표가 가능한 캘린더의 시작 일자. +\nYYYY-MM-DD 형식."),
+                                    PayloadDocumentation.fieldWithPath("meetingMetaData.calendar.endTo").type(JsonFieldType.STRING).description("모임 일자 투표가 가능한 캘린더의 마지막 일자. +\nYYYY-MM-DD 형식"),
+                                    PayloadDocumentation.subsectionWithPath("meetingMetaData.fixedDate").type(JsonFieldType.OBJECT).description("모임 확정 일자 정보.").optional(),
+                                    PayloadDocumentation.fieldWithPath("meetingMetaData.fixedDate.startFrom").type(JsonFieldType.STRING).description("확정된 모임 일자의 시작일. +\nYYYY-MM-DD 형식."),
+                                    PayloadDocumentation.fieldWithPath("meetingMetaData.fixedDate.endTo").type(JsonFieldType.STRING).description("확정된 모임 일자의 종료일. +\nYYYY-MM-DD 형식"),
+
+                                    PayloadDocumentation.subsectionWithPath("members").type(JsonFieldType.ARRAY).description("모임에 가입된 회원 정보 리스트."),
+                                    PayloadDocumentation.fieldWithPath("members[].memberId").type(JsonFieldType.NUMBER).description("회원의 모임 회원 번호. +\n유저 식별값과는 별개의 정보입니다."),
+                                    PayloadDocumentation.fieldWithPath("members[].userId").type(JsonFieldType.NUMBER).description("회원의 유저 식별값. +\n유저 식별값과는 별개의 정보입니다."),
+                                    PayloadDocumentation.fieldWithPath("members[].nickname").type(JsonFieldType.STRING).description("회원의 유저 닉네임."),
+                                    PayloadDocumentation.fieldWithPath("members[].profileImageUrl").type(JsonFieldType.STRING).description("회원의 유저 프로필 이미지 URL.").optional(),
+                                    PayloadDocumentation.fieldWithPath("members[].memberRole").type(JsonFieldType.STRING).description("모임에서 해당 회원의 권한. +\n" + RestDocsUtil.generateLinkCode(RestDocsUtil.DocUrl.MEETING_MEMBER_ROLE)),
+
+                                    PayloadDocumentation.subsectionWithPath("places").type(JsonFieldType.ARRAY).description("모임에 등록된 장소 리스트").optional(),
+                                    PayloadDocumentation.fieldWithPath("places[].meetingPlaceId").type(JsonFieldType.NUMBER).description("등록된 장소의 식별값"),
+                                    PayloadDocumentation.fieldWithPath("places[].placeName").type(JsonFieldType.STRING).description("장소의 이름"),
+                                    PayloadDocumentation.fieldWithPath("places[].memo").type(JsonFieldType.STRING).description("장소에 대한 메모").optional(),
+                                    PayloadDocumentation.fieldWithPath("places[].lat").type(JsonFieldType.NUMBER).description("장소의 위도값").optional(),
+                                    PayloadDocumentation.fieldWithPath("places[].lng").type(JsonFieldType.NUMBER).description("장소의 경도값").optional(),
+                                    PayloadDocumentation.fieldWithPath("places[].address").type(JsonFieldType.STRING).description("장소의 주소").optional(),
+                                    PayloadDocumentation.fieldWithPath("places[].order").type(JsonFieldType.NUMBER).description("장소 정렬 순서"),
+                                    PayloadDocumentation.fieldWithPath("places[].category").type(JsonFieldType.STRING).description("장소 카테고리. +\n" + RestDocsUtil.generateLinkCode(RestDocsUtil.DocUrl.PLACE_CATEGORY_CODE)),
+                                    PayloadDocumentation.fieldWithPath("places[].googlePlaceId").type(JsonFieldType.STRING).description("Google Place API에서 장소의 식별값").optional()
                             )
                     )
             );

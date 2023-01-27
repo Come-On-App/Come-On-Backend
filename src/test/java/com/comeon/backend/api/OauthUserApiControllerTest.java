@@ -1,12 +1,12 @@
 package com.comeon.backend.api;
 
 import com.comeon.backend.api.utils.RestDocsTestSupport;
+import com.comeon.backend.jwt.application.JwtToken;
+import com.comeon.backend.jwt.application.Tokens;
 import com.comeon.backend.user.command.application.OauthUserFacade;
-import com.comeon.backend.user.command.application.dto.LoginUserDto;
+import com.comeon.backend.user.command.application.dto.LoginDto;
 import com.comeon.backend.user.command.domain.Role;
 import com.comeon.backend.user.presentation.OauthUserApiController;
-import com.comeon.backend.user.presentation.request.GoogleOauthRequest;
-import com.comeon.backend.user.presentation.request.KakaoOauthRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -39,12 +39,18 @@ public class OauthUserApiControllerTest extends RestDocsTestSupport {
         @DisplayName("given: 유효한 idToken -> then: HTTP 200")
         void success() throws Exception {
             //given
-            GoogleOauthRequest request = new GoogleOauthRequest("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
+            LoginDto.GoogleOauthRequest request = new LoginDto.GoogleOauthRequest("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
 
             // mocking
-            LoginUserDto loginUserDto = new LoginUserDto(1L, "userNickname", Role.USER.getValue());
-            given(oauthUserFacade.googleLogin(anyString()))
-                    .willReturn(loginUserDto);
+            Tokens tokens = jwtManager.buildTokens(1L, "userNickname", Role.USER.getValue());
+            JwtToken atk = tokens.getAccessToken();
+            JwtToken rtk = tokens.getRefreshToken();
+            LoginDto.OauthLoginResponse response = new LoginDto.OauthLoginResponse(
+                    new LoginDto.AccessTokenResponse(atk.getToken(), atk.getPayload().getExpiration().toEpochMilli(), atk.getPayload().getUserId()),
+                    new LoginDto.RefreshTokenResponse(rtk.getToken(), rtk.getPayload().getExpiration().toEpochMilli())
+            );
+            given(oauthUserFacade.googleLogin(any()))
+                    .willReturn(response);
 
             //when
             ResultActions perform = mockMvc.perform(
@@ -150,11 +156,17 @@ public class OauthUserApiControllerTest extends RestDocsTestSupport {
         @DisplayName("given: 유효한 인가코드 -> then: HTTP 200")
         void success() throws Exception {
             //given
-            KakaoOauthRequest request = new KakaoOauthRequest("45n67yw45gtqv34ymms5e4egyw34");
+            LoginDto.KakaoOauthRequest request = new LoginDto.KakaoOauthRequest("45n67yw45gtqv34ymms5e4egyw34");
 
             // mocking
-            LoginUserDto loginUserDto = new LoginUserDto(1L, "userNickname", Role.USER.getValue());
-            given(oauthUserFacade.kakaoLogin(anyString())).willReturn(loginUserDto);
+            Tokens tokens = jwtManager.buildTokens(1L, "userNickname", Role.USER.getValue());
+            JwtToken atk = tokens.getAccessToken();
+            JwtToken rtk = tokens.getRefreshToken();
+            LoginDto.OauthLoginResponse response = new LoginDto.OauthLoginResponse(
+                    new LoginDto.AccessTokenResponse(atk.getToken(), atk.getPayload().getExpiration().toEpochMilli(), atk.getPayload().getUserId()),
+                    new LoginDto.RefreshTokenResponse(rtk.getToken(), rtk.getPayload().getExpiration().toEpochMilli())
+            );
+            given(oauthUserFacade.kakaoLogin(any())).willReturn(response);
 
             //when
             ResultActions perform = mockMvc.perform(

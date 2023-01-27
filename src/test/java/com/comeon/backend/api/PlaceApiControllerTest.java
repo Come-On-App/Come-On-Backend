@@ -3,12 +3,11 @@ package com.comeon.backend.api;
 import com.comeon.backend.api.utils.RestDocsTestSupport;
 import com.comeon.backend.api.utils.RestDocsUtil;
 import com.comeon.backend.meeting.command.application.MeetingPlaceFacade;
+import com.comeon.backend.meeting.command.application.dto.PlaceCommandDto;
 import com.comeon.backend.meeting.command.domain.PlaceCategory;
 import com.comeon.backend.meeting.presentation.PlaceApiController;
-import com.comeon.backend.meeting.presentation.request.PlaceAddRequest;
-import com.comeon.backend.meeting.presentation.request.PlaceModifyRequest;
 import com.comeon.backend.meeting.query.dao.MeetingPlaceDao;
-import com.comeon.backend.meeting.query.dao.result.PlaceListResult;
+import com.comeon.backend.meeting.query.dao.dto.PlaceListResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -50,10 +49,10 @@ public class PlaceApiControllerTest extends RestDocsTestSupport {
         void success() throws Exception {
             //given
             Long meetingId = 333L;
-            BDDMockito.given(meetingPlaceDao.findPlaceList(BDDMockito.anyLong()))
+            BDDMockito.given(meetingPlaceDao.findPlacesByMeetingId(BDDMockito.anyLong()))
                     .willReturn(
                             List.of(
-                                    new PlaceListResult(
+                                    new PlaceListResponse(
                                             396L,
                                             "place1",
                                             "memo1",
@@ -64,7 +63,7 @@ public class PlaceApiControllerTest extends RestDocsTestSupport {
                                             PlaceCategory.ETC.name(),
                                             "243crtc23478"
                                     ),
-                                    new PlaceListResult(
+                                    new PlaceListResponse(
                                             399L,
                                             "place2",
                                             "memo2",
@@ -128,10 +127,10 @@ public class PlaceApiControllerTest extends RestDocsTestSupport {
         @DisplayName("given: 인증 필수, 경로 변수로 모임 식별값, 장소 정보 데이터 -> then: 생성된 장소 식별값 반환")
         void success() throws Exception {
             //given
-            PlaceAddRequest request = new PlaceAddRequest("newPlace123", "here is memo of place", "서울특별시 XX구 YY동 ZZ-ZZZ", 127.8997, 68.123123, PlaceCategory.SPORT.name(), "c4 tg78q364grv7q2r3gfc27q3rg");
+            PlaceCommandDto.AddRequest request = new PlaceCommandDto.AddRequest("newPlace123", "here is memo of place", 127.8997, 68.123123, "서울특별시 XX구 YY동 ZZ-ZZZ", PlaceCategory.SPORT.name(), "c4 tg78q364grv7q2r3gfc27q3rg");
             Long meetingId = 333L;
             Long placeId = 453L;
-            BDDMockito.given(meetingPlaceFacade.addPlace(BDDMockito.anyLong(), BDDMockito.anyLong(), BDDMockito.anyString(), BDDMockito.anyString(), BDDMockito.anyDouble(), BDDMockito.anyDouble(), BDDMockito.anyString(), BDDMockito.anyString(), BDDMockito.anyString()))
+            BDDMockito.given(meetingPlaceFacade.addPlace(BDDMockito.anyLong(), BDDMockito.anyLong(), BDDMockito.any()))
                     .willReturn(placeId);
 
             //when
@@ -186,11 +185,11 @@ public class PlaceApiControllerTest extends RestDocsTestSupport {
         @DisplayName("given: 인증 필수, 경로 변수로 모임 식별값, 수정할 장소 정보 데이터 -> then: 성공 응답 true")
         void success() throws Exception {
             //given
-            PlaceModifyRequest request = new PlaceModifyRequest("modifyPlace123", "place memo modify", "서울특별시 YY구 ZZ동 XX-XXXX", 128.0312, 67.00, PlaceCategory.ETC.name(), "c4 tg78q364grv7q2r3gfc27q3rg");
+            PlaceCommandDto.ModifyRequest request = new PlaceCommandDto.ModifyRequest("modifyPlace123", "place memo modify", 128.0312, 67.00, "서울특별시 YY구 ZZ동 XX-XXXX", PlaceCategory.ETC.name(), "c4 tg78q364grv7q2r3gfc27q3rg");
             Long meetingId = 333L;
             Long placeId = 453L;
             BDDMockito.willDoNothing().given(meetingPlaceFacade)
-                    .modifyPlace(BDDMockito.anyLong(), BDDMockito.anyLong(), BDDMockito.anyLong(), BDDMockito.anyString(), BDDMockito.anyString(), BDDMockito.anyDouble(), BDDMockito.anyDouble(), BDDMockito.anyString(), BDDMockito.anyString(), BDDMockito.anyString());
+                    .modifyPlace(BDDMockito.anyLong(), BDDMockito.anyLong(), BDDMockito.anyLong(), BDDMockito.any());
 
             //when
             ResultActions perform = mockMvc.perform(
