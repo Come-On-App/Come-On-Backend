@@ -6,7 +6,7 @@ import com.comeon.backend.meeting.MemberRole;
 import com.comeon.backend.meeting.command.application.MeetingFacade;
 import com.comeon.backend.meeting.command.application.dto.MeetingCommandDto;
 import com.comeon.backend.meeting.command.domain.PlaceCategory;
-import com.comeon.backend.meeting.presentation.MeetingApiController;
+import com.comeon.backend.meeting.presentation.api.MeetingApiController;
 import com.comeon.backend.meeting.query.dao.MeetingDao;
 import com.comeon.backend.meeting.query.dao.dto.MeetingDetailsResponse;
 import com.comeon.backend.meeting.query.dao.dto.MeetingSliceResponse;
