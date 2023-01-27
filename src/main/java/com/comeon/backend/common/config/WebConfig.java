@@ -1,5 +1,6 @@
-package com.comeon.backend.meeting.presentation;
+package com.comeon.backend.common.config;
 
+import com.comeon.backend.meeting.presentation.MemberAuthorizationInterceptor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -7,7 +8,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 @RequiredArgsConstructor
-public class MeetingWebConfig implements WebMvcConfigurer {
+public class WebConfig implements WebMvcConfigurer {
 
     private final MemberAuthorizationInterceptor memberAuthorizationInterceptor;
 

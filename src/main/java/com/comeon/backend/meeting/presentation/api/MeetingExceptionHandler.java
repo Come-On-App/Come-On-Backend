@@ -1,7 +1,9 @@
-package com.comeon.backend.meeting.presentation;
+package com.comeon.backend.meeting.presentation.api;
 
 import com.comeon.backend.common.api.ErrorResponse;
 import com.comeon.backend.common.util.ResponseEntityUtils;
+import com.comeon.backend.meeting.presentation.MemberAuthorizationException;
+import com.comeon.backend.meeting.presentation.NotMemberException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.ResponseEntity;

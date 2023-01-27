@@ -1,10 +1,11 @@
-package com.comeon.backend.meeting.presentation;
+package com.comeon.backend.meeting.presentation.api;
 
 import com.comeon.backend.common.api.SliceResponse;
 import com.comeon.backend.common.security.JwtPrincipal;
 import com.comeon.backend.meeting.command.application.MeetingFacade;
 import com.comeon.backend.meeting.command.application.dto.MeetingCommandDto;
-import com.comeon.backend.meeting.presentation.response.MeetingAddResponse;
+import com.comeon.backend.meeting.presentation.RequiredMemberRole;
+import com.comeon.backend.meeting.presentation.api.dto.MeetingAddResponse;
 import com.comeon.backend.meeting.query.dao.MeetingDao;
 import com.comeon.backend.meeting.query.dao.dto.MeetingDetailsResponse;
 import com.comeon.backend.meeting.query.dao.dto.MeetingSliceResponse;

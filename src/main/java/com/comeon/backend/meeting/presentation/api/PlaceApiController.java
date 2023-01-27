@@ -1,14 +1,15 @@
-package com.comeon.backend.meeting.presentation;
+package com.comeon.backend.meeting.presentation.api;
 
 import com.comeon.backend.common.api.ListResponse;
 import com.comeon.backend.common.security.JwtPrincipal;
 import com.comeon.backend.meeting.command.application.MeetingPlaceFacade;
 import com.comeon.backend.meeting.command.application.dto.PlaceCommandDto;
-import com.comeon.backend.meeting.presentation.response.PlaceAddResponse;
+import com.comeon.backend.meeting.presentation.RequiredMemberRole;
+import com.comeon.backend.meeting.presentation.api.dto.PlaceAddResponse;
 import com.comeon.backend.meeting.query.dao.MeetingPlaceDao;
 import com.comeon.backend.meeting.query.dao.dto.PlaceListResponse;
-import com.comeon.backend.meeting.presentation.response.PlaceModifyResponse;
-import com.comeon.backend.meeting.presentation.response.PlaceRemoveResponse;
+import com.comeon.backend.meeting.presentation.api.dto.PlaceModifyResponse;
+import com.comeon.backend.meeting.presentation.api.dto.PlaceRemoveResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

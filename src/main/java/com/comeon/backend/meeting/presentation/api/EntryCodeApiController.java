@@ -1,9 +1,10 @@
-package com.comeon.backend.meeting.presentation;
+package com.comeon.backend.meeting.presentation.api;
 
 import com.comeon.backend.common.security.JwtPrincipal;
 import com.comeon.backend.meeting.MemberRole;
 import com.comeon.backend.meeting.command.application.MeetingFacade;
 import com.comeon.backend.meeting.command.application.dto.MeetingCommandDto;
+import com.comeon.backend.meeting.presentation.RequiredMemberRole;
 import com.comeon.backend.meeting.query.dao.MeetingDao;
 import com.comeon.backend.meeting.query.dao.dto.EntryCodeDetailsResponse;
 import lombok.RequiredArgsConstructor;
