@@ -25,6 +25,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 
 @WebMvcTest(EntryCodeApiController.class)
 public class EntryCodeApiControllerTest extends RestDocsTestSupport {
@@ -102,6 +103,7 @@ public class EntryCodeApiControllerTest extends RestDocsTestSupport {
             String entryCodeMock = "AJ4ER9";
             LocalDateTime expirationMock = LocalDateTime.now().plusDays(7);
 
+            grantHost();
             BDDMockito.given(meetingFacade.renewEntryCode(BDDMockito.anyLong(), BDDMockito.anyLong()))
                     .willReturn(new MeetingCommandDto.RenewEntryCodeResponse(meetingIdMock, entryCodeMock, expirationMock));
 

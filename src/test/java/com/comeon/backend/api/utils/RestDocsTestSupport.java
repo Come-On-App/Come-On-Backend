@@ -52,7 +52,7 @@ public class RestDocsTestSupport extends ControllerUnitTest {
     protected JwtToken currentRequestATK;
 
     @BeforeEach
-    void setUp() {
+    void setUpSupport() {
         currentRequestATK = jwtManager.buildAccessToken(currentUserId, "user_" + currentUserId, Role.USER.getValue());
         SecurityContextHolder.getContext().setAuthentication(jwtAuthenticationProvider.getAuthentication(currentRequestATK.getToken()));
     }
