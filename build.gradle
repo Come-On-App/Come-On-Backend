@@ -88,7 +88,8 @@ dependencies {
 
     asciidoctorExt 'org.springframework.restdocs:spring-restdocs-asciidoctor'
 
-    implementation 'org.bgee.log4jdbc-log4j2:log4jdbc-log4j2-jdbc4:1.16'
+    // p6spy
+    implementation 'p6spy:p6spy:3.9.1'
 }
 
 dependencyManagement {
