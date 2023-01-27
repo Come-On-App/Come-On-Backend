@@ -16,6 +16,8 @@ include::meeting-add.adoc[]
 
 include::meeting-list.adoc[]
 
+include::meeting-details.adoc[]
+
 include::meeting-join.adoc[]
 
 include::entry-code-details.adoc[]
