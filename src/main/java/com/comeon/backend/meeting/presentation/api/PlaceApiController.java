@@ -15,6 +15,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -27,10 +29,10 @@ public class PlaceApiController {
     @RequiredMemberRole
     @GetMapping
     public ListResponse<PlaceListResponse> placeList(
-            @AuthenticationPrincipal JwtPrincipal jwtPrincipal,
             @PathVariable Long meetingId
     ) {
-        return ListResponse.toListResponse(meetingPlaceDao.findPlacesByMeetingId(meetingId));
+        List<PlaceListResponse> result = meetingPlaceDao.findPlacesByMeetingId(meetingId);
+        return ListResponse.toListResponse(result);
     }
 
     @RequiredMemberRole
@@ -59,7 +61,6 @@ public class PlaceApiController {
     @RequiredMemberRole
     @DeleteMapping("/{meetingPlaceId}")
     public PlaceRemoveResponse placeRemove(
-            @AuthenticationPrincipal JwtPrincipal jwtPrincipal,
             @PathVariable Long meetingId,
             @PathVariable Long meetingPlaceId
     ) {

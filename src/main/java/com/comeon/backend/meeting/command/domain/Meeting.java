@@ -88,8 +88,11 @@ public class Meeting extends BaseTimeEntity {
     }
 
     public MeetingEntryCode renewEntryCodeAndGet() {
-        if (this.entryCode == null) this.entryCode = MeetingEntryCode.createWithRandomCode(this);
-        else entryCode.renewCode();
+        if (this.entryCode == null) {
+            this.entryCode = MeetingEntryCode.createWithRandomCode(this);
+        } else {
+            entryCode.renewCode();
+        }
 
         return this.entryCode;
     }

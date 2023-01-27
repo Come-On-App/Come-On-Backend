@@ -103,7 +103,7 @@ public class EntryCodeApiControllerTest extends RestDocsTestSupport {
             LocalDateTime expirationMock = LocalDateTime.now().plusDays(7);
 
             grantHost();
-            BDDMockito.given(meetingFacade.renewEntryCode(BDDMockito.anyLong(), BDDMockito.anyLong()))
+            BDDMockito.given(meetingFacade.renewEntryCode(BDDMockito.anyLong()))
                     .willReturn(new MeetingCommandDto.RenewEntryCodeResponse(meetingIdMock, entryCodeMock, expirationMock));
 
             //when
