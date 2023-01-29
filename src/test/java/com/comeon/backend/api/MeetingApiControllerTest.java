@@ -2,16 +2,13 @@ package com.comeon.backend.api;
 
 import com.comeon.backend.api.utils.RestDocsTestSupport;
 import com.comeon.backend.api.utils.RestDocsUtil;
-import com.comeon.backend.meeting.MemberRole;
+import com.comeon.backend.common.config.interceptor.MemberRole;
+import com.comeon.backend.meeting.api.MeetingApiController;
+import com.comeon.backend.meeting.command.application.MeetingCommandDto;
 import com.comeon.backend.meeting.command.application.MeetingFacade;
-import com.comeon.backend.meeting.command.application.dto.MeetingCommandDto;
-import com.comeon.backend.meeting.command.domain.PlaceCategory;
-import com.comeon.backend.meeting.presentation.api.MeetingApiController;
 import com.comeon.backend.meeting.query.dao.MeetingDao;
-import com.comeon.backend.meeting.query.dao.dto.MeetingDetailsResponse;
-import com.comeon.backend.meeting.query.dao.dto.MeetingSliceResponse;
-import com.comeon.backend.meeting.query.dao.dto.MemberListResponse;
-import com.comeon.backend.meeting.query.dao.dto.PlaceListResponse;
+import com.comeon.backend.meeting.query.dto.*;
+import com.comeon.backend.place.command.domain.PlaceCategory;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -34,6 +31,7 @@ import org.springframework.util.MultiValueMap;
 
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -333,6 +331,113 @@ public class MeetingApiControllerTest extends RestDocsTestSupport {
                                     PayloadDocumentation.fieldWithPath("places[].order").type(JsonFieldType.NUMBER).description("장소 정렬 순서"),
                                     PayloadDocumentation.fieldWithPath("places[].category").type(JsonFieldType.STRING).description("장소 카테고리. +\n" + RestDocsUtil.generateLinkCode(RestDocsUtil.DocUrl.PLACE_CATEGORY_CODE)),
                                     PayloadDocumentation.fieldWithPath("places[].googlePlaceId").type(JsonFieldType.STRING).description("Google Place API에서 장소의 식별값").optional()
+                            )
+                    )
+            );
+        }
+    }
+
+    @Nested
+    @DisplayName("입장 코드 조회 API")
+    class entryCodeDetails {
+
+        String endpoint = "/api/v1/meetings/{meeting-id}/entry-code";
+
+        @Test
+        @DisplayName("given: 인증 필요, 요청 경로에 meetingId -> then: HTTP 200, 해당 모임의 입장 코드 정보")
+        void success() throws Exception {
+            //given
+            Long meetingIdMock = 55L;
+            String entryCodeMock = "DJE52P";
+            LocalDateTime expirationMock = LocalDateTime.of(2023, 1, 30, 23, 11, 30);
+
+            BDDMockito.given(meetingDao.findEntryCodeDetails(BDDMockito.anyLong()))
+                    .willReturn(new EntryCodeDetailsResponse(meetingIdMock, entryCodeMock, expirationMock));
+
+            //when
+            ResultActions perform = mockMvc.perform(
+                    RestDocumentationRequestBuilders.get(endpoint, meetingIdMock)
+                            .header(HttpHeaders.AUTHORIZATION, "Bearer " + currentRequestATK.getToken())
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .characterEncoding(StandardCharsets.UTF_8)
+            );
+
+            //then
+            perform.andExpect(MockMvcResultMatchers.status().isOk())
+                    .andExpect(MockMvcResultMatchers.jsonPath("$.meetingId").value(meetingIdMock))
+                    .andExpect(MockMvcResultMatchers.jsonPath("$.entryCode").value(entryCodeMock))
+                    .andExpect(MockMvcResultMatchers.jsonPath("$.expiredAt").value(expirationMock.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))));
+
+            // docs
+            perform.andDo(
+                    restDocs.document(
+                            RequestDocumentation.pathParameters(
+                                    getTitleAttributes(endpoint),
+                                    RequestDocumentation.parameterWithName("meeting-id").description("입장 코드를 조회할 모임의 식별값")
+                            ),
+                            HeaderDocumentation.requestHeaders(
+                                    getTitleAttributes("요청 헤더"),
+                                    authorizationHeaderDescriptor
+                            ),
+                            PayloadDocumentation.responseFields(
+                                    getTitleAttributes("응답 필드"),
+                                    PayloadDocumentation.fieldWithPath("meetingId").type(JsonFieldType.NUMBER).description("입장 코드를 조회한 모임의 식별값"),
+                                    PayloadDocumentation.fieldWithPath("entryCode").type(JsonFieldType.STRING).description("해당 모임의 입장 코드. +\n입장 코드를 한번도 갱신하지 않았으면 null 입니다.").optional(),
+                                    PayloadDocumentation.fieldWithPath("expiredAt").type(JsonFieldType.STRING).description("해당 모임의 입장 코드가 만료되는 시간. 만료일. +\nyyyy-MM-dd HH:mm:ss 형식. +\n자세한 내용은 요청/응답 예시를 확인해주세요. +\n입장 코드를 한번도 갱신하지 않았으면 null 입니다.").optional()
+                            )
+                    )
+            );
+        }
+    }
+
+    @Nested
+    @DisplayName("입장 코드 갱신 API")
+    class entryCodeRenew {
+
+        String endpoint = "/api/v1/meetings/{meeting-id}/entry-code";
+
+        @Test
+        @DisplayName("given: 인증 필요, 요청 경로에 meetingId -> then: HTTP 200, 갱신된 입장 코드 정보")
+        void success() throws Exception {
+            //given
+            Long meetingIdMock = 55L;
+            String entryCodeMock = "AJ4ER9";
+            LocalDateTime expirationMock = LocalDateTime.now().plusDays(7);
+
+            grantHost();
+            BDDMockito.given(meetingFacade.renewEntryCode(BDDMockito.anyLong()))
+                    .willReturn(new MeetingCommandDto.RenewEntryCodeResponse(meetingIdMock, entryCodeMock, expirationMock));
+
+            //when
+            ResultActions perform = mockMvc.perform(
+                    RestDocumentationRequestBuilders.post(endpoint, meetingIdMock)
+                            .header(HttpHeaders.AUTHORIZATION, "Bearer " + currentRequestATK.getToken())
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .characterEncoding(StandardCharsets.UTF_8)
+            );
+
+            //then
+            perform.andExpect(MockMvcResultMatchers.status().isOk())
+                    .andExpect(MockMvcResultMatchers.jsonPath("$.meetingId").value(meetingIdMock))
+                    .andExpect(MockMvcResultMatchers.jsonPath("$.entryCode").value(entryCodeMock))
+                    .andExpect(MockMvcResultMatchers.jsonPath("$.expiredAt").value(expirationMock.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))));
+
+            // docs
+            perform.andDo(
+                    restDocs.document(
+                            RequestDocumentation.pathParameters(
+                                    getTitleAttributes(endpoint),
+                                    RequestDocumentation.parameterWithName("meeting-id").description("입장 코드를 갱신할 모임의 식별값")
+                            ),
+                            HeaderDocumentation.requestHeaders(
+                                    getTitleAttributes("요청 헤더"),
+                                    authorizationHeaderDescriptor
+                            ),
+                            PayloadDocumentation.responseFields(
+                                    getTitleAttributes("응답 필드"),
+                                    PayloadDocumentation.fieldWithPath("meetingId").type(JsonFieldType.NUMBER).description("입장 코드를 갱신한 모임의 식별값"),
+                                    PayloadDocumentation.fieldWithPath("entryCode").type(JsonFieldType.STRING).description("갱신된 입장 코드"),
+                                    PayloadDocumentation.fieldWithPath("expiredAt").type(JsonFieldType.STRING).description("갱신된 입장 코드가 만료되는 시간. 만료일. +\nyyyy-MM-dd HH:mm:ss 형식. +\n자세한 내용은 요청/응답 예시를 확인해주세요.")
                             )
                     )
             );

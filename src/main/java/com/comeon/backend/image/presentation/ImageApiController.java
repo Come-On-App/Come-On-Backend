@@ -20,7 +20,7 @@ public class ImageApiController {
 
     @PostMapping
     public ImageDto.UploadResponse uploadImage(@AuthenticationPrincipal JwtPrincipal jwtPrincipal,
-                                           @RequestParam("image") MultipartFile imageFile) {
+                                               @RequestParam("image") MultipartFile imageFile) {
         return fileManager.upload(imageFile, jwtPrincipal.getUserId());
     }
 

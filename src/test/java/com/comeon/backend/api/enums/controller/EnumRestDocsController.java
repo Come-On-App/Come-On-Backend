@@ -1,7 +1,7 @@
 package com.comeon.backend.api.enums.controller;
 
-import com.comeon.backend.meeting.MemberRole;
-import com.comeon.backend.meeting.command.domain.PlaceCategory;
+import com.comeon.backend.common.config.interceptor.MemberRole;
+import com.comeon.backend.place.command.domain.PlaceCategory;
 import com.comeon.backend.user.command.domain.OauthProvider;
 import com.comeon.backend.user.command.domain.Role;
 import com.comeon.backend.user.command.domain.UserStatus;

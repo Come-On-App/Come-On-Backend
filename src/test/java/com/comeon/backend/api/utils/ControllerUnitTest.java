@@ -1,12 +1,12 @@
 package com.comeon.backend.api.utils;
 
+import com.comeon.backend.common.config.interceptor.MemberRole;
 import com.comeon.backend.jwt.application.JwtManager;
 import com.comeon.backend.jwt.domain.RefreshTokenRepository;
 import com.comeon.backend.jwt.infra.*;
-import com.comeon.backend.meeting.MemberRole;
-import com.comeon.backend.meeting.infrastructure.presentation.SecurityContextUserProvider;
-import com.comeon.backend.meeting.query.dao.MeetingMemberDao;
-import com.comeon.backend.meeting.query.dao.dto.MemberSimpleResponse;
+import com.comeon.backend.common.config.interceptor.SecurityContextUserProvider;
+import com.comeon.backend.common.config.interceptor.MeetingMemberDao;
+import com.comeon.backend.common.config.interceptor.MemberSimpleResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;

@@ -3,7 +3,7 @@ package com.comeon.backend.jwt.infra;
 import com.comeon.backend.jwt.application.UserSimple;
 import com.comeon.backend.jwt.application.UserSimpleService;
 import com.comeon.backend.user.query.dao.UserDao;
-import com.comeon.backend.user.query.dao.dto.UserSimpleResponse;
+import com.comeon.backend.user.query.dao.UserSimpleResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

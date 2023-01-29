@@ -1,12 +1,7 @@
 package com.comeon.backend.api.error.controller;
 
+import com.comeon.backend.common.error.*;
 import com.comeon.backend.common.response.ErrorResponse;
-import com.comeon.backend.common.error.CommonErrorCode;
-import com.comeon.backend.common.error.ErrorCode;
-import com.comeon.backend.image.ImageErrorCode;
-import com.comeon.backend.jwt.JwtErrorCode;
-import com.comeon.backend.meeting.MeetingErrorCode;
-import com.comeon.backend.user.UserErrorCode;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
