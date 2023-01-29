@@ -2,8 +2,8 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.comeon.backend.meeting.infrastructure.dao.mapper.MeetingMemberMapper">
-    <resultMap id="MemberSimpleMap" type="com.comeon.backend.meeting.query.dao.dto.MemberSimpleResponse">
+<mapper namespace="com.comeon.backend.meeting.infrastructure.MeetingMemberMapper">
+    <resultMap id="MemberSimpleMap" type="com.comeon.backend.meeting.query.dto.MemberSimpleResponse">
         <id column="user_id" property="userId"/>
         <result column="member_id" property="memberId"/>
         <result column="member_role" property="memberRole"/>

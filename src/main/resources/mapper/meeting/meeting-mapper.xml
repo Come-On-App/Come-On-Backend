@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.comeon.backend.meeting.infrastructure.dao.mapper.MeetingMapper">
+<mapper namespace="com.comeon.backend.meeting.infrastructure.MeetingMapper">
     <!--  모임 리스트(Slice) 조회  -->
-    <resultMap id="MeetingSliceMap" type="com.comeon.backend.meeting.query.dao.dto.MeetingSliceResponse">
+    <resultMap id="MeetingSliceMap" type="com.comeon.backend.meeting.query.dto.MeetingSliceResponse">
         <result column="meeting_id" property="meetingId"/>
         <result column="member_count" property="memberCount"/>
         <result column="my_meeting_role" property="myMeetingRole"/>
@@ -13,14 +13,14 @@
         <result column="calendar_end_to" property="calendarEndTo"/>
         <result column="meeting_image_url" property="meetingImageUrl"/>
         <association property="hostUser"
-                     javaType="com.comeon.backend.meeting.query.dao.dto.MeetingSliceResponse$UserSimple">
+                     javaType="com.comeon.backend.meeting.query.dto.MeetingSliceResponse$UserSimple">
             <result column="host_user_user_id" property="userId"/>
             <result column="host_user_nickname" property="nickname"/>
             <result column="host_user_profile_image" property="profileImageUrl"/>
         </association>
     </resultMap>
 
-    <select id="selectMeetingSlice" parameterType="com.comeon.backend.meeting.infrastructure.dao.mapper.MeetingSliceParam"
+    <select id="selectMeetingSlice" parameterType="com.comeon.backend.meeting.infrastructure.MeetingSliceParam"
             resultMap="MeetingSliceMap">
         select m.meeting_id as meeting_id,
         host_member.user_id as host_user_user_id,
@@ -67,7 +67,7 @@
 
 
     <!--  모임 입장 코드 상세 조회  -->
-    <resultMap id="entryCodeDetailsMap" type="com.comeon.backend.meeting.query.dao.dto.EntryCodeDetailsResponse">
+    <resultMap id="entryCodeDetailsMap" type="com.comeon.backend.meeting.query.dto.EntryCodeDetailsResponse">
         <result column="meeting_id" property="meetingId"/>
         <result column="code" property="entryCode"/>
         <result column="expired_at" property="expiredAt"/>
@@ -84,19 +84,19 @@
 
 
     <!--  모임 상세 조회  -->
-    <resultMap id="MeetingDetailsMap" type="com.comeon.backend.meeting.query.dao.dto.MeetingDetailsResponse">
+    <resultMap id="MeetingDetailsMap" type="com.comeon.backend.meeting.query.dto.MeetingDetailsResponse">
         <association property="meetingMetaData"
-                     javaType="com.comeon.backend.meeting.query.dao.dto.MeetingDetailsResponse$MeetingMetaData">
+                     javaType="com.comeon.backend.meeting.query.dto.MeetingDetailsResponse$MeetingMetaData">
             <id column="meeting_id" property="meetingId"/>
             <result column="meeting_image_url" property="thumbnailImageUrl"/>
             <result column="meeting_name" property="meetingName"/>
             <association property="calendar"
-                         javaType="com.comeon.backend.meeting.query.dao.dto.MeetingDetailsResponse$MeetingCalendar">
+                         javaType="com.comeon.backend.meeting.query.dto.MeetingDetailsResponse$MeetingCalendar">
                 <result column="calendar_start_from" property="startFrom"/>
                 <result column="calendar_end_to" property="endTo"/>
             </association>
             <association property="fixedDate"
-                         javaType="com.comeon.backend.meeting.query.dao.dto.MeetingDetailsResponse$FixedDate">
+                         javaType="com.comeon.backend.meeting.query.dto.MeetingDetailsResponse$FixedDate">
                 <result column="fixed_date_start_from" property="startFrom"/>
                 <result column="fixed_date_end_to" property="endTo"/>
             </association>
@@ -105,7 +105,7 @@
         <collection property="places" column="meetingId = meeting_id" javaType="List" select="selectPlaces"/>
     </resultMap>
 
-    <resultMap id="MemberListMap" type="com.comeon.backend.meeting.query.dao.dto.MemberListResponse">
+    <resultMap id="MemberListMap" type="com.comeon.backend.meeting.query.dto.MemberListResponse">
         <id column="members_member_id" property="memberId"/>
         <id column="members_user_id" property="userId"/>
         <id column="members_nickname" property="nickname"/>
@@ -113,7 +113,7 @@
         <id column="members_member_role" property="memberRole"/>
     </resultMap>
 
-    <resultMap id="PlaceListMap" type="com.comeon.backend.meeting.query.dao.dto.PlaceListResponse">
+    <resultMap id="PlaceListMap" type="com.comeon.backend.meeting.query.dto.PlaceListResponse">
         <id column="places_meeting_place_id" property="meetingPlaceId"/>
         <id column="places_name" property="placeName"/>
         <id column="places_memo" property="memo"/>
@@ -161,5 +161,17 @@
         from meeting_place mp
         where mp.meeting_id = #{meetingId}
         order by mp.place_order
+    </select>
+
+    <resultMap id="MeetingCalendarMap" type="com.comeon.backend.meeting.query.dto.MeetingCalendarResponse">
+        <result column="calendar_start_from" property="startFrom"/>
+        <result column="calendar_end_to" property="endTo"/>
+    </resultMap>
+
+    <select id="selectMeetingCalendar" resultMap="MeetingCalendarMap">
+        select m.calendar_start_from,
+               m.calendar_end_to
+        from meeting m
+        where m.meeting_id = #{meetingId}
     </select>
 </mapper>

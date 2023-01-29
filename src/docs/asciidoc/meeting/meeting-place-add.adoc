@@ -4,28 +4,34 @@
 :docinfo: shared-head
 
 [[meeting-place-add]]
-== 모임에 장소 추가
+=== 모임에 장소 추가
 
 POST /api/v1/meetings/{meeting-id}/places
 
-=== API Spec
-==== 경로 파라미터
+==== API Spec
+*경로 파라미터*
+
 include::{snippets}/place-add/success/path-parameters.adoc[]
 
-==== 요청 헤더
+*요청 헤더*
+
 include::{snippets}/place-add/success/request-headers.adoc[]
 
-==== 요청 필드
+*요청 필드*
+
 include::{snippets}/place-add/success/request-fields.adoc[]
 
-==== 응답 필드
+*응답 필드*
+
 include::{snippets}/place-add/success/response-fields.adoc[]
 
-=== 요청/응답 예시
-==== 요청 예시
+==== 요청/응답 예시
+*요청 예시*
+
 include::{snippets}/place-add/success/http-request.adoc[]
 
-==== 응답 예시
+*응답 예시*
+
 include::{snippets}/place-add/success/http-response.adoc[]
 
 오류 발생시 아래 "오류 코드 확인하기" 링크에서 모임 관련 오류(`3XXX`)를 확인해주세요.

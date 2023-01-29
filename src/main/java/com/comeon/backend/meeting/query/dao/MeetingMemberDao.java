@@ -1,6 +1,6 @@
 package com.comeon.backend.meeting.query.dao;
 
-import com.comeon.backend.meeting.query.dao.dto.MemberSimpleResponse;
+import com.comeon.backend.meeting.query.dto.MemberSimpleResponse;
 
 public interface MeetingMemberDao {
 

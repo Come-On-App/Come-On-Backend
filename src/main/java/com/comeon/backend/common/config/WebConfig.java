@@ -1,6 +1,6 @@
 package com.comeon.backend.common.config;
 
-import com.comeon.backend.meeting.presentation.MemberAuthorizationInterceptor;
+import com.comeon.backend.common.config.interceptor.MemberAuthorizationInterceptor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;

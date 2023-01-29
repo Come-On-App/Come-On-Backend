@@ -7,7 +7,7 @@ import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.comeon.backend.common.error.CommonErrorCode;
 import com.comeon.backend.common.error.RestApiException;
-import com.comeon.backend.image.ImageErrorCode;
+import com.comeon.backend.common.error.ImageErrorCode;
 import com.comeon.backend.image.application.FileManager;
 import com.comeon.backend.image.application.ImageDto;
 import lombok.RequiredArgsConstructor;

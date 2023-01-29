@@ -26,13 +26,10 @@ public class Meeting extends BaseTimeEntity {
     private LocalDate calendarEndTo;
 
     @OneToOne(mappedBy = "meeting", cascade = CascadeType.ALL, orphanRemoval = true)
-    private MeetingEntryCode entryCode;
+    private EntryCode entryCode;
 
     @OneToMany(mappedBy = "meeting", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<MeetingMember> members = new ArrayList<>();
-
-    @OneToMany(mappedBy = "meeting", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<MeetingPlace> places = new ArrayList<>();
+    private List<Member> members = new ArrayList<>();
 
     @Builder
     public Meeting(Long hostUserId, String name, String thumbnailImageUrl,
@@ -42,54 +39,30 @@ public class Meeting extends BaseTimeEntity {
         this.calendarStartFrom = calendarStartFrom;
         this.calendarEndTo = calendarEndTo;
 
-        members.add(MeetingMember.createHostMember(hostUserId, this));
+        members.add(Member.createHostMember(this, hostUserId));
     }
 
-    public MeetingMember join(Long participantUserId) {
-        MeetingMember participantMember = MeetingMember.createParticipantMember(participantUserId, this);
-        members.add(participantMember);
-        return participantMember;
+    public Member join(Long userId) {
+        checkExistMember(userId);
+        Member participant = Member.createParticipantMember(this, userId);
+        members.add(participant);
+        return participant;
     }
 
-    public MeetingPlace createPlace(Long userId, PlaceInfo placeInfo) {
-        MeetingPlace place = MeetingPlace.builder()
-                .meeting(this)
-                .userId(userId)
-                .placeInfo(placeInfo)
-                .placeOrder(this.places.size() + 1)
-                .build();
-        places.add(place);
-
-        return place;
-    }
-
-    public void modifyPlaceByPlaceId(Long placeId, Long userId, PlaceInfo placeInfo) {
-        MeetingPlace mp = getPlaceByPlaceId(placeId);
-        mp.update(userId, placeInfo);
-    }
-
-    private MeetingPlace getPlaceByPlaceId(Long placeId) {
-        return this.places.stream()
-                .filter(place -> place.getId() == placeId)
+    private void checkExistMember(Long userId) {
+        members.stream()
+                .filter(member -> member.getUserId().equals(userId))
                 .findFirst()
-                .orElseThrow(() -> new PlaceNotExistException(placeId));
+                .ifPresent(this::generateJoinedError);
     }
 
-    public void removePlaceByPlaceId(Long placeId) {
-        MeetingPlace mp = getPlaceByPlaceId(placeId);
-        this.places.remove(mp);
-        arrangeOrder(mp.getOrder());
+    private void generateJoinedError(Member member) {
+        throw new MemberAlreadyJoinedException(member);
     }
 
-    private void arrangeOrder(int startOrder) {
-        this.places.stream()
-                .filter(place -> place.getOrder() > startOrder)
-                .forEach(MeetingPlace::decreaseOrder);
-    }
-
-    public MeetingEntryCode renewEntryCodeAndGet() {
+    public EntryCode renewEntryCodeAndGet() {
         if (this.entryCode == null) {
-            this.entryCode = MeetingEntryCode.createWithRandomCode(this);
+            this.entryCode = EntryCode.createWithRandomCode(this);
         } else {
             entryCode.renewCode();
         }

@@ -1,7 +1,7 @@
 package com.comeon.backend.jwt.application;
 
 import com.comeon.backend.common.error.RestApiException;
-import com.comeon.backend.jwt.JwtErrorCode;
+import com.comeon.backend.common.error.JwtErrorCode;
 import com.comeon.backend.jwt.domain.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

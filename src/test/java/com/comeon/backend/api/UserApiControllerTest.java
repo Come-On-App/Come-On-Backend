@@ -2,11 +2,11 @@ package com.comeon.backend.api;
 
 import com.comeon.backend.api.utils.RestDocsTestSupport;
 import com.comeon.backend.api.utils.RestDocsUtil;
+import com.comeon.backend.user.api.UserApiController;
 import com.comeon.backend.user.command.application.UserFacade;
 import com.comeon.backend.user.command.application.dto.UserDto;
-import com.comeon.backend.user.presentation.UserApiController;
 import com.comeon.backend.user.query.dao.UserDao;
-import com.comeon.backend.user.query.dao.dto.UserDetailsResponse;
+import com.comeon.backend.user.query.dao.UserDetailsResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
