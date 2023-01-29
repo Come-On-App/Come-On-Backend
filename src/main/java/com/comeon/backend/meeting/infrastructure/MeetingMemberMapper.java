@@ -1,5 +1,6 @@
-package com.comeon.backend.common.config.interceptor;
+package com.comeon.backend.meeting.infrastructure;
 
+import com.comeon.backend.meeting.query.dto.MemberSimpleResponse;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper

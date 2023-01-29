@@ -12,6 +12,10 @@ public enum MeetingErrorCode implements ErrorCode {
     NO_AUTHORITIES(3004, HttpStatus.FORBIDDEN, "해당 요청을 처리할 권한(모임 권한)이 부족합니다."),
 
     INVALID_PLACE_ID(3100, HttpStatus.NOT_FOUND, "존재하지 않는 장소 식별값입니다."),
+
+    DATE_VOTING_EXIST(3200, HttpStatus.BAD_REQUEST, "이미 해당 일자에 투표하셨습니다."),
+    NO_DATE_VOTING_EXIST(3201, HttpStatus.BAD_REQUEST, "해당 일자에 투표한 이력이 없습니다."),
+    DATE_OUT_OF_CALENDAR_RANGE(3202, HttpStatus.BAD_REQUEST, "투표 가능 범위에 해당하지 않는 일자입니다.")
     ;
 
     private final int code;

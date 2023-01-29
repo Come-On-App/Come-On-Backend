@@ -2,6 +2,7 @@ package com.comeon.backend.common.config.interceptor;
 
 import com.comeon.backend.common.response.ErrorResponse;
 import com.comeon.backend.common.response.ResponseEntityUtils;
+import com.comeon.backend.meeting.query.application.NotMemberException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.ResponseEntity;

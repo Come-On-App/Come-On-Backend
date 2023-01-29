@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 public class MemberAuthorizationInterceptor implements HandlerInterceptor {
 
     private final UserProvider userProvider;
-    private final MeetingMemberDao meetingMemberDao;
+    private final MemberRoleService memberRoleService;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
@@ -36,15 +36,13 @@ public class MemberAuthorizationInterceptor implements HandlerInterceptor {
         Long meetingId = convertMeetingId(pathVariables.get("meetingId"));
 
         Long userId = userProvider.getUserId().orElseThrow();
-        MemberSimpleResponse memberSimple = meetingMemberDao.findMemberSimple(meetingId, userId);
-        if (memberSimple == null) {
-            throw new NotMemberException("모임에 가입되지 않은 유저입니다. meetingId: " + meetingId + ", userId: " + userId);
-        }
+
+        MemberRole memberRole = memberRoleService.getMemberRoleBy(meetingId, userId);
 
         MemberRole[] roles = requiredMemberRoleAnnotation.value();
-        if (Arrays.stream(roles).noneMatch(memberRole -> memberRole == memberSimple.getMemberRole())) {
+        if (Arrays.stream(roles).noneMatch(role -> role == memberRole)) {
             String roleNames = Arrays.stream(roles).map(MemberRole::name).collect(Collectors.joining(" | "));
-            throw new MemberAuthorizationException("required: " + roleNames + ", but client role: " + memberSimple.getMemberRole().name());
+            throw new MemberAuthorizationException("required: " + roleNames + ", but client role: " + memberRole.name());
         }
 
         return true;

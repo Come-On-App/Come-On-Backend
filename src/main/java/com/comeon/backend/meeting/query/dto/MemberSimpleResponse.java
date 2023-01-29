@@ -1,5 +1,6 @@
-package com.comeon.backend.common.config.interceptor;
+package com.comeon.backend.meeting.query.dto;
 
+import com.comeon.backend.common.config.interceptor.MemberRole;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

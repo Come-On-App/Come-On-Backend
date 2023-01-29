@@ -162,4 +162,16 @@
         where mp.meeting_id = #{meetingId}
         order by mp.place_order
     </select>
+
+    <resultMap id="MeetingCalendarMap" type="com.comeon.backend.meeting.query.dto.MeetingCalendarResponse">
+        <result column="calendar_start_from" property="startFrom"/>
+        <result column="calendar_end_to" property="endTo"/>
+    </resultMap>
+
+    <select id="selectMeetingCalendar" resultMap="MeetingCalendarMap">
+        select m.calendar_start_from,
+               m.calendar_end_to
+        from meeting m
+        where m.meeting_id = #{meetingId}
+    </select>
 </mapper>

@@ -1,4 +1,4 @@
-package com.comeon.backend.common.config.interceptor;
+package com.comeon.backend.meeting.query.application;
 
 import com.comeon.backend.common.error.ErrorCode;
 import com.comeon.backend.common.error.MeetingErrorCode;
