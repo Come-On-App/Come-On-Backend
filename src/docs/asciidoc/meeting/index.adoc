@@ -12,6 +12,7 @@ ifndef::snippets[]
 :snippets: ./build/generated-snippets
 endif::[]
 
+== 모임 API
 include::meeting-add.adoc[]
 
 include::meeting-list.adoc[]
@@ -24,6 +25,7 @@ include::entry-code-details.adoc[]
 
 include::entry-code-renew.adoc[]
 
+== 모임 장소 API
 include::meeting-place-list.adoc[]
 
 include::meeting-place-add.adoc[]
@@ -31,3 +33,12 @@ include::meeting-place-add.adoc[]
 include::meeting-place-modify.adoc[]
 
 include::meeting-place-remove.adoc[]
+
+== 모임일 투표 API
+include::voting-add.adoc[]
+
+include::voting-remove.adoc[]
+
+include::voting-simple-list.adoc[]
+
+include::voting-details.adoc[]
