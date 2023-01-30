@@ -2,7 +2,7 @@ package com.comeon.backend.date.command.application.voting;
 
 import com.comeon.backend.date.command.domain.voting.DateVoting;
 import com.comeon.backend.date.command.domain.voting.DateVotingRepository;
-import com.comeon.backend.date.command.domain.voting.MeetingCalendarService;
+import com.comeon.backend.date.command.domain.voting.VotingDateValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,21 +16,21 @@ import java.time.format.DateTimeFormatter;
 public class VotingFacade {
 
     private final DateVotingRepository dateVotingRepository;
-    private final MeetingCalendarService meetingCalendarService;
+    private final VotingDateValidator votingDateValidator;
 
     public void addVoting(Long userId, Long meetingId, AddVotingRequest request) {
         LocalDate date = request.getDate();
-        checkDateInCalendar(meetingId, date);
-
         dateVotingRepository.findDateVotingBy(meetingId, userId, date)
                 .ifPresent(this::generateVotingExistError);
+
+        checkDateInCalendar(meetingId, date);
 
         DateVoting dateVoting = new DateVoting(meetingId, userId, date);
         dateVotingRepository.save(dateVoting);
     }
 
     private void checkDateInCalendar(Long meetingId, LocalDate date) {
-        if (!meetingCalendarService.verifyDateInMeetingCalendar(meetingId, date)) {
+        if (!votingDateValidator.verifyDateInMeetingCalendar(meetingId, date)) {
             throw new DateOutOfMeetingCalendarException("일자가 투표 가능 범위에 포함되지 않습니다. meetingId: " +
                     meetingId + ", date: " + date.format(DateTimeFormatter.ISO_DATE));
         }

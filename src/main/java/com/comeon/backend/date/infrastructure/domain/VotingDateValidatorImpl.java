@@ -2,17 +2,15 @@ package com.comeon.backend.date.infrastructure.domain;
 
 import com.comeon.backend.meeting.query.dao.MeetingDao;
 import com.comeon.backend.meeting.query.dto.MeetingCalendarResponse;
-import com.comeon.backend.date.command.domain.voting.MeetingCalendarService;
+import com.comeon.backend.date.command.domain.voting.VotingDateValidator;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 
-@Slf4j
 @Component
 @RequiredArgsConstructor
-public class MeetingCalendarServiceImpl implements MeetingCalendarService {
+public class VotingDateValidatorImpl implements VotingDateValidator {
 
     private final MeetingDao meetingDao;
 
