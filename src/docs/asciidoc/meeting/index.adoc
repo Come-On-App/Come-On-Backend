@@ -42,3 +42,6 @@ include::voting-remove.adoc[]
 include::voting-simple-list.adoc[]
 
 include::voting-details.adoc[]
+
+== 모임일 확정 API
+include::meeting-date-confirm.adoc[]
