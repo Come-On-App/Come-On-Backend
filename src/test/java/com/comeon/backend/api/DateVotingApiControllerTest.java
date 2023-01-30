@@ -3,15 +3,15 @@ package com.comeon.backend.api;
 import com.comeon.backend.api.utils.RestDocsTestSupport;
 import com.comeon.backend.api.utils.RestDocsUtil;
 import com.comeon.backend.common.config.interceptor.MemberRole;
-import com.comeon.backend.voting.api.DateVotingApiController;
-import com.comeon.backend.voting.command.application.AddVotingRequest;
-import com.comeon.backend.voting.command.application.RemoveVotingRequest;
-import com.comeon.backend.voting.command.application.VotingFacade;
-import com.comeon.backend.voting.query.application.DateVotingQueryService;
-import com.comeon.backend.voting.query.dao.DateVotingDao;
-import com.comeon.backend.voting.query.dto.VotingDetailsResponse;
-import com.comeon.backend.voting.query.dto.VotingMemberSimple;
-import com.comeon.backend.voting.query.dto.VotingSimpleResponse;
+import com.comeon.backend.date.api.DateVotingApiController;
+import com.comeon.backend.date.command.application.voting.AddVotingRequest;
+import com.comeon.backend.date.command.application.voting.RemoveVotingRequest;
+import com.comeon.backend.date.command.application.voting.VotingFacade;
+import com.comeon.backend.date.query.application.DateVotingQueryService;
+import com.comeon.backend.date.query.dao.DateVotingDao;
+import com.comeon.backend.date.query.dto.VotingDetailsResponse;
+import com.comeon.backend.date.query.dto.VotingMemberSimple;
+import com.comeon.backend.date.query.dto.VotingSimpleResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -45,7 +45,7 @@ public class DateVotingApiControllerTest extends RestDocsTestSupport {
     @MockBean
     DateVotingQueryService dateVotingQueryService;
 
-    String baseEndpoint = "/api/v1/meetings/{meeting-id}/date-voting";
+    String baseEndpoint = "/api/v1/meetings/{meeting-id}/date/voting";
     Long mockMeetingId = 117L;
 
     @Nested
@@ -66,7 +66,7 @@ public class DateVotingApiControllerTest extends RestDocsTestSupport {
             ResultActions perform = mockMvc.perform(
                     RestDocumentationRequestBuilders.post(endpoint, mockMeetingId)
                             .content(createJson(request))
-                            .header(HttpHeaders.AUTHORIZATION, currentRequestATK.getToken())
+                            .header(HttpHeaders.AUTHORIZATION, "Bearer " + currentRequestATK.getToken())
                             .contentType(MediaType.APPLICATION_JSON)
                             .characterEncoding(StandardCharsets.UTF_8)
             );
@@ -116,7 +116,7 @@ public class DateVotingApiControllerTest extends RestDocsTestSupport {
             ResultActions perform = mockMvc.perform(
                     RestDocumentationRequestBuilders.delete(endpoint, mockMeetingId)
                             .content(createJson(request))
-                            .header(HttpHeaders.AUTHORIZATION, currentRequestATK.getToken())
+                            .header(HttpHeaders.AUTHORIZATION, "Bearer " + currentRequestATK.getToken())
                             .contentType(MediaType.APPLICATION_JSON)
                             .characterEncoding(StandardCharsets.UTF_8)
             );
@@ -173,7 +173,7 @@ public class DateVotingApiControllerTest extends RestDocsTestSupport {
             //when
             ResultActions perform = mockMvc.perform(
                     RestDocumentationRequestBuilders.get(endpoint, mockMeetingId)
-                            .header(HttpHeaders.AUTHORIZATION, currentRequestATK.getToken())
+                            .header(HttpHeaders.AUTHORIZATION, "Bearer " + currentRequestATK.getToken())
                             .contentType(MediaType.APPLICATION_JSON)
                             .characterEncoding(StandardCharsets.UTF_8)
             );
@@ -234,7 +234,7 @@ public class DateVotingApiControllerTest extends RestDocsTestSupport {
             ResultActions perform = mockMvc.perform(
                     RestDocumentationRequestBuilders.get(endpoint, mockMeetingId)
                             .param("date", date.format(DateTimeFormatter.ISO_DATE))
-                            .header(HttpHeaders.AUTHORIZATION, currentRequestATK.getToken())
+                            .header(HttpHeaders.AUTHORIZATION, "Bearer " + currentRequestATK.getToken())
                             .contentType(MediaType.APPLICATION_JSON)
                             .characterEncoding(StandardCharsets.UTF_8)
             );

@@ -13,10 +13,16 @@
         <result column="calendar_end_to" property="calendarEndTo"/>
         <result column="meeting_image_url" property="meetingImageUrl"/>
         <association property="hostUser"
-                     javaType="com.comeon.backend.meeting.query.dto.MeetingSliceResponse$UserSimple">
+                     javaType="com.comeon.backend.meeting.query.dto.HostUserSimpleResponse">
             <result column="host_user_user_id" property="userId"/>
             <result column="host_user_nickname" property="nickname"/>
             <result column="host_user_profile_image" property="profileImageUrl"/>
+        </association>
+        <association property="fixedDate"
+                     javaType="com.comeon.backend.meeting.query.dto.FixedDateResponse">
+            <result column="fixed_date_start_from" property="startFrom"/>
+            <result column="fixed_date_end_to" property="endTo"/>
+            <result column="fixed_date_start_time" property="startTime"/>
         </association>
     </resultMap>
 
@@ -31,7 +37,11 @@
         m.name as meeting_name,
         m.calendar_start_from as calendar_start_from,
         m.calendar_end_to as calendar_end_to,
-        m.thumbnail_image_url as meeting_image_url
+        m.thumbnail_image_url as meeting_image_url,
+        mfd.start_from as fixed_date_start_from,
+        mfd.end_to as fixed_date_end_to,
+        mfd.start_time as fixed_date_start_time
+
         from meeting_member mm
         left join meeting m on m.meeting_id = mm.meeting_id
         left join (select mm.meeting_id as meeting_id,
@@ -42,6 +52,7 @@
         from meeting_member mm
         left join users u on mm.user_id = u.user_id
         where mm.role = 'HOST') host_member on m.meeting_id = host_member.meeting_id
+        left join meeting_fixed_date mfd on mm.meeting_id = mfd.meeting_id
         <where>
             mm.user_id = #{userId}
             <if test="words != null and words.size > 0">
@@ -90,19 +101,27 @@
             <id column="meeting_id" property="meetingId"/>
             <result column="meeting_image_url" property="thumbnailImageUrl"/>
             <result column="meeting_name" property="meetingName"/>
+            <association property="hostUser"
+                         javaType="com.comeon.backend.meeting.query.dto.HostUserSimpleResponse">
+                <result column="host_user_user_id" property="userId"/>
+                <result column="host_user_nickname" property="nickname"/>
+                <result column="host_user_profile_image" property="profileImageUrl"/>
+            </association>
             <association property="calendar"
                          javaType="com.comeon.backend.meeting.query.dto.MeetingDetailsResponse$MeetingCalendar">
                 <result column="calendar_start_from" property="startFrom"/>
                 <result column="calendar_end_to" property="endTo"/>
             </association>
             <association property="fixedDate"
-                         javaType="com.comeon.backend.meeting.query.dto.MeetingDetailsResponse$FixedDate">
+                         javaType="com.comeon.backend.meeting.query.dto.FixedDateResponse">
                 <result column="fixed_date_start_from" property="startFrom"/>
                 <result column="fixed_date_end_to" property="endTo"/>
+                <result column="fixed_date_start_time" property="startTime"/>
             </association>
         </association>
         <collection property="members" column="meetingId = meeting_id" javaType="List" select="selectMembers"/>
         <collection property="places" column="meetingId = meeting_id" javaType="List" select="selectPlaces"/>
+        <collection property="votingDates" column="{ meetingId = meeting_id, userId = user_id }" javaType="List" select="selectVotingSimpleList"/>
     </resultMap>
 
     <resultMap id="MemberListMap" type="com.comeon.backend.meeting.query.dto.MemberListResponse">
@@ -125,15 +144,36 @@
         <id column="places_google_place_id" property="googlePlaceId"/>
     </resultMap>
 
+    <resultMap id="VotingSimpleListMap" type="com.comeon.backend.meeting.query.dto.VotingSimpleListResponse">
+        <id column="voting_date" property="date"/>
+        <id column="voting_member_count" property="memberCount"/>
+        <id column="voting_current_user_voted" property="myVoting"/>
+    </resultMap>
+
     <select id="selectMeetingDetails" resultMap="MeetingDetailsMap">
-        select m.meeting_id          as meeting_id,
-               m.thumbnail_image_url as meeting_image_url,
-               m.name                as meeting_name,
-               m.calendar_start_from as calendar_start_from,
-               m.calendar_end_to     as calendar_end_to
-               # TODO fixed_date
+        select m.meeting_id                   as meeting_id,
+               m.thumbnail_image_url          as meeting_image_url,
+               m.name                         as meeting_name,
+               m.calendar_start_from          as calendar_start_from,
+               m.calendar_end_to              as calendar_end_to,
+               mfd.start_from                 as fixed_date_start_from,
+               mfd.end_to                     as fixed_date_end_to,
+               mfd.start_time                 as fixed_date_start_time,
+               host_member.user_id            as host_user_user_id,
+               host_member.user_nickname      as host_user_nickname,
+               host_member.user_profile_image as host_user_profile_image,
+               #{userId}                      as user_id
         from meeting m
-        where m.meeting_id = #{meetingId};
+                 left join meeting_fixed_date mfd on m.meeting_id = mfd.meeting_id
+                 left join (select mm.meeting_id       as meeting_id,
+                                   u.user_id           as user_id,
+                                   u.nickname          as user_nickname,
+                                   u.profile_image_url as user_profile_image,
+                                   mm.role             as host_role
+                            from meeting_member mm
+                                     left join users u on mm.user_id = u.user_id
+                            where mm.role = 'HOST') host_member on m.meeting_id = host_member.meeting_id
+        where m.meeting_id = #{meetingId}
     </select>
 
     <select id="selectMembers" resultMap="MemberListMap">
@@ -154,13 +194,27 @@
                mp.memo             as places_memo,
                mp.lat              as places_lat,
                mp.lng              as places_lng,
-               mp.address          as places_adress,
+               mp.address          as places_address,
                mp.place_order      as places_order,
                mp.category         as places_category,
                mp.google_place_id  as places_google_place_id
         from meeting_place mp
         where mp.meeting_id = #{meetingId}
         order by mp.place_order
+    </select>
+
+    <select id="selectVotingSimpleList" resultMap="VotingSimpleListMap" parameterType="java.util.Map">
+        select mdv.date                               as voting_date,
+               count(mdv.user_id)                     as voting_member_count,
+               exists(select *
+                      from meeting_date_voting mdv2
+                      where mdv2.meeting_id = #{meetingId}
+                        and mdv2.date = mdv.date
+                        and mdv2.user_id = #{userId}) as voting_current_user_voted
+        from meeting_date_voting mdv
+        where mdv.meeting_id = #{meetingId}
+        group by mdv.date
+        order by mdv.date
     </select>
 
     <resultMap id="MeetingCalendarMap" type="com.comeon.backend.meeting.query.dto.MeetingCalendarResponse">

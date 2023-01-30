@@ -15,7 +15,9 @@ public enum MeetingErrorCode implements ErrorCode {
 
     DATE_VOTING_EXIST(3200, HttpStatus.BAD_REQUEST, "이미 해당 일자에 투표하셨습니다."),
     NO_DATE_VOTING_EXIST(3201, HttpStatus.BAD_REQUEST, "해당 일자에 투표한 이력이 없습니다."),
-    DATE_OUT_OF_CALENDAR_RANGE(3202, HttpStatus.BAD_REQUEST, "투표 가능 범위에 해당하지 않는 일자입니다.")
+    DATE_OUT_OF_CALENDAR_RANGE(3202, HttpStatus.BAD_REQUEST, "투표 가능 범위에 해당하지 않는 일자입니다."),
+    DATE_RANGE_OUT_OF_CALENDAR_RANGE(3203, HttpStatus.BAD_REQUEST, "모임일 확정 일자가 모임 캘린더 범위에 포함되지 않습니다."),
+    FIXED_DATE_EXIST(3204, HttpStatus.BAD_REQUEST, "이미 지정된 모임일이 존재합니다.")
     ;
 
     private final int code;

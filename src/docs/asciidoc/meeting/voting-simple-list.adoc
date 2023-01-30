@@ -6,7 +6,7 @@
 [[voting-simple-list]]
 === 모임일 투표 현황 리스트 조회
 
-GET /api/v1/meetings/{meeting-id}/date-voting
+GET /api/v1/meetings/{meeting-id}/date/voting
 
 ==== API Spec
 *경로 파라미터*

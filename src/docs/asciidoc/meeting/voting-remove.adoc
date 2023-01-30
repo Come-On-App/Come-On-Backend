@@ -6,7 +6,7 @@
 [[voting-remove]]
 === 모임일 투표 삭제
 
-DELETE /api/v1/meetings/{meeting-id}/date-voting
+DELETE /api/v1/meetings/{meeting-id}/date/voting
 
 ==== API Spec
 *경로 파라미터*

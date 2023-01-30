@@ -13,6 +13,6 @@ public interface MeetingMapper {
 
     List<MeetingSliceResponse> selectMeetingSlice(MeetingSliceParam param);
     EntryCodeDetailsResponse selectEntryCodeDetails(Long meetingId);
-    MeetingDetailsResponse selectMeetingDetails(Long meetingId);
+    MeetingDetailsResponse selectMeetingDetails(Long meetingId, Long userId);
     MeetingCalendarResponse selectMeetingCalendar(Long meetingId);
 }
