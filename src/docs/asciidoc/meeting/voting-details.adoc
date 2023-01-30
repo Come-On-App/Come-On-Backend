@@ -6,7 +6,7 @@
 [[voting-details]]
 === 특정 일자 투표 현황 상세 조회
 
-GET /api/v1/meetings/{meeting-id}/date-voting/details
+GET /api/v1/meetings/{meeting-id}/date/voting/details
 
 ==== API Spec
 *경로 파라미터*

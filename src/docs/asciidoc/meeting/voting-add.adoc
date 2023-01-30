@@ -6,7 +6,7 @@
 [[voting-add]]
 === 모임일 투표 등록
 
-POST /api/v1/meetings/{meeting-id}/date-voting
+POST /api/v1/meetings/{meeting-id}/date/voting
 
 ==== API Spec
 *경로 파라미터*
