@@ -69,7 +69,7 @@ public class MeetingApiControllerTest extends RestDocsTestSupport {
             ResultActions perform = mockMvc.perform(
                     RestDocumentationRequestBuilders.post(endpoint)
                             .content(createJson(request))
-                            .header(HttpHeaders.AUTHORIZATION, currentRequestATK.getToken())
+                            .header(HttpHeaders.AUTHORIZATION, "Bearer " + currentRequestATK.getToken())
                             .contentType(MediaType.APPLICATION_JSON)
                             .characterEncoding(StandardCharsets.UTF_8)
             );

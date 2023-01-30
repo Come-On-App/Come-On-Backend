@@ -66,7 +66,7 @@ public class DateVotingApiControllerTest extends RestDocsTestSupport {
             ResultActions perform = mockMvc.perform(
                     RestDocumentationRequestBuilders.post(endpoint, mockMeetingId)
                             .content(createJson(request))
-                            .header(HttpHeaders.AUTHORIZATION, currentRequestATK.getToken())
+                            .header(HttpHeaders.AUTHORIZATION, "Bearer " + currentRequestATK.getToken())
                             .contentType(MediaType.APPLICATION_JSON)
                             .characterEncoding(StandardCharsets.UTF_8)
             );
@@ -116,7 +116,7 @@ public class DateVotingApiControllerTest extends RestDocsTestSupport {
             ResultActions perform = mockMvc.perform(
                     RestDocumentationRequestBuilders.delete(endpoint, mockMeetingId)
                             .content(createJson(request))
-                            .header(HttpHeaders.AUTHORIZATION, currentRequestATK.getToken())
+                            .header(HttpHeaders.AUTHORIZATION, "Bearer " + currentRequestATK.getToken())
                             .contentType(MediaType.APPLICATION_JSON)
                             .characterEncoding(StandardCharsets.UTF_8)
             );
@@ -173,7 +173,7 @@ public class DateVotingApiControllerTest extends RestDocsTestSupport {
             //when
             ResultActions perform = mockMvc.perform(
                     RestDocumentationRequestBuilders.get(endpoint, mockMeetingId)
-                            .header(HttpHeaders.AUTHORIZATION, currentRequestATK.getToken())
+                            .header(HttpHeaders.AUTHORIZATION, "Bearer " + currentRequestATK.getToken())
                             .contentType(MediaType.APPLICATION_JSON)
                             .characterEncoding(StandardCharsets.UTF_8)
             );
@@ -234,7 +234,7 @@ public class DateVotingApiControllerTest extends RestDocsTestSupport {
             ResultActions perform = mockMvc.perform(
                     RestDocumentationRequestBuilders.get(endpoint, mockMeetingId)
                             .param("date", date.format(DateTimeFormatter.ISO_DATE))
-                            .header(HttpHeaders.AUTHORIZATION, currentRequestATK.getToken())
+                            .header(HttpHeaders.AUTHORIZATION, "Bearer " + currentRequestATK.getToken())
                             .contentType(MediaType.APPLICATION_JSON)
                             .characterEncoding(StandardCharsets.UTF_8)
             );
