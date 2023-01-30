@@ -7,6 +7,7 @@ import com.comeon.backend.date.command.application.confirm.FixedDateAddRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.mockito.BDDMockito;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpHeaders;
@@ -48,6 +49,8 @@ public class FixedDateApiControllerTest extends RestDocsTestSupport {
                     LocalDate.of(2023, 3, 5).format(DateTimeFormatter.ISO_DATE),
                     LocalTime.of(14, 30, 0).format(DateTimeFormatter.ISO_LOCAL_TIME)
             );
+            BDDMockito.willDoNothing().given(dateConfirmFacade)
+                    .confirmMeetingDate(BDDMockito.anyLong(), BDDMockito.any());
             grantHost();
 
             //when
