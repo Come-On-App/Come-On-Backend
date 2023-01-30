@@ -30,7 +30,13 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
                          AuthenticationException authException) throws IOException, ServletException {
         log.error("Not Authenticated Request. Request Uri : {} {}", request.getMethod(), request.getRequestURI());
 
-        ErrorCode errorCode = CommonErrorCode.UNAUTHORIZED;
+        String atk = AuthHeaderParser.resolveAccessToken(request);
+        ErrorCode errorCode;
+        if (atk == null) {
+            errorCode = CommonErrorCode.NO_AUTHORIZATION_HEADER;
+        } else {
+            errorCode = CommonErrorCode.INVALID_AUTHORIZATION_HEADER;
+        }
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .errorCode(errorCode.getCode())
                 .errorDescription(errorCode.getDescription())
