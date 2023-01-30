@@ -6,27 +6,19 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.util.List;
+import java.time.LocalTime;
 
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class MeetingSliceResponse {
-
-    private Long meetingId;
-    private HostUserSimpleResponse hostUser;
-    private Integer memberCount;
-    private String myMeetingRole;
-    private String meetingName;
+public class FixedDateResponse {
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    private LocalDate calendarStartFrom;
+    private LocalDate startFrom;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    private LocalDate calendarEndTo;
+    private LocalDate endTo;
 
-    private String meetingImageUrl;
-
-    private FixedDateResponse fixedDate;
-
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm:ss")
+    private LocalTime startTime;
 }

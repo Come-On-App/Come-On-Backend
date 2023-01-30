@@ -51,9 +51,10 @@ public class MeetingApiController {
     @RequiredMemberRole
     @GetMapping("/{meetingId}")
     public MeetingDetailsResponse meetingDetails(
+            @AuthenticationPrincipal JwtPrincipal jwtPrincipal,
             @PathVariable Long meetingId
     ) {
-        return meetingDao.findMeetingDetails(meetingId);
+        return meetingDao.findMeetingDetails(meetingId, jwtPrincipal.getUserId());
     }
 
     @PostMapping("/join")

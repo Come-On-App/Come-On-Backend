@@ -26,7 +26,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 @WebMvcTest(FixedDateApiController.class)
-public class FixedDateApiControllerTest extends RestDocsTestSupport {
+public class FixedDateInfoApiControllerTest extends RestDocsTestSupport {
 
     @MockBean
     DateConfirmFacade dateConfirmFacade;

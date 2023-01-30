@@ -11,6 +11,6 @@ public interface MeetingDao {
 
     Slice<MeetingSliceResponse> findMeetingSlice(Long userId, Pageable pageable, MeetingSliceCondition cond);
     EntryCodeDetailsResponse findEntryCodeDetails(Long meetingId);
-    MeetingDetailsResponse findMeetingDetails(Long meetingId);
+    MeetingDetailsResponse findMeetingDetails(Long meetingId, Long userId);
     MeetingCalendarResponse findMeetingCalendar(Long meetingId);
 }

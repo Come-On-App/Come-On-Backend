@@ -32,6 +32,7 @@ import org.springframework.util.MultiValueMap;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -184,9 +185,9 @@ public class MeetingApiControllerTest extends RestDocsTestSupport {
 
             // mocking
             List<MeetingSliceResponse> sliceResults = List.of(
-                    new MeetingSliceResponse(10L, new MeetingSliceResponse.UserSimple(31L, "user31", null), 10, MemberRole.PARTICIPANT.name(), "ex meeting 10", LocalDate.of(2023, 3, 1), LocalDate.of(2023, 3, 23), "https://xxxx.xxxxxxx.xxxx/xxxxxxxxxxx", null, null),
-                    new MeetingSliceResponse(14L, new MeetingSliceResponse.UserSimple(currentRequestATK.getPayload().getUserId(), currentRequestATK.getPayload().getNickname(), "https://xxx.xxxx.xxxxxx/xxxxxx"), 4, MemberRole.HOST.name(), "meeting 14 ex", LocalDate.of(2023, 3, 10), LocalDate.of(2023, 3, 18), "https://xxxx.xxxxxxx.xxxx/xxxxxxxxxxx", null, null),
-                    new MeetingSliceResponse(23L, new MeetingSliceResponse.UserSimple(11L, "user 11", null), 6, MemberRole.PARTICIPANT.name(), "meeting ex 23", LocalDate.of(2023, 3, 22), LocalDate.of(2023, 3, 30), "https://xxxx.xxxxxxx.xxxx/xxxxxxxxx", null, null)
+                    new MeetingSliceResponse(10L, new HostUserSimpleResponse(31L, "user31", null), 10, MemberRole.PARTICIPANT.name(), "ex meeting 10", LocalDate.of(2023, 3, 1), LocalDate.of(2023, 3, 23), "https://xxxx.xxxxxxx.xxxx/xxxxxxxxxxx", null),
+                    new MeetingSliceResponse(14L, new HostUserSimpleResponse(currentRequestATK.getPayload().getUserId(), currentRequestATK.getPayload().getNickname(), "https://xxx.xxxx.xxxxxx/xxxxxx"), 4, MemberRole.HOST.name(), "meeting 14 ex", LocalDate.of(2023, 3, 10), LocalDate.of(2023, 3, 18), "https://xxxx.xxxxxxx.xxxx/xxxxxxxxxxx", null),
+                    new MeetingSliceResponse(23L, new HostUserSimpleResponse(11L, "user 11", null), 6, MemberRole.PARTICIPANT.name(), "meeting ex 23", LocalDate.of(2023, 3, 22), LocalDate.of(2023, 3, 30), "https://xxxx.xxxxxxx.xxxx/xxxxxxxxx", new FixedDateResponse(LocalDate.of(2023, 3, 5), LocalDate.of(2023, 3, 5), LocalTime.of(12, 0, 0)))
             );
             BDDMockito.given(meetingDao.findMeetingSlice(BDDMockito.anyLong(), BDDMockito.any(), BDDMockito.any()))
                     .willReturn(new SliceImpl<>(sliceResults, Pageable.ofSize(3), true));
@@ -232,8 +233,10 @@ public class MeetingApiControllerTest extends RestDocsTestSupport {
                                     PayloadDocumentation.fieldWithPath("calendarStartFrom").type(JsonFieldType.STRING).description("모임일 투표 캘린더의 시작 일자"),
                                     PayloadDocumentation.fieldWithPath("calendarEndTo").type(JsonFieldType.STRING).description("모임일 투표 캘린더의 종료(마지막) 일자"),
                                     PayloadDocumentation.fieldWithPath("meetingImageUrl").type(JsonFieldType.STRING).description("모임의 썸네일 이미지 URL"),
-                                    PayloadDocumentation.fieldWithPath("fixedDates").type(JsonFieldType.NULL).description("임시"),
-                                    PayloadDocumentation.fieldWithPath("meetingStatus").type(JsonFieldType.NULL).description("임시")
+                                    PayloadDocumentation.subsectionWithPath("fixedDate").type(JsonFieldType.OBJECT).description("확정된 모임일 정보").optional(),
+                                    PayloadDocumentation.fieldWithPath("fixedDate.startFrom").type(JsonFieldType.STRING).description("모임 시작일. +\nYYYY-MM-DD 형식."),
+                                    PayloadDocumentation.fieldWithPath("fixedDate.endTo").type(JsonFieldType.STRING).description("모임 종료일. +\nYYYY-MM-DD 형식"),
+                                    PayloadDocumentation.fieldWithPath("fixedDate.startTime").type(JsonFieldType.STRING).description("모임 시작 시간. +\nHH:mm:ss 형식")
                             )
                     )
             );
@@ -258,13 +261,15 @@ public class MeetingApiControllerTest extends RestDocsTestSupport {
                             mockMeetingId,
                             "https://xxxx.xxxx.xxxx/xxxxxx",
                             "예제 모임 1",
+                            new HostUserSimpleResponse(112L, "user112", "https://xxx.xxx.xxxx/xxxxx"),
                             new MeetingDetailsResponse.MeetingCalendar(
                                     LocalDate.of(2023, 3,1),
                                     LocalDate.of(2023, 3,31)
                             ),
-                            new MeetingDetailsResponse.FixedDate(
+                            new FixedDateResponse(
                                     LocalDate.of(2023, 3, 11),
-                                    LocalDate.of(2023, 3, 11)
+                                    LocalDate.of(2023, 3, 11),
+                                    LocalTime.of(11,0,0)
                             )
                     ),
                     List.of(
@@ -272,11 +277,16 @@ public class MeetingApiControllerTest extends RestDocsTestSupport {
                             new MemberListResponse(109L, 134L, "user134", null, MemberRole.PARTICIPANT.name())
                     ),
                     List.of(
+                            new VotingSimpleListResponse(LocalDate.of(2023, 3, 5), 2, true),
+                            new VotingSimpleListResponse(LocalDate.of(2023, 3, 7), 1, false),
+                            new VotingSimpleListResponse(LocalDate.of(2023, 3, 11), 1, true)
+                    ),
+                    List.of(
                             new PlaceListResponse(3323L, "홍대역", "여기서 모이자", 68.123, 127.31561, "XXX-YYYY", 1, PlaceCategory.ETC.name(), "asd23234tabn4tav"),
                             new PlaceListResponse(3642L, "홍대 마약 떡볶이", "점심식사", 68.4567, 127.1252346, "ZZZ-1231", 2, PlaceCategory.RESTAURANT.name(), "36m3w546hwh3w4gv")
                     )
             );
-            BDDMockito.given(meetingDao.findMeetingDetails(BDDMockito.anyLong()))
+            BDDMockito.given(meetingDao.findMeetingDetails(BDDMockito.anyLong(), BDDMockito.anyLong()))
                     .willReturn(response);
 
             //when
@@ -307,12 +317,20 @@ public class MeetingApiControllerTest extends RestDocsTestSupport {
                                     PayloadDocumentation.fieldWithPath("meetingMetaData.meetingId").type(JsonFieldType.NUMBER).description("모임의 식별값."),
                                     PayloadDocumentation.fieldWithPath("meetingMetaData.thumbnailImageUrl").type(JsonFieldType.STRING).description("모임 썸네일 이미지."),
                                     PayloadDocumentation.fieldWithPath("meetingMetaData.meetingName").type(JsonFieldType.STRING).description("모임 이름."),
+
+                                    PayloadDocumentation.subsectionWithPath("meetingMetaData.hostUser").type(JsonFieldType.OBJECT).description("해당 모임의 방장 정보."),
+                                    PayloadDocumentation.fieldWithPath("meetingMetaData.hostUser.userId").type(JsonFieldType.NUMBER).description("방장의 유저 식별값."),
+                                    PayloadDocumentation.fieldWithPath("meetingMetaData.hostUser.nickname").type(JsonFieldType.STRING).description("방장의 닉네임."),
+                                    PayloadDocumentation.fieldWithPath("meetingMetaData.hostUser.profileImageUrl").type(JsonFieldType.STRING).description("방장의 프로필 이미지 URL.").optional(),
+
                                     PayloadDocumentation.subsectionWithPath("meetingMetaData.calendar").type(JsonFieldType.OBJECT).description("모임 일자 투표가 가능한 캘린더 정보."),
                                     PayloadDocumentation.fieldWithPath("meetingMetaData.calendar.startFrom").type(JsonFieldType.STRING).description("모임 일자 투표가 가능한 캘린더의 시작 일자. +\nYYYY-MM-DD 형식."),
                                     PayloadDocumentation.fieldWithPath("meetingMetaData.calendar.endTo").type(JsonFieldType.STRING).description("모임 일자 투표가 가능한 캘린더의 마지막 일자. +\nYYYY-MM-DD 형식"),
+
                                     PayloadDocumentation.subsectionWithPath("meetingMetaData.fixedDate").type(JsonFieldType.OBJECT).description("모임 확정 일자 정보.").optional(),
                                     PayloadDocumentation.fieldWithPath("meetingMetaData.fixedDate.startFrom").type(JsonFieldType.STRING).description("확정된 모임 일자의 시작일. +\nYYYY-MM-DD 형식."),
                                     PayloadDocumentation.fieldWithPath("meetingMetaData.fixedDate.endTo").type(JsonFieldType.STRING).description("확정된 모임 일자의 종료일. +\nYYYY-MM-DD 형식"),
+                                    PayloadDocumentation.fieldWithPath("meetingMetaData.fixedDate.startTime").type(JsonFieldType.STRING).description("확정된 모임 일자의 종료일. +\nHH:mm:ss 형식"),
 
                                     PayloadDocumentation.subsectionWithPath("members").type(JsonFieldType.ARRAY).description("모임에 가입된 회원 정보 리스트."),
                                     PayloadDocumentation.fieldWithPath("members[].memberId").type(JsonFieldType.NUMBER).description("회원의 모임 회원 번호. +\n유저 식별값과는 별개의 정보입니다."),
@@ -320,6 +338,11 @@ public class MeetingApiControllerTest extends RestDocsTestSupport {
                                     PayloadDocumentation.fieldWithPath("members[].nickname").type(JsonFieldType.STRING).description("회원의 유저 닉네임."),
                                     PayloadDocumentation.fieldWithPath("members[].profileImageUrl").type(JsonFieldType.STRING).description("회원의 유저 프로필 이미지 URL.").optional(),
                                     PayloadDocumentation.fieldWithPath("members[].memberRole").type(JsonFieldType.STRING).description("모임에서 해당 회원의 권한. +\n" + RestDocsUtil.generateLinkCode(RestDocsUtil.DocUrl.MEETING_MEMBER_ROLE)),
+
+                                    PayloadDocumentation.subsectionWithPath("votingDates").type(JsonFieldType.ARRAY).description("모임일 투표 현황 정보 리스트."),
+                                    PayloadDocumentation.fieldWithPath("votingDates[].date").type(JsonFieldType.STRING).description("모임일 투표 일자. +\nYYYY-MM-DD 형식."),
+                                    PayloadDocumentation.fieldWithPath("votingDates[].memberCount").type(JsonFieldType.NUMBER).description("해당 일자에 투표한 회원 수."),
+                                    PayloadDocumentation.fieldWithPath("votingDates[].myVoting").type(JsonFieldType.BOOLEAN).description("현재 유저가 해당 일자에 투표 했는지 여부."),
 
                                     PayloadDocumentation.subsectionWithPath("places").type(JsonFieldType.ARRAY).description("모임에 등록된 장소 리스트").optional(),
                                     PayloadDocumentation.fieldWithPath("places[].meetingPlaceId").type(JsonFieldType.NUMBER).description("등록된 장소의 식별값"),

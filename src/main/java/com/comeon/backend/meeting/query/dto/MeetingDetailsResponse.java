@@ -15,36 +15,26 @@ public class MeetingDetailsResponse {
 
     private MeetingMetaData meetingMetaData;
     private List<MemberListResponse> members;
-//    private List<DateListResponse> dates;
+    private List<VotingSimpleListResponse> votingDates;
     private List<PlaceListResponse> places;
 
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
     public static class MeetingMetaData {
+
         private Long meetingId;
         private String thumbnailImageUrl;
         private String meetingName;
+        private HostUserSimpleResponse hostUser;
         private MeetingCalendar calendar;
-        private FixedDate fixedDate;
+        private FixedDateResponse fixedDate;
     }
 
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
     public static class MeetingCalendar {
-
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-        private LocalDate startFrom;
-
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-        private LocalDate endTo;
-    }
-
-    @Getter
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class FixedDate {
 
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
         private LocalDate startFrom;
