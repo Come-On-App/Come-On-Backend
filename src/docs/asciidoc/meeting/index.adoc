@@ -25,6 +25,9 @@ include::entry-code-details.adoc[]
 
 include::entry-code-renew.adoc[]
 
+== 모임 회원 API
+include::meeting-member-list.adoc[]
+
 == 모임 장소 API
 include::meeting-place-list.adoc[]
 
