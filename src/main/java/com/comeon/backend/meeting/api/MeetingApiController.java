@@ -2,15 +2,18 @@ package com.comeon.backend.meeting.api;
 
 import com.comeon.backend.common.config.interceptor.MemberRole;
 import com.comeon.backend.common.config.interceptor.RequiredMemberRole;
+import com.comeon.backend.common.response.ListResponse;
 import com.comeon.backend.common.response.SliceResponse;
 import com.comeon.backend.common.security.JwtPrincipal;
 import com.comeon.backend.meeting.command.application.MeetingCommandDto;
 import com.comeon.backend.meeting.command.application.MeetingFacade;
 import com.comeon.backend.meeting.query.dao.MeetingDao;
+import com.comeon.backend.meeting.query.dao.MeetingMemberDao;
 import com.comeon.backend.meeting.query.dao.MeetingSliceCondition;
 import com.comeon.backend.meeting.query.dto.EntryCodeDetailsResponse;
 import com.comeon.backend.meeting.query.dto.MeetingDetailsResponse;
 import com.comeon.backend.meeting.query.dto.MeetingSliceResponse;
+import com.comeon.backend.meeting.query.dto.MemberListResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -20,6 +23,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -28,6 +33,7 @@ public class MeetingApiController {
 
     private final MeetingFacade meetingFacade;
     private final MeetingDao meetingDao;
+    private final MeetingMemberDao meetingMemberDao;
 
     @PostMapping
     public MeetingAddResponse meetingAdd(
@@ -55,6 +61,15 @@ public class MeetingApiController {
             @PathVariable Long meetingId
     ) {
         return meetingDao.findMeetingDetails(meetingId, jwtPrincipal.getUserId());
+    }
+
+    @RequiredMemberRole
+    @GetMapping("/{meetingId}/members")
+    public ListResponse<MemberListResponse> meetingMemberList(
+            @PathVariable Long meetingId
+    ) {
+        List<MemberListResponse> memberList = meetingMemberDao.findMemberList(meetingId);
+        return ListResponse.toListResponse(memberList);
     }
 
     @PostMapping("/join")

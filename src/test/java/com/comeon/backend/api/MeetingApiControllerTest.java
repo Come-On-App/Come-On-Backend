@@ -7,6 +7,7 @@ import com.comeon.backend.meeting.api.MeetingApiController;
 import com.comeon.backend.meeting.command.application.MeetingCommandDto;
 import com.comeon.backend.meeting.command.application.MeetingFacade;
 import com.comeon.backend.meeting.query.dao.MeetingDao;
+import com.comeon.backend.meeting.query.dao.MeetingMemberDao;
 import com.comeon.backend.meeting.query.dto.*;
 import com.comeon.backend.place.command.domain.PlaceCategory;
 import org.junit.jupiter.api.DisplayName;
@@ -334,7 +335,7 @@ public class MeetingApiControllerTest extends RestDocsTestSupport {
 
                                     PayloadDocumentation.subsectionWithPath("members").type(JsonFieldType.ARRAY).description("모임에 가입된 회원 정보 리스트."),
                                     PayloadDocumentation.fieldWithPath("members[].memberId").type(JsonFieldType.NUMBER).description("회원의 모임 회원 번호. +\n유저 식별값과는 별개의 정보입니다."),
-                                    PayloadDocumentation.fieldWithPath("members[].userId").type(JsonFieldType.NUMBER).description("회원의 유저 식별값. +\n유저 식별값과는 별개의 정보입니다."),
+                                    PayloadDocumentation.fieldWithPath("members[].userId").type(JsonFieldType.NUMBER).description("회원의 유저 식별값."),
                                     PayloadDocumentation.fieldWithPath("members[].nickname").type(JsonFieldType.STRING).description("회원의 유저 닉네임."),
                                     PayloadDocumentation.fieldWithPath("members[].profileImageUrl").type(JsonFieldType.STRING).description("회원의 유저 프로필 이미지 URL.").optional(),
                                     PayloadDocumentation.fieldWithPath("members[].memberRole").type(JsonFieldType.STRING).description("모임에서 해당 회원의 권한. +\n" + RestDocsUtil.generateLinkCode(RestDocsUtil.DocUrl.MEETING_MEMBER_ROLE)),
@@ -461,6 +462,63 @@ public class MeetingApiControllerTest extends RestDocsTestSupport {
                                     PayloadDocumentation.fieldWithPath("meetingId").type(JsonFieldType.NUMBER).description("입장 코드를 갱신한 모임의 식별값"),
                                     PayloadDocumentation.fieldWithPath("entryCode").type(JsonFieldType.STRING).description("갱신된 입장 코드"),
                                     PayloadDocumentation.fieldWithPath("expiredAt").type(JsonFieldType.STRING).description("갱신된 입장 코드가 만료되는 시간. 만료일. +\nyyyy-MM-dd HH:mm:ss 형식. +\n자세한 내용은 요청/응답 예시를 확인해주세요.")
+                            )
+                    )
+            );
+        }
+    }
+
+    @Nested
+    @DisplayName("모임 회원 리스트 조회 API")
+    class meetingMemberList {
+
+        String endpoint = "/api/v1/meetings/{meeting-id}/members";
+
+        @Test
+        @DisplayName("given: 인증 필요, 요청 경로에 meetingId -> then: HTTP 200, 갱신된 입장 코드 정보")
+        void success() throws Exception {
+            //given
+            Long meetingIdMock = 55L;
+            BDDMockito.given(meetingMemberDao.findMemberList(BDDMockito.anyLong()))
+                    .willReturn(
+                            List.of(
+                                    new MemberListResponse(88L, 112L, "user112", "https://xxx.xxx.xxxx/xxxxx", MemberRole.HOST.name()),
+                                    new MemberListResponse(109L, 134L, "user134", null, MemberRole.PARTICIPANT.name()),
+                                    new MemberListResponse(111L, 155L, "user155", "https://xxx.xxx.xxxx/xxxxx", MemberRole.PARTICIPANT.name()),
+                                    new MemberListResponse(135L, 157L, "user157", "https://xxx.xxx.xxxx/xxxxx", MemberRole.PARTICIPANT.name())
+                            )
+                    );
+
+            //when
+            ResultActions perform = mockMvc.perform(
+                    RestDocumentationRequestBuilders.get(endpoint, meetingIdMock)
+                            .header(HttpHeaders.AUTHORIZATION, "Bearer " + currentRequestATK.getToken())
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .characterEncoding(StandardCharsets.UTF_8)
+            );
+
+            //then
+            perform.andExpect(MockMvcResultMatchers.status().isOk());
+
+            // docs
+            perform.andDo(
+                    restDocs.document(
+                            RequestDocumentation.pathParameters(
+                                    getTitleAttributes(endpoint),
+                                    RequestDocumentation.parameterWithName("meeting-id").description("입장 코드를 갱신할 모임의 식별값")
+                            ),
+                            HeaderDocumentation.requestHeaders(
+                                    getTitleAttributes("요청 헤더"),
+                                    authorizationHeaderDescriptor
+                            ),
+                            PayloadDocumentation.responseFields(
+                                    PayloadDocumentation.beneathPath("contents").withSubsectionId("list-contents"),
+                                    getTitleAttributes("contents 응답 필드"),
+                                    PayloadDocumentation.fieldWithPath("memberId").type(JsonFieldType.NUMBER).description("회원의 모임 회원 번호. +\n유저 식별값과는 별개의 정보입니다."),
+                                    PayloadDocumentation.fieldWithPath("userId").type(JsonFieldType.NUMBER).description("회원의 유저 식별값."),
+                                    PayloadDocumentation.fieldWithPath("nickname").type(JsonFieldType.STRING).description("회원의 유저 닉네임."),
+                                    PayloadDocumentation.fieldWithPath("profileImageUrl").type(JsonFieldType.STRING).description("회원의 유저 프로필 이미지 URL.").optional(),
+                                    PayloadDocumentation.fieldWithPath("memberRole").type(JsonFieldType.STRING).description("모임에서 해당 회원의 권한. +\n" + RestDocsUtil.generateLinkCode(RestDocsUtil.DocUrl.MEETING_MEMBER_ROLE))
                             )
                     )
             );
