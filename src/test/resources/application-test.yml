@@ -27,6 +27,17 @@ spring:
             user-info-uri: https://kapi.kakao.com/v2/user/me
             user-name-attribute: id
 
+  kafka:
+    bootstrap-servers: localhost:1234
+
+kafka:
+  topic:
+    meeting-meta-data: "test_meta_data"
+    meeting-members: "test_members"
+    meeting-places: "test_places"
+    meeting-voting: "test_voting"
+    meeting-fixed-date: "test_fixed_date"
+
 cloud:
   aws:
     region:
