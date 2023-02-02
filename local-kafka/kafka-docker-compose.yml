@@ -1,0 +1,40 @@
+version: '3'
+
+volumes:
+  local-kafka:
+    external: true
+    name: local-kafka
+
+services:
+  zookeeper:
+    container_name: zookeeper
+    image: zookeeper
+    ports:
+      - "2181:2181"
+    restart: always
+
+  kafka:
+    container_name: local-kafka-1
+    image: wurstmeister/kafka
+    depends_on:
+      - zookeeper
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_ADVERTISED_HOST_NAME: 127.0.0.1
+      KAFKA_ADVERTISED_PORT: 9092
+      # topic 명:partition 개수:replica 개수
+      # topic_connecting_members
+      # topic_meeting_meta
+      # topic_meeting_members
+      # topic_meeting_voting
+      # topic_meeting_places
+      # topic_meeting_fixed_date
+      KAFKA_CREATE_TOPICS: "topic_connecting_members:1:1,topic_meeting_meta:1:1,topic_meeting_members:1:1,topic_meeting_voting:1:1,topic_meeting_places:1:1,topic_meeting_fixed_date:1:1"
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092 # 내외부 통신에 필요한 프로토콜 지정
+      # KAFKA_HEAP_OPTS: "-Xmx400m -Xms400m" # 카프카 브로커 실행시 힙 메모리 지정
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - local-kafka:/var/lib/local-kafka
+    restart: always
