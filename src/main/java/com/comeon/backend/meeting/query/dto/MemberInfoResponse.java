@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class MemberListResponse {
+public class MemberInfoResponse {
 
     private Long memberId;
     private Long userId;

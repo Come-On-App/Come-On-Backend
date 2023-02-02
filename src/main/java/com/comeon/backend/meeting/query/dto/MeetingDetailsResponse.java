@@ -14,7 +14,7 @@ import java.util.List;
 public class MeetingDetailsResponse {
 
     private MeetingMetaData meetingMetaData;
-    private List<MemberListResponse> members;
+    private List<MemberInfoResponse> members;
     private List<VotingSimpleListResponse> votingDates;
     private List<PlaceListResponse> places;
 

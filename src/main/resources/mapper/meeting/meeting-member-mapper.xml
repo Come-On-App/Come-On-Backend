@@ -20,7 +20,7 @@
 
 
 
-    <resultMap id="MemberListMap" type="com.comeon.backend.meeting.query.dto.MemberListResponse">
+    <resultMap id="MemberInfoMap" type="com.comeon.backend.meeting.query.dto.MemberInfoResponse">
         <id column="members_member_id" property="memberId"/>
         <id column="members_user_id" property="userId"/>
         <id column="members_nickname" property="nickname"/>
@@ -28,7 +28,7 @@
         <id column="members_member_role" property="memberRole"/>
     </resultMap>
 
-    <select id="selectMemberList" resultMap="MemberListMap">
+    <select id="selectMemberList" resultMap="MemberInfoMap">
         select mm.meeting_member_id as members_member_id,
                u.user_id            as members_user_id,
                u.nickname           as members_nickname,
@@ -38,5 +38,16 @@
                  left join users u on mm.user_id = u.user_id
         where mm.meeting_id = #{meetingId}
         order by u.nickname
+    </select>
+
+    <select id="selectMemberInfo" resultMap="MemberInfoMap">
+        select mm.meeting_member_id as members_member_id,
+               u.user_id            as members_user_id,
+               u.nickname           as members_nickname,
+               u.profile_image_url  as members_profile_image_url,
+               mm.role              as members_member_role
+        from meeting_member mm
+                 left join users u on mm.user_id = u.user_id
+        where mm.meeting_id = #{meetingId} and mm.user_id = #{userId}
     </select>
 </mapper>

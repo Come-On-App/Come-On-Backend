@@ -13,7 +13,7 @@ import com.comeon.backend.meeting.query.dao.MeetingSliceCondition;
 import com.comeon.backend.meeting.query.dto.EntryCodeDetailsResponse;
 import com.comeon.backend.meeting.query.dto.MeetingDetailsResponse;
 import com.comeon.backend.meeting.query.dto.MeetingSliceResponse;
-import com.comeon.backend.meeting.query.dto.MemberListResponse;
+import com.comeon.backend.meeting.query.dto.MemberInfoResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -65,11 +65,21 @@ public class MeetingApiController {
 
     @RequiredMemberRole
     @GetMapping("/{meetingId}/members")
-    public ListResponse<MemberListResponse> meetingMemberList(
+    public ListResponse<MemberInfoResponse> meetingMemberList(
             @PathVariable Long meetingId
     ) {
-        List<MemberListResponse> memberList = meetingMemberDao.findMemberList(meetingId);
+        List<MemberInfoResponse> memberList = meetingMemberDao.findMemberList(meetingId);
         return ListResponse.toListResponse(memberList);
+    }
+
+    @RequiredMemberRole
+    @GetMapping("/{meetingId}/members/me")
+    public MemberInfoResponse myMemberInfo(
+            @AuthenticationPrincipal JwtPrincipal jwtPrincipal,
+            @PathVariable Long meetingId
+    ) {
+        MemberInfoResponse memberInfoResponse = meetingMemberDao.findMember(meetingId, jwtPrincipal.getUserId());
+        return memberInfoResponse;
     }
 
     @PostMapping("/join")
