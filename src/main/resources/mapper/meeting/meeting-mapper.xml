@@ -124,7 +124,7 @@
         <collection property="votingDates" column="{ meetingId = meeting_id, userId = user_id }" javaType="List" select="selectVotingSimpleList"/>
     </resultMap>
 
-    <resultMap id="MemberListMap" type="com.comeon.backend.meeting.query.dto.MemberListResponse">
+    <resultMap id="MemberListMap" type="com.comeon.backend.meeting.query.dto.MemberInfoResponse">
         <id column="members_member_id" property="memberId"/>
         <id column="members_user_id" property="userId"/>
         <id column="members_nickname" property="nickname"/>

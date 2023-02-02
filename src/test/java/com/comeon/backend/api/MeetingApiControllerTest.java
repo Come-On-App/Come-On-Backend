@@ -7,7 +7,6 @@ import com.comeon.backend.meeting.api.MeetingApiController;
 import com.comeon.backend.meeting.command.application.MeetingCommandDto;
 import com.comeon.backend.meeting.command.application.MeetingFacade;
 import com.comeon.backend.meeting.query.dao.MeetingDao;
-import com.comeon.backend.meeting.query.dao.MeetingMemberDao;
 import com.comeon.backend.meeting.query.dto.*;
 import com.comeon.backend.place.command.domain.PlaceCategory;
 import org.junit.jupiter.api.DisplayName;
@@ -274,8 +273,8 @@ public class MeetingApiControllerTest extends RestDocsTestSupport {
                             )
                     ),
                     List.of(
-                            new MemberListResponse(88L, 112L, "user112", "https://xxx.xxx.xxxx/xxxxx", MemberRole.HOST.name()),
-                            new MemberListResponse(109L, 134L, "user134", null, MemberRole.PARTICIPANT.name())
+                            new MemberInfoResponse(88L, 112L, "user112", "https://xxx.xxx.xxxx/xxxxx", MemberRole.HOST.name()),
+                            new MemberInfoResponse(109L, 134L, "user134", null, MemberRole.PARTICIPANT.name())
                     ),
                     List.of(
                             new VotingSimpleListResponse(LocalDate.of(2023, 3, 5), 2, true),
@@ -482,10 +481,10 @@ public class MeetingApiControllerTest extends RestDocsTestSupport {
             BDDMockito.given(meetingMemberDao.findMemberList(BDDMockito.anyLong()))
                     .willReturn(
                             List.of(
-                                    new MemberListResponse(88L, 112L, "user112", "https://xxx.xxx.xxxx/xxxxx", MemberRole.HOST.name()),
-                                    new MemberListResponse(109L, 134L, "user134", null, MemberRole.PARTICIPANT.name()),
-                                    new MemberListResponse(111L, 155L, "user155", "https://xxx.xxx.xxxx/xxxxx", MemberRole.PARTICIPANT.name()),
-                                    new MemberListResponse(135L, 157L, "user157", "https://xxx.xxx.xxxx/xxxxx", MemberRole.PARTICIPANT.name())
+                                    new MemberInfoResponse(88L, 112L, "user112", "https://xxx.xxx.xxxx/xxxxx", MemberRole.HOST.name()),
+                                    new MemberInfoResponse(109L, 134L, "user134", null, MemberRole.PARTICIPANT.name()),
+                                    new MemberInfoResponse(111L, 155L, "user155", "https://xxx.xxx.xxxx/xxxxx", MemberRole.PARTICIPANT.name()),
+                                    new MemberInfoResponse(135L, 157L, "user157", "https://xxx.xxx.xxxx/xxxxx", MemberRole.PARTICIPANT.name())
                             )
                     );
 

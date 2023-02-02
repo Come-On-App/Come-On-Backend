@@ -1,3 +1,4 @@
 [submodule "src/main/resources/config"]
 	path = src/main/resources/config
 	url = https://github.com/Come-On-App/Come-On-Backend-Properties.git
+	branch = main

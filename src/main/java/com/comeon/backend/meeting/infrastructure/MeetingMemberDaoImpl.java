@@ -1,7 +1,7 @@
 package com.comeon.backend.meeting.infrastructure;
 
 import com.comeon.backend.meeting.query.dao.MeetingMemberDao;
-import com.comeon.backend.meeting.query.dto.MemberListResponse;
+import com.comeon.backend.meeting.query.dto.MemberInfoResponse;
 import com.comeon.backend.meeting.query.dto.MemberSimpleResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -20,7 +20,12 @@ public class MeetingMemberDaoImpl implements MeetingMemberDao {
     }
 
     @Override
-    public List<MemberListResponse> findMemberList(Long meetingId) {
+    public List<MemberInfoResponse> findMemberList(Long meetingId) {
         return meetingMemberMapper.selectMemberList(meetingId);
+    }
+
+    @Override
+    public MemberInfoResponse findMember(Long meetingId, Long userId) {
+        return meetingMemberMapper.selectMemberInfo(meetingId, userId);
     }
 }
