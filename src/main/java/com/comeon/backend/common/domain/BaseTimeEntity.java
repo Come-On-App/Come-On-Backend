@@ -1,4 +1,4 @@
-package com.comeon.backend.common.model;
+package com.comeon.backend.common.domain;
 
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;
