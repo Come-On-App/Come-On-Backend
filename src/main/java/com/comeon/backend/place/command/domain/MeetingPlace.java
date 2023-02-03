@@ -1,6 +1,7 @@
 package com.comeon.backend.place.command.domain;
 
-import com.comeon.backend.common.model.BaseTimeEntity;
+import com.comeon.backend.common.domain.BaseTimeEntity;
+import com.comeon.backend.common.event.Events;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -52,6 +53,8 @@ public class MeetingPlace extends BaseTimeEntity {
         this.googlePlaceId = placeInfo.getGooglePlaceId();
         this.order = placeOrder;
         this.lastModifiedUserId = userId;
+
+        Events.raise(PlacesUpdateEvent.create(meetingId));
     }
 
     public void decreaseOrder() {
@@ -68,6 +71,8 @@ public class MeetingPlace extends BaseTimeEntity {
         updateGooglePlaceId(placeInfo.getGooglePlaceId());
 
         updateLastModifiedUserId(userId);
+
+        Events.raise(PlacesUpdateEvent.create(meetingId));
     }
 
     private void updateName(String name) {

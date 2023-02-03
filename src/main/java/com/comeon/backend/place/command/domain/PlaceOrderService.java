@@ -1,5 +1,6 @@
 package com.comeon.backend.place.command.domain;
 
+import com.comeon.backend.common.event.Events;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +31,9 @@ public class PlaceOrderService {
                 .findFirst()
                 .orElseThrow(() -> new PlaceNotExistException(placeId));
         places.remove(placeToRemove);
+        meetingPlaceRepository.delete(placeToRemove);
+        Events.raise(PlacesUpdateEvent.create(meetingId));
+
         int removedOrder = placeToRemove.getOrder();
         places.stream()
                 .filter(place -> place.getOrder() > removedOrder)
