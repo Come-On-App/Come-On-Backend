@@ -8,4 +8,5 @@ public interface MeetingPlaceRepository {
     MeetingPlace save(MeetingPlace meetingPlace);
     List<MeetingPlace> findByMeetingId(Long meetingId);
     Optional<MeetingPlace> findByMeetingIdAndPlaceId(Long meetingId, Long placeId);
+    void delete(MeetingPlace meetingPlace);
 }

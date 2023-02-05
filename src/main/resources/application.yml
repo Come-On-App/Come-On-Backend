@@ -3,9 +3,9 @@ spring:
     additional-location: config/
   profiles:
     group:
-      local: "local,root,datasource,jwt,oauth,aws,logging"
-      dev: "dev,root,datasource,jwt,oauth,aws,logging"
-      prod: "prod,root,datasource,jwt,oauth,aws,logging"
+      local: "local,root,datasource,jwt,oauth,aws,logging,kafka"
+      dev: "dev,root,datasource,jwt,oauth,aws,logging,kafka"
+      prod: "prod,root,datasource,jwt,oauth,aws,logging,kafka"
     active: local
   messages:
     basename: errors

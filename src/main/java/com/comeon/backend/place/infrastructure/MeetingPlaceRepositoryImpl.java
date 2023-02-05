@@ -28,4 +28,9 @@ public class MeetingPlaceRepositoryImpl implements MeetingPlaceRepository {
     public Optional<MeetingPlace> findByMeetingIdAndPlaceId(Long meetingId, Long placeId) {
         return meetingPlaceJpaRepository.findByIdAndMeetingId(placeId, meetingId);
     }
+
+    @Override
+    public void delete(MeetingPlace meetingPlace) {
+        meetingPlaceJpaRepository.delete(meetingPlace);
+    }
 }
