@@ -41,3 +41,4 @@ local-db/read/db/**
 
 /src/main/resources/static/docs/**
 spy.log
+/log
