@@ -2,8 +2,10 @@
 <configuration scan="true" scanPeriod="60 seconds">
     <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
 
-    <property name="CONSOLE_LOG_PATTERN" value="%clr(%d{${LOG_DATEFORMAT_PATTERN:-yyyy-MM-dd HH:mm:ss.SSS}}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}: %-5line){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"/>
-    <property name="FILE_LOG_PATTERN" value="%d{${LOG_DATEFORMAT_PATTERN:-yyyy-MM-dd HH:mm:ss.SSS}} ${LOG_LEVEL_PATTERN:-%5p} ${PID:- } --- [%t] %-40.40logger{39} : %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"/>
+    <property name="CONSOLE_LOG_PATTERN" value="%clr(%d{${LOG_DATEFORMAT_PATTERN:-yyyy-MM-dd HH:mm:ss.SSS}}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta} %clr(---){faint} %clr([%8X{traceId}]){faint} %clr(%-40.40logger{39}: %-5line){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"/>
+<!--    <property name="CONSOLE_LOG_PATTERN" value="%clr(%d{${LOG_DATEFORMAT_PATTERN:-yyyy-MM-dd HH:mm:ss.SSS}}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta} %clr(-&#45;&#45;){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}: %-5line){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"/>-->
+    <property name="FILE_LOG_PATTERN" value="%d{${LOG_DATEFORMAT_PATTERN:-yyyy-MM-dd HH:mm:ss.SSS}} ${LOG_LEVEL_PATTERN:-%5p} ${PID:- } --- [%8X{traceId}] %-40.40logger{39} : %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"/>
+<!--    <property name="FILE_LOG_PATTERN" value="%d{${LOG_DATEFORMAT_PATTERN:-yyyy-MM-dd HH:mm:ss.SSS}} ${LOG_LEVEL_PATTERN:-%5p} ${PID:- } -&#45;&#45; [%t] %-40.40logger{39} : %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"/>-->
     <property name="LOG_CHARSET" value="UTF-8"/>
     <property name="LOG_PATH" value="${log.file.path:-./log}"/>
     <property name="LOG_FILE" value="${log.file.name:-%d{yyyy-MM-dd}}"/>
@@ -34,72 +36,6 @@
         </rollingPolicy>
     </appender>
 
-    <appender name="FILE_INFO" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${LOG_PATH}/info/info-${LOG_FILE}.log</file>
-        <filter class="ch.qos.logback.classic.filter.LevelFilter">
-            <level>INFO</level>
-            <onMatch>ACCEPT</onMatch>
-            <onMismatch>DENY</onMismatch>
-        </filter>
-        <encoder>
-            <pattern>${FILE_LOG_PATTERN}</pattern>
-            <charset>${LOG_CHARSET}</charset>
-            <!-- 헤더에 패턴 출력 -->
-            <outputPatternAsHeader>true</outputPatternAsHeader>
-        </encoder>
-        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-            <fileNamePattern>
-                ${LOG_PATH}/info/info-${LOG_FILE}.%i.log
-            </fileNamePattern>
-            <maxFileSize>10MB</maxFileSize>
-            <maxHistory>30</maxHistory>
-        </rollingPolicy>
-    </appender>
-
-    <appender name="FILE_WARN" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${LOG_PATH}/warn/warn-${LOG_FILE}.log</file>
-        <filter class="ch.qos.logback.classic.filter.LevelFilter">
-            <level>WARN</level>
-            <onMatch>ACCEPT</onMatch>
-            <onMismatch>DENY</onMismatch>
-        </filter>
-        <encoder>
-            <pattern>${FILE_LOG_PATTERN}</pattern>
-            <charset>${LOG_CHARSET}</charset>
-            <!-- 헤더에 패턴 출력 -->
-            <outputPatternAsHeader>true</outputPatternAsHeader>
-        </encoder>
-        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-            <fileNamePattern>
-                ${LOG_PATH}/warn/warn-${LOG_FILE}.%i.log
-            </fileNamePattern>
-            <maxFileSize>10MB</maxFileSize>
-            <maxHistory>30</maxHistory>
-        </rollingPolicy>
-    </appender>
-
-    <appender name="FILE_ERROR" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${LOG_PATH}/error/error-${LOG_FILE}.log</file>
-        <filter class="ch.qos.logback.classic.filter.LevelFilter">
-            <level>ERROR</level>
-            <onMatch>ACCEPT</onMatch>
-            <onMismatch>DENY</onMismatch>
-        </filter>
-        <encoder>
-            <pattern>${FILE_LOG_PATTERN}</pattern>
-            <charset>${LOG_CHARSET}</charset>
-            <!-- 헤더에 패턴 출력 -->
-            <outputPatternAsHeader>true</outputPatternAsHeader>
-        </encoder>
-        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-            <fileNamePattern>
-                ${LOG_PATH}/error/error-${LOG_FILE}.%i.log
-            </fileNamePattern>
-            <maxFileSize>10MB</maxFileSize>
-            <maxHistory>30</maxHistory>
-        </rollingPolicy>
-    </appender>
-
     <springProfile name="local">
         <root level="info">
             <appender-ref ref="CONSOLE"/>
@@ -114,6 +50,72 @@
     </springProfile>
 
     <springProfile name="prod">
+        <appender name="FILE_INFO" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <file>${LOG_PATH}/info/info-${LOG_FILE}.log</file>
+            <filter class="ch.qos.logback.classic.filter.LevelFilter">
+                <level>INFO</level>
+                <onMatch>ACCEPT</onMatch>
+                <onMismatch>DENY</onMismatch>
+            </filter>
+            <encoder>
+                <pattern>${FILE_LOG_PATTERN}</pattern>
+                <charset>${LOG_CHARSET}</charset>
+                <!-- 헤더에 패턴 출력 -->
+                <outputPatternAsHeader>true</outputPatternAsHeader>
+            </encoder>
+            <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+                <fileNamePattern>
+                    ${LOG_PATH}/info/info-${LOG_FILE}.%i.log
+                </fileNamePattern>
+                <maxFileSize>10MB</maxFileSize>
+                <maxHistory>3</maxHistory>
+            </rollingPolicy>
+        </appender>
+
+        <appender name="FILE_WARN" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <file>${LOG_PATH}/warn/warn-${LOG_FILE}.log</file>
+            <filter class="ch.qos.logback.classic.filter.LevelFilter">
+                <level>WARN</level>
+                <onMatch>ACCEPT</onMatch>
+                <onMismatch>DENY</onMismatch>
+            </filter>
+            <encoder>
+                <pattern>${FILE_LOG_PATTERN}</pattern>
+                <charset>${LOG_CHARSET}</charset>
+                <!-- 헤더에 패턴 출력 -->
+                <outputPatternAsHeader>true</outputPatternAsHeader>
+            </encoder>
+            <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+                <fileNamePattern>
+                    ${LOG_PATH}/warn/warn-${LOG_FILE}.%i.log
+                </fileNamePattern>
+                <maxFileSize>10MB</maxFileSize>
+                <maxHistory>30</maxHistory>
+            </rollingPolicy>
+        </appender>
+
+        <appender name="FILE_ERROR" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <file>${LOG_PATH}/error/error-${LOG_FILE}.log</file>
+            <filter class="ch.qos.logback.classic.filter.LevelFilter">
+                <level>ERROR</level>
+                <onMatch>ACCEPT</onMatch>
+                <onMismatch>DENY</onMismatch>
+            </filter>
+            <encoder>
+                <pattern>${FILE_LOG_PATTERN}</pattern>
+                <charset>${LOG_CHARSET}</charset>
+                <!-- 헤더에 패턴 출력 -->
+                <outputPatternAsHeader>true</outputPatternAsHeader>
+            </encoder>
+            <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+                <fileNamePattern>
+                    ${LOG_PATH}/error/error-${LOG_FILE}.%i.log
+                </fileNamePattern>
+                <maxFileSize>10MB</maxFileSize>
+                <maxHistory>30</maxHistory>
+            </rollingPolicy>
+        </appender>
+
         <root level="info">
             <appender-ref ref="FILE_INFO"/>
             <appender-ref ref="FILE_WARN"/>
