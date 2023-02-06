@@ -5,20 +5,24 @@ import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.amazonaws.util.IOUtils;
 import com.comeon.backend.common.error.CommonErrorCode;
 import com.comeon.backend.common.error.RestApiException;
-import com.comeon.backend.common.error.ImageErrorCode;
+import com.comeon.backend.image.application.FileEmptyException;
 import com.comeon.backend.image.application.FileManager;
 import com.comeon.backend.image.application.ImageDto;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.UUID;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class S3FileManager implements FileManager {
@@ -37,17 +41,22 @@ public class S3FileManager implements FileManager {
     @Override
     public ImageDto.UploadResponse upload(MultipartFile multipartFile, Long userId) {
         if (multipartFile == null || multipartFile.isEmpty()) {
-            throw new RestApiException("이미지 파일이 비어있습니다.", ImageErrorCode.NO_IMAGE_FILE);
+            log.warn("Image file is empty..");
+            throw new FileEmptyException();
         }
 
         String filename = getFilenameToStore(multipartFile);
         String fullPath = getFullPath(userId, filename);
 
         ObjectMetadata objectMetadata = new ObjectMetadata();
-        objectMetadata.setContentType(multipartFile.getContentType());
         try (InputStream inputStream = multipartFile.getInputStream()) {
-            amazonS3.putObject(new PutObjectRequest(bucket, fullPath, inputStream, objectMetadata)
-                    .withCannedAcl(CannedAccessControlList.PublicRead));
+            byte[] bytes = IOUtils.toByteArray(inputStream);
+            objectMetadata.setContentLength(bytes.length);
+            objectMetadata.setContentType(multipartFile.getContentType());
+            PutObjectRequest putObjectRequest = new PutObjectRequest(bucket, fullPath, new ByteArrayInputStream(bytes), objectMetadata);
+            amazonS3.putObject(putObjectRequest.withCannedAcl(CannedAccessControlList.PublicRead));
+
+            log.debug("Upload image success!! userId: {}, filename: {}", userId, filename);
         } catch (IOException e) {
             throw new RestApiException(e, CommonErrorCode.INTERNAL_SERVER_ERROR);
         }

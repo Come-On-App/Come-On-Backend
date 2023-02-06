@@ -2,6 +2,7 @@ package com.comeon.backend.api.utils;
 
 import com.comeon.backend.common.config.interceptor.MemberAuthorizationInterceptor;
 import com.comeon.backend.common.config.interceptor.MemberRole;
+import com.comeon.backend.common.log.LoggingManager;
 import com.comeon.backend.jwt.application.JwtManager;
 import com.comeon.backend.jwt.domain.RefreshTokenRepository;
 import com.comeon.backend.jwt.infra.*;
@@ -29,7 +30,8 @@ import java.util.Optional;
         JwtProperties.class,
         JwtValidatorImpl.class,
         ReissueConditionImpl.class,
-        SecurityContextUserProvider.class
+        SecurityContextUserProvider.class,
+        LoggingManager.class,
 })
 @MockBean(JpaMetamodelMappingContext.class)
 public abstract class ControllerUnitTest {

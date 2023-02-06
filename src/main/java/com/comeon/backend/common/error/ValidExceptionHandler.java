@@ -1,7 +1,6 @@
-package com.comeon.backend.common.response;
+package com.comeon.backend.common.error;
 
-import com.comeon.backend.common.error.CommonErrorCode;
-import com.comeon.backend.common.error.ErrorCode;
+import com.comeon.backend.common.response.ErrorResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.MessageSource;
@@ -14,7 +13,9 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.multipart.support.MissingServletRequestPartException;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
@@ -46,6 +47,23 @@ public class ValidExceptionHandler {
         List<ErrorResponse.ValidError> errors = parseValidErrors(e);
 
         CommonErrorCode errorCode = CommonErrorCode.BIND_ERROR;
+        return ResponseEntity.status(errorCode.getHttpStatus())
+                .body(
+                        ErrorResponse.builder()
+                                .errorCode(errorCode.getCode())
+                                .errorDescription(errorCode.getDescription())
+                                .errors(errors)
+                                .build()
+                );
+    }
+
+    @ExceptionHandler(MissingServletRequestPartException.class)
+    public ResponseEntity<ErrorResponse> missingRequestPartHandle(MissingServletRequestPartException e) {
+        String partName = e.getRequestPartName();
+        List<ErrorResponse.ValidError> errors = new ArrayList<>();
+        errors.add(new ErrorResponse.ValidError(partName, "해당 요청 파트는 필수값입니다.", null));
+
+        ErrorCode errorCode = CommonErrorCode.PART_NOT_PRESENT;
         return ResponseEntity.status(errorCode.getHttpStatus())
                 .body(
                         ErrorResponse.builder()
