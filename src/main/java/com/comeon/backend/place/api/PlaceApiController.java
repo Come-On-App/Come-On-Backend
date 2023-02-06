@@ -13,6 +13,7 @@ import com.comeon.backend.place.query.dto.PlaceListResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -40,7 +41,7 @@ public class PlaceApiController {
     public PlaceAddResponse placeAdd(
             @AuthenticationPrincipal JwtPrincipal jwtPrincipal,
             @PathVariable Long meetingId,
-            @RequestBody PlaceCommandDto.AddRequest request
+            @Validated @RequestBody PlaceCommandDto.AddRequest request
     ) {
         Long meetingPlaceId = meetingPlaceFacade.addPlace(jwtPrincipal.getUserId(), meetingId, request);
         return new PlaceAddResponse(meetingPlaceId);
@@ -52,7 +53,7 @@ public class PlaceApiController {
             @AuthenticationPrincipal JwtPrincipal jwtPrincipal,
             @PathVariable Long meetingId,
             @PathVariable Long meetingPlaceId,
-            @RequestBody PlaceCommandDto.ModifyRequest request
+            @Validated @RequestBody PlaceCommandDto.ModifyRequest request
     ) {
         meetingPlaceFacade.modifyPlace(jwtPrincipal.getUserId(), meetingId, meetingPlaceId, request);
         return new PlaceModifyResponse();

@@ -5,17 +5,23 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotBlank;
+
 public class PlaceCommandDto {
 
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
     public static class AddRequest {
+
+        @NotBlank
         private String name;
         private String memo;
         private Double lat;
         private Double lng;
         private String address;
+
+        @NotBlank
         private String category;
         private String googlePlaceId;
 
@@ -31,11 +37,15 @@ public class PlaceCommandDto {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class ModifyRequest {
+
+        @NotBlank
         private String name;
         private String memo;
         private Double lat;
         private Double lng;
         private String address;
+
+        @NotBlank
         private String category;
         private String googlePlaceId;
 

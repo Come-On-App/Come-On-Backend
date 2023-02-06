@@ -17,16 +17,16 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 @RestControllerAdvice
 public class CommonExceptionHandler {
 
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ErrorResponse> allErrorHandle(Exception e) {
+        log.error("{}", e.getClass().getSimpleName(), e);
+        return ResponseEntityUtils.buildResponseByErrorCode(CommonErrorCode.INTERNAL_SERVER_ERROR);
+    }
+
     @ExceptionHandler(RestApiException.class)
     public ResponseEntity<ErrorResponse> customExceptionHandle(RestApiException e) {
         log.error("{}", e.getClass().getSimpleName(), e);
-        return ResponseEntity.status(e.getErrorCode().getHttpStatus())
-                .body(
-                        ErrorResponse.builder()
-                                .errorCode(e.getErrorCode().getCode())
-                                .errorDescription(e.getErrorCode().getDescription())
-                                .build()
-                );
+        return ResponseEntityUtils.buildResponseByErrorCode(e.getErrorCode());
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
