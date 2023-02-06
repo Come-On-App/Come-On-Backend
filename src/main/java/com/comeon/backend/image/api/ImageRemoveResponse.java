@@ -1,4 +1,4 @@
-package com.comeon.backend.image.presentation.response;
+package com.comeon.backend.image.api;
 
 import lombok.Getter;
 

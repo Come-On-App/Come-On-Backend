@@ -1,9 +1,8 @@
-package com.comeon.backend.image.presentation;
+package com.comeon.backend.image.api;
 
 import com.comeon.backend.common.security.JwtPrincipal;
 import com.comeon.backend.image.application.FileManager;
 import com.comeon.backend.image.application.ImageDto;
-import com.comeon.backend.image.presentation.response.ImageRemoveResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

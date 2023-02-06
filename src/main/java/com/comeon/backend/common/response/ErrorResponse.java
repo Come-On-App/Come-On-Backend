@@ -17,6 +17,7 @@ public class ErrorResponse {
     private List<ValidError> errors;
 
     @Getter
+    @AllArgsConstructor
     public static class ValidError {
 
         private String field;

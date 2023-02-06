@@ -1,9 +1,7 @@
-package com.comeon.backend.common.response;
+package com.comeon.backend.common.error;
 
-import com.comeon.backend.common.error.CommonErrorCode;
-import com.comeon.backend.common.error.ErrorCode;
-import com.comeon.backend.common.error.RestApiException;
-import com.comeon.backend.common.error.TypeMismatchException;
+import com.comeon.backend.common.response.ErrorResponse;
+import com.comeon.backend.common.response.ResponseEntityUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +11,6 @@ import org.springframework.web.bind.MissingPathVariableException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
-import org.springframework.web.multipart.support.MissingServletRequestPartException;
 
 @Slf4j
 @Order(Integer.MAX_VALUE)
@@ -53,12 +50,6 @@ public class CommonExceptionHandler {
     @ExceptionHandler(TypeMismatchException.class)
     public ResponseEntity<ErrorResponse> typeMismatchHandle(TypeMismatchException e) {
         ErrorCode errorCode = e.getErrorCode();
-        return ResponseEntityUtils.buildResponseByErrorCode(errorCode);
-    }
-
-    @ExceptionHandler(MissingServletRequestPartException.class)
-    public ResponseEntity<ErrorResponse> missingRequestPartHandle(MissingServletRequestPartException e) {
-        ErrorCode errorCode = CommonErrorCode.REQUEST_VALIDATION_FAIL;
         return ResponseEntityUtils.buildResponseByErrorCode(errorCode);
     }
 }

@@ -3,7 +3,7 @@ package com.comeon.backend.api;
 import com.comeon.backend.api.utils.RestDocsTestSupport;
 import com.comeon.backend.config.S3MockConfig;
 import com.comeon.backend.image.infrastructure.S3FileManager;
-import com.comeon.backend.image.presentation.ImageApiController;
+import com.comeon.backend.image.api.ImageApiController;
 import org.apache.http.entity.ContentType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
