@@ -25,11 +25,20 @@ public class HttpLogFilter extends OncePerRequestFilter {
         String traceId = createTraceId();
         MDC.put("traceId", traceId);
 
+        long startTime = System.currentTimeMillis();
+        ResponseWrapper responseWrapper = new ResponseWrapper(response);
         if (isAsyncDispatch(request) || !loggingManager.isVisibleRequest(request)) {
-            filterChain.doFilter(request, response);
+            filterChain.doFilter(request, responseWrapper);
         } else {
-            doFilterWrapped(new RequestWrapper(request), new ResponseWrapper(response), filterChain);
+            // 요청 로깅
+            RequestWrapper requestWrapper = new RequestWrapper(request);
+            loggingManager.normalRequestLogging(requestWrapper);
+            filterChain.doFilter(requestWrapper, responseWrapper);
         }
+        // 응답 로깅
+        long endTime = System.currentTimeMillis();
+        long executeTime = endTime - startTime;
+        loggingManager.responseLogging(responseWrapper, executeTime);
 
         MDC.clear();
     }
@@ -49,7 +58,6 @@ public class HttpLogFilter extends OncePerRequestFilter {
             long endTime = System.currentTimeMillis();
             long executeTime = endTime - startTime;
             loggingManager.responseLogging(response, executeTime);
-            response.copyBodyToResponse();
         }
     }
 }

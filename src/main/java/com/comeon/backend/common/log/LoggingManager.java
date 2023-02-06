@@ -47,7 +47,11 @@ public class LoggingManager {
     }
 
     public void multipartRequestLogging(RequestWrapper request) throws IOException, ServletException {
-        log.info("Request: {} {}", request.getMethod(), request.getRequestURI() + request.getQueryString());
+        String requestMethod = request.getMethod();
+        String requestURI = request.getRequestURI();
+        String queryString = request.getQueryString();
+        String requestPath = queryString != null ? requestURI + "?" + queryString : requestURI;
+        log.info("Request: {} {}", requestMethod, requestPath);
 
         Map<String, Object> headerMap = getHeaderMap(request);
         log.info("Request Header: {}", headerMap);
@@ -61,16 +65,14 @@ public class LoggingManager {
     private Map<String, Object> getPartMap(HttpServletRequest request) throws ServletException, IOException {
         Map<String, Object> partMap = new HashMap<>();
         for (Part part : request.getParts()) {
+            String content;
             if (isImage(part)) {
-                byte[] partByteArray = StreamUtils.copyToByteArray(part.getInputStream());
-                String hasData = partByteArray.length > 0
-                        ? "DATA_EXIST"
-                        : "NO_DATA";
-                partMap.put(part.getName(), hasData);
+                content = part.getContentType();
             } else {
                 byte[] partByteArray = StreamUtils.copyToByteArray(part.getInputStream());
-                partMap.put(part.getName(), new String(partByteArray));
+                content = "value(" + new String(partByteArray) + ")";
             }
+            partMap.put(part.getName(), content);
         }
         return partMap;
     }
@@ -91,6 +93,7 @@ public class LoggingManager {
         }
         log.info("Response Body: {}", bodyString);
         log.info("took {} ms", executeTime);
+        response.copyBodyToResponse();
     }
 
     public boolean isVisibleRequest(HttpServletRequest request) {
@@ -103,8 +106,13 @@ public class LoggingManager {
                 MediaType.valueOf("application/*+xml")
         );
 
-        MediaType requestContentType = MediaType.valueOf(request.getContentType());
-        return visibleTypes.stream()
-                .anyMatch(mediaType -> mediaType.includes(requestContentType));
+        String contentType = request.getContentType();
+        if (contentType != null) {
+            MediaType requestContentType = MediaType.valueOf(contentType);
+            return visibleTypes.stream()
+                    .anyMatch(mediaType -> mediaType.includes(requestContentType));
+        }
+
+        return false;
     }
 }
