@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.comeon.backend.user.infrastructure.query.UserMapper">
+    <resultMap id="UserDetailsMap" type="com.comeon.backend.user.query.UserDetails">
+        <result column="user_id" property="userId"/>
+        <result column="nickname" property="nickname"/>
+        <result column="profile_image_url" property="profileImageUrl"/>
+        <result column="role" property="role"/>
+        <result column="email" property="email"/>
+        <result column="name" property="name"/>
+    </resultMap>
+
+    <resultMap id="UserSimpleMap" type="com.comeon.backend.user.query.UserSimple">
+        <result column="user_id" property="userId"/>
+        <result column="nickname" property="nickname"/>
+        <result column="role" property="role"/>
+    </resultMap>
+
+    <select id="selectUserDetailsByUserId" resultMap="UserDetailsMap">
+        select user_id,
+               nickname,
+               profile_image_url,
+               role,
+               email,
+               name
+        from users
+        where user_id = #{userId}
+    </select>
+
+    <select id="selectUserSimpleByUserId" resultMap="UserSimpleMap">
+        select u.user_id as user_id,
+               u.nickname as nickname,
+               u.role as role
+        from users u
+        where u.user_id = #{userId}
+    </select>
+</mapper>

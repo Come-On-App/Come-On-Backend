@@ -1,7 +1,7 @@
 package com.comeon.backend.date.infrastructure.domain;
 
 import com.comeon.backend.meeting.query.dao.MeetingDao;
-import com.comeon.backend.meeting.query.dto.MeetingCalendarResponse;
+import com.comeon.backend.meeting.query.dto.MeetingCalendarDetails;
 import com.comeon.backend.date.command.domain.voting.VotingDateValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -16,7 +16,7 @@ public class VotingDateValidatorImpl implements VotingDateValidator {
 
     @Override
     public boolean verifyDateInMeetingCalendar(Long meetingId, LocalDate date) {
-        MeetingCalendarResponse meetingCalendar = meetingDao.findMeetingCalendar(meetingId);
+        MeetingCalendarDetails meetingCalendar = meetingDao.findMeetingCalendar(meetingId);
         return !meetingCalendar.getStartFrom().isAfter(date)
                 && !meetingCalendar.getEndTo().isBefore(date);
     }

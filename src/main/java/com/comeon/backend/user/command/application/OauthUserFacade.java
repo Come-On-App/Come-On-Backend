@@ -1,6 +1,7 @@
 package com.comeon.backend.user.command.application;
 
-import com.comeon.backend.user.command.application.dto.LoginDto;
+import com.comeon.backend.user.command.application.dto.GoogleOauthRequest;
+import com.comeon.backend.user.command.application.dto.KakaoOauthRequest;
 import com.comeon.backend.user.command.domain.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,17 +15,20 @@ public class OauthUserFacade {
     private final GoogleOauthService googleOauthService;
     private final KakaoOauthService kakaoOauthService;
     private final OauthUserService oauthUserService;
-    private final JwtService jwtService;
 
-    public LoginDto.OauthLoginResponse googleLogin(LoginDto.GoogleOauthRequest request) {
+    public Long googleLogin(GoogleOauthRequest request) {
         OauthUserInfo oauthUserInfo = googleOauthService.getUserInfoByIdToken(request.getIdToken());
-        User user = oauthUserService.saveUser(oauthUserInfo);
-        return jwtService.issueTokens(user.getId(), user.getNickname(), user.getRole().getValue());
+        User user = saveUser(oauthUserInfo);
+        return user.getId();
     }
 
-    public LoginDto.OauthLoginResponse kakaoLogin(LoginDto.KakaoOauthRequest request) {
+    public Long kakaoLogin(KakaoOauthRequest request) {
         OauthUserInfo oauthUserInfo = kakaoOauthService.getUserInfoByCode(request.getCode());
-        User user = oauthUserService.saveUser(oauthUserInfo);
-        return jwtService.issueTokens(user.getId(), user.getNickname(), user.getRole().getValue());
+        User user = saveUser(oauthUserInfo);
+        return user.getId();
+    }
+
+    private User saveUser(OauthUserInfo oauthUserInfo) {
+        return oauthUserService.saveUser(oauthUserInfo);
     }
 }

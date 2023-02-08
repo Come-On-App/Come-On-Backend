@@ -2,7 +2,7 @@ package com.comeon.backend.meeting.api;
 
 import com.comeon.backend.common.response.ErrorResponse;
 import com.comeon.backend.common.response.ResponseEntityUtils;
-import com.comeon.backend.meeting.command.domain.MemberAlreadyJoinedException;
+import com.comeon.backend.meetingmember.command.application.MemberAlreadyJoinedException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.ResponseEntity;

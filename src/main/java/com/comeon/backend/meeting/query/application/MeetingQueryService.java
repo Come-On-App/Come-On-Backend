@@ -1,23 +1,36 @@
 package com.comeon.backend.meeting.query.application;
 
-import com.comeon.backend.meeting.query.dao.MeetingMemberDao;
-import com.comeon.backend.meeting.query.dto.MemberSimpleResponse;
+import com.comeon.backend.meeting.MeetingNotExistException;
+import com.comeon.backend.meeting.query.dao.MeetingDao;
+import com.comeon.backend.meeting.query.dto.MeetingDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@RequiredArgsConstructor
 @Transactional(readOnly = true)
+@RequiredArgsConstructor
 public class MeetingQueryService {
 
-    private final MeetingMemberDao meetingMemberDao;
+    private final MeetingDao meetingDao;
 
-    public MemberSimpleResponse findMemberSimple(Long meetingId, Long userId) {
-        MemberSimpleResponse memberSimple = meetingMemberDao.findMemberSimple(meetingId, userId);
-        if (memberSimple == null) {
-            throw new NotMemberException("모임에 가입되지 않은 유저입니다. meetingId: " + meetingId + ", userId: " + userId);
+    public MeetingDetails findMeetingDetails(Long meetingId, Long userId) {
+        MeetingDetails meetingDetails = meetingDao.findMeetingDetails(meetingId, userId);
+
+        if (meetingDetails == null) {
+            throw new MeetingNotExistException(meetingId);
         }
-        return memberSimple;
+
+        return meetingDetails;
+    }
+
+    public Long findMeetingId(String entryCode) {
+        Long meetingId = meetingDao.findMeetingIdByEntryCode(entryCode);
+
+        if (meetingId == null) {
+            throw new EntryCodeNotMatchedException();
+        }
+
+        return meetingId;
     }
 }

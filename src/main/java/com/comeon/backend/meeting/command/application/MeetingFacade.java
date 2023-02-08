@@ -1,6 +1,10 @@
 package com.comeon.backend.meeting.command.application;
 
-import com.comeon.backend.meeting.command.domain.*;
+import com.comeon.backend.meeting.command.application.dto.EntryCodeRenewResponse;
+import com.comeon.backend.meeting.command.application.dto.MeetingAddRequest;
+import com.comeon.backend.meeting.command.domain.Meeting;
+import com.comeon.backend.meeting.MeetingNotExistException;
+import com.comeon.backend.meeting.command.domain.MeetingRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,25 +16,16 @@ public class MeetingFacade {
 
     private final MeetingRepository meetingRepository;
 
-    public Long addMeeting(Long userId, MeetingCommandDto.AddRequest request) {
+    public Long addMeeting(Long userId, MeetingAddRequest request) {
         Meeting meeting = request.toEntity(userId);
-        return meetingRepository.saveMeeting(meeting).getId();
+        return meetingRepository.save(meeting).getId();
     }
 
-    public MeetingCommandDto.JoinResponse joinMeeting(Long userId, MeetingCommandDto.JoinRequest request) {
-        Meeting meeting = meetingRepository.findMeetingBy(request.getEntryCode())
-                .orElseThrow(EntryCodeNotMatchedException::new);
-        Member member = meeting.join(userId);
-        meetingRepository.flush();
-
-        return new MeetingCommandDto.JoinResponse(member);
-    }
-
-    public MeetingCommandDto.RenewEntryCodeResponse renewEntryCode(Long meetingId) {
+    public EntryCodeRenewResponse renewEntryCode(Long meetingId) {
         Meeting meeting = meetingRepository.findMeetingBy(meetingId)
                 .orElseThrow(() -> new MeetingNotExistException(meetingId));
-        EntryCode entryCode = meeting.renewEntryCodeAndGet();
+        meeting.renewEntryCode();
 
-        return new MeetingCommandDto.RenewEntryCodeResponse(entryCode);
+        return new EntryCodeRenewResponse(meeting);
     }
 }

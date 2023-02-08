@@ -1,6 +1,6 @@
 package com.comeon.backend.user.command.application;
 
-import com.comeon.backend.user.command.application.dto.UserDto;
+import com.comeon.backend.user.command.application.dto.UserModifyRequest;
 import com.comeon.backend.user.command.domain.User;
 import com.comeon.backend.user.command.domain.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +14,7 @@ public class UserFacade {
 
     private final UserRepository userRepository;
 
-    public void modifyUser(Long userId, UserDto.ModifyRequest request) {
+    public void modifyUser(Long userId, UserModifyRequest request) {
         User user = userRepository.findBy(userId).orElseThrow();
         user.updateProfile(request.getNickname(), request.getProfileImageUrl());
     }

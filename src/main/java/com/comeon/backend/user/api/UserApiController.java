@@ -1,11 +1,11 @@
 package com.comeon.backend.user.api;
 
-import com.comeon.backend.common.security.JwtPrincipal;
-import com.comeon.backend.user.api.response.UserModifyResponse;
+import com.comeon.backend.config.security.JwtPrincipal;
+import com.comeon.backend.user.api.dto.UserModifyResponse;
 import com.comeon.backend.user.command.application.UserFacade;
-import com.comeon.backend.user.command.application.dto.UserDto;
-import com.comeon.backend.user.query.dao.UserDao;
-import com.comeon.backend.user.query.dao.UserDetailsResponse;
+import com.comeon.backend.user.command.application.dto.UserModifyRequest;
+import com.comeon.backend.user.query.UserDao;
+import com.comeon.backend.user.query.UserDetails;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -22,13 +22,13 @@ public class UserApiController {
     private final UserDao userDao;
 
     @GetMapping("/me")
-    public UserDetailsResponse myDetails(@AuthenticationPrincipal JwtPrincipal jwtPrincipal) {
+    public UserDetails myDetails(@AuthenticationPrincipal JwtPrincipal jwtPrincipal) {
         return userDao.findUserDetails(jwtPrincipal.getUserId());
     }
 
     @PutMapping("/me")
     public UserModifyResponse modifyMe(@AuthenticationPrincipal JwtPrincipal jwtPrincipal,
-                                       @Validated @RequestBody UserDto.ModifyRequest request) {
+                                       @Validated @RequestBody UserModifyRequest request) {
         userFacade.modifyUser(jwtPrincipal.getUserId(), request);
         return new UserModifyResponse();
     }

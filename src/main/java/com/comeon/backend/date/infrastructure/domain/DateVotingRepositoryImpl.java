@@ -1,7 +1,7 @@
 package com.comeon.backend.date.infrastructure.domain;
 
-import com.comeon.backend.date.command.domain.voting.DateVoting;
 import com.comeon.backend.date.command.domain.voting.DateVotingRepository;
+import com.comeon.backend.date.command.domain.voting.DateVoting;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

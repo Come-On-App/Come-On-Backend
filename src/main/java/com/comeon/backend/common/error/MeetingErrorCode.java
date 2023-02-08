@@ -10,6 +10,7 @@ public enum MeetingErrorCode implements ErrorCode {
     MEETING_NOT_EXIST(3002, HttpStatus.NOT_FOUND, "존재하지 않는 모임입니다."),
     NOT_MEMBER(3003, HttpStatus.FORBIDDEN, "가입되지 않은 모임입니다."),
     NO_AUTHORITIES(3004, HttpStatus.FORBIDDEN, "해당 요청을 처리할 권한(모임 권한)이 부족합니다."),
+    HOST_ALREADY_EXIST(3005, HttpStatus.BAD_REQUEST, "이미 HOST 권한을 가진 멤버가 존재합니다. HOST 권한을 가진 멤버는 둘 이상 존재할 수 없습니다."),
 
     INVALID_PLACE_ID(3100, HttpStatus.NOT_FOUND, "존재하지 않는 장소 식별값입니다."),
 

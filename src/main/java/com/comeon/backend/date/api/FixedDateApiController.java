@@ -1,7 +1,7 @@
 package com.comeon.backend.date.api;
 
-import com.comeon.backend.common.config.interceptor.MemberRole;
-import com.comeon.backend.common.config.interceptor.RequiredMemberRole;
+import com.comeon.backend.config.web.member.MemberRole;
+import com.comeon.backend.config.web.member.RequiredMemberRole;
 import com.comeon.backend.date.api.dto.MeetingDateConfirmResponse;
 import com.comeon.backend.date.command.application.confirm.DateConfirmFacade;
 import com.comeon.backend.date.command.application.confirm.FixedDateAddRequest;

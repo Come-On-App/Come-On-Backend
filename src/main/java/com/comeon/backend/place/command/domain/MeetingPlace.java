@@ -1,6 +1,6 @@
 package com.comeon.backend.place.command.domain;
 
-import com.comeon.backend.common.domain.BaseTimeEntity;
+import com.comeon.backend.common.model.BaseTimeEntity;
 import com.comeon.backend.common.event.Events;
 import lombok.AccessLevel;
 import lombok.Builder;

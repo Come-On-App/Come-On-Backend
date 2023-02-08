@@ -1,8 +1,8 @@
 package com.comeon.backend.user.infrastructure.query;
 
-import com.comeon.backend.user.query.dao.UserDao;
-import com.comeon.backend.user.query.dao.UserDetailsResponse;
-import com.comeon.backend.user.query.dao.UserSimpleResponse;
+import com.comeon.backend.user.query.UserDetails;
+import com.comeon.backend.user.query.UserSimple;
+import com.comeon.backend.user.query.UserDao;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -13,12 +13,12 @@ public class UserDaoImpl implements UserDao {
     private final UserMapper userMapper;
 
     @Override
-    public UserDetailsResponse findUserDetails(Long userId) {
+    public UserDetails findUserDetails(Long userId) {
         return userMapper.selectUserDetailsByUserId(userId);
     }
 
     @Override
-    public UserSimpleResponse findUserSimple(Long userId) {
+    public UserSimple findUserSimple(Long userId) {
         return userMapper.selectUserSimpleByUserId(userId);
     }
 }

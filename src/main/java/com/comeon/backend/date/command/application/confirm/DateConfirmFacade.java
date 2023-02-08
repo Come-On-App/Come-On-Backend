@@ -27,8 +27,7 @@ public class DateConfirmFacade {
         LocalDate meetingDateEndTo = request.getMeetingDateEndTo();
         checkDateRangeInCalendar(meetingId, meetingDateStartFrom, meetingDateEndTo);
 
-        LocalTime meetingStartTime = request.getMeetingStartTime();
-        FixedDate fixedDate = new FixedDate(meetingId, meetingDateStartFrom, meetingDateEndTo, meetingStartTime);
+        FixedDate fixedDate = new FixedDate(meetingId, meetingDateStartFrom, meetingDateEndTo);
         fixedDateRepository.save(fixedDate);
     }
 

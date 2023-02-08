@@ -21,13 +21,11 @@ public class FixedDate {
     private Long meetingId;
     private LocalDate startFrom;
     private LocalDate endTo;
-    private LocalTime startTime;
 
-    public FixedDate(Long meetingId, LocalDate startFrom, LocalDate endTo, LocalTime startTime) {
+    public FixedDate(Long meetingId, LocalDate startFrom, LocalDate endTo) {
         this.meetingId = meetingId;
         this.startFrom = startFrom;
         this.endTo = endTo;
-        this.startTime = startTime;
     }
 
     @Override
@@ -36,7 +34,6 @@ public class FixedDate {
                 + "meetingId: " + meetingId
                 + "startFrom: " + startFrom.format(DateTimeFormatter.ISO_DATE)
                 + "endTo: " + endTo.format(DateTimeFormatter.ISO_DATE)
-                + "startTime: " + startTime.format(DateTimeFormatter.ISO_LOCAL_TIME)
                 + "]";
     }
 }

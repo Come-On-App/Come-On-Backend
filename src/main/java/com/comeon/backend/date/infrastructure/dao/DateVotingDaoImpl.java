@@ -2,7 +2,7 @@ package com.comeon.backend.date.infrastructure.dao;
 
 import com.comeon.backend.date.query.dao.DateVotingDao;
 import com.comeon.backend.date.query.dto.VotingMemberSimple;
-import com.comeon.backend.date.query.dto.VotingSimpleResponse;
+import com.comeon.backend.date.query.dto.DateVotingSimple;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -16,7 +16,7 @@ public class DateVotingDaoImpl implements DateVotingDao {
     private final DateVotingMapper dateVotingMapper;
 
     @Override
-    public List<VotingSimpleResponse> findVotingSimpleListByMeetingIdWhetherMyVoting(Long meetingId, Long userId) {
+    public List<DateVotingSimple> findVotingSimpleListByMeetingIdWhetherMyVoting(Long meetingId, Long userId) {
         return dateVotingMapper.selectVotingSimples(meetingId, userId);
     }
 
