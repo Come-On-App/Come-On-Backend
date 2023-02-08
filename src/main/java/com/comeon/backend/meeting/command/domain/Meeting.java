@@ -1,15 +1,14 @@
 package com.comeon.backend.meeting.command.domain;
 
-import com.comeon.backend.common.domain.BaseTimeEntity;
+import com.comeon.backend.common.event.Events;
+import com.comeon.backend.common.model.BaseTimeEntity;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
+import java.time.LocalTime;
 
 @Entity @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -22,51 +21,40 @@ public class Meeting extends BaseTimeEntity {
     private String name;
     private String thumbnailImageUrl;
 
-    private LocalDate calendarStartFrom;
-    private LocalDate calendarEndTo;
+    @Embedded
+    private Calendar calendar;
 
-    @OneToOne(mappedBy = "meeting", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Embedded
     private EntryCode entryCode;
 
-    @OneToMany(mappedBy = "meeting", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Member> members = new ArrayList<>();
+    @Embedded
+    private MeetingTime meetingTime;
+
+    @Transient
+    private Long createdUserId;
 
     @Builder
-    public Meeting(Long hostUserId, String name, String thumbnailImageUrl,
-                   LocalDate calendarStartFrom, LocalDate calendarEndTo) {
+    public Meeting(String name, String thumbnailImageUrl, Calendar calendar, Long createdUserId) {
         this.name = name;
         this.thumbnailImageUrl = thumbnailImageUrl;
-        this.calendarStartFrom = calendarStartFrom;
-        this.calendarEndTo = calendarEndTo;
+        this.calendar = calendar;
+        this.entryCode = EntryCode.create();
+        this.meetingTime = new MeetingTime();
 
-        members.add(Member.createHostMember(this, hostUserId));
+        this.createdUserId = createdUserId;
     }
 
-    public Member join(Long userId) {
-        checkExistMember(userId);
-        Member participant = Member.createParticipantMember(this, userId);
-        members.add(participant);
-        return participant;
+    public void renewEntryCode() {
+        this.entryCode = EntryCode.create();
     }
 
-    private void checkExistMember(Long userId) {
-        members.stream()
-                .filter(member -> member.getUserId().equals(userId))
-                .findFirst()
-                .ifPresent(this::generateJoinedError);
+    @PostPersist
+    public void postPersist() {
+        MeetingCreateEvent createEvent = MeetingCreateEvent.create(this.id, this.createdUserId);
+        Events.raise(createEvent);
     }
 
-    private void generateJoinedError(Member member) {
-        throw new MemberAlreadyJoinedException(member);
-    }
-
-    public EntryCode renewEntryCodeAndGet() {
-        if (this.entryCode == null) {
-            this.entryCode = EntryCode.createWithRandomCode(this);
-        } else {
-            entryCode.renewCode();
-        }
-
-        return this.entryCode;
+    public void modifyMeetingTime(LocalTime meetingTime) {
+        this.meetingTime = new MeetingTime(meetingTime);
     }
 }

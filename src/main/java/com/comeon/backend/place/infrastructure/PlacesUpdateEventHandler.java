@@ -1,9 +1,9 @@
 package com.comeon.backend.place.infrastructure;
 
-import com.comeon.backend.common.kafka.MeetingResourceUpdatedMessage;
-import com.comeon.backend.common.kafka.TargetResourceOfMeeting;
-import com.comeon.backend.common.kafka.KafkaProducer;
-import com.comeon.backend.common.kafka.KafkaTopicProperties;
+import com.comeon.backend.common.producer.MeetingResourceUpdatedMessage;
+import com.comeon.backend.common.producer.TargetResourceOfMeeting;
+import com.comeon.backend.common.producer.KafkaProducer;
+import com.comeon.backend.common.producer.KafkaTopicProperties;
 import com.comeon.backend.place.command.domain.PlacesUpdateEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;

@@ -1,5 +1,7 @@
 package com.comeon.backend.place.command.application;
 
+import com.comeon.backend.place.command.application.dto.PlaceAddRequest;
+import com.comeon.backend.place.command.application.dto.PlaceModifyRequest;
 import com.comeon.backend.place.command.domain.MeetingPlace;
 import com.comeon.backend.place.command.domain.MeetingPlaceRepository;
 import com.comeon.backend.place.command.domain.PlaceNotExistException;
@@ -16,12 +18,12 @@ public class MeetingPlaceFacade {
     private final MeetingPlaceRepository meetingPlaceRepository;
     private final PlaceOrderService placeOrderService;
 
-    public Long addPlace(Long userId, Long meetingId, PlaceCommandDto.AddRequest request) {
+    public Long addPlace(Long userId, Long meetingId, PlaceAddRequest request) {
         MeetingPlace place = placeOrderService.addPlaceAtLast(userId, meetingId, request.toPlaceInfo());
         return place.getId();
     }
 
-    public void modifyPlace(Long userId, Long meetingId, Long placeId, PlaceCommandDto.ModifyRequest request) {
+    public void modifyPlace(Long userId, Long meetingId, Long placeId, PlaceModifyRequest request) {
         MeetingPlace place = meetingPlaceRepository.findByMeetingIdAndPlaceId(meetingId, placeId)
                 .orElseThrow(() -> new PlaceNotExistException(placeId));
         place.update(userId, request.toPlaceInfo());

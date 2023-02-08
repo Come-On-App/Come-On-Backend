@@ -1,9 +1,9 @@
 package com.comeon.backend.meeting.infrastructure;
 
-import com.comeon.backend.meeting.query.dto.EntryCodeDetailsResponse;
-import com.comeon.backend.meeting.query.dto.MeetingCalendarResponse;
-import com.comeon.backend.meeting.query.dto.MeetingDetailsResponse;
-import com.comeon.backend.meeting.query.dto.MeetingSliceResponse;
+import com.comeon.backend.meeting.query.dto.EntryCodeDetails;
+import com.comeon.backend.meeting.query.dto.MeetingCalendarDetails;
+import com.comeon.backend.meeting.query.dto.MeetingDetails;
+import com.comeon.backend.meeting.query.dto.MeetingSimple;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -11,8 +11,9 @@ import java.util.List;
 @Mapper
 public interface MeetingMapper {
 
-    List<MeetingSliceResponse> selectMeetingSlice(MeetingSliceParam param);
-    EntryCodeDetailsResponse selectEntryCodeDetails(Long meetingId);
-    MeetingDetailsResponse selectMeetingDetails(Long meetingId, Long userId);
-    MeetingCalendarResponse selectMeetingCalendar(Long meetingId);
+    List<MeetingSimple> selectMeetingSlice(MeetingSliceParam param);
+    EntryCodeDetails selectEntryCodeDetails(Long meetingId);
+    MeetingDetails selectMeetingDetails(Long meetingId, Long userId);
+    MeetingCalendarDetails selectMeetingCalendar(Long meetingId);
+    Long selectMeetingId(String entryCode);
 }

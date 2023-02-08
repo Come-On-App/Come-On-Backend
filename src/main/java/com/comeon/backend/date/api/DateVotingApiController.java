@@ -1,8 +1,8 @@
 package com.comeon.backend.date.api;
 
-import com.comeon.backend.common.config.interceptor.RequiredMemberRole;
+import com.comeon.backend.config.web.member.RequiredMemberRole;
 import com.comeon.backend.common.response.ListResponse;
-import com.comeon.backend.common.security.JwtPrincipal;
+import com.comeon.backend.config.security.JwtPrincipal;
 import com.comeon.backend.date.api.dto.AddVotingResponse;
 import com.comeon.backend.date.api.dto.RemoveVotingResponse;
 import com.comeon.backend.date.command.application.voting.AddVotingRequest;
@@ -10,8 +10,8 @@ import com.comeon.backend.date.command.application.voting.RemoveVotingRequest;
 import com.comeon.backend.date.command.application.voting.VotingFacade;
 import com.comeon.backend.date.query.application.DateVotingQueryService;
 import com.comeon.backend.date.query.dao.DateVotingDao;
-import com.comeon.backend.date.query.dto.VotingDetailsResponse;
-import com.comeon.backend.date.query.dto.VotingSimpleResponse;
+import com.comeon.backend.date.query.dto.DateVotingDetails;
+import com.comeon.backend.date.query.dto.DateVotingSimple;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -58,11 +58,11 @@ public class DateVotingApiController {
     // 전체 투표 기간 요약 정보 조회
     @RequiredMemberRole
     @GetMapping
-    public ListResponse<VotingSimpleResponse> votingSimpleList(
+    public ListResponse<DateVotingSimple> votingSimpleList(
             @AuthenticationPrincipal JwtPrincipal jwtPrincipal,
             @PathVariable Long meetingId
     ) {
-        List<VotingSimpleResponse> votingSimples
+        List<DateVotingSimple> votingSimples
                 = dateVotingDao.findVotingSimpleListByMeetingIdWhetherMyVoting(meetingId, jwtPrincipal.getUserId());
         return ListResponse.toListResponse(votingSimples);
     }
@@ -70,12 +70,12 @@ public class DateVotingApiController {
     // 특정 일자 투표 현황 상세 조회
     @RequiredMemberRole
     @GetMapping("/details")
-    public VotingDetailsResponse votingDetails(
+    public DateVotingDetails votingDetails(
             @AuthenticationPrincipal JwtPrincipal jwtPrincipal,
             @PathVariable Long meetingId,
             @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date
     ) {
-        VotingDetailsResponse response = dateVotingQueryService.votingDetails(meetingId, date, jwtPrincipal.getUserId());
+        DateVotingDetails response = dateVotingQueryService.votingDetails(meetingId, date, jwtPrincipal.getUserId());
         return response;
     }
 }

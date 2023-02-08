@@ -2,7 +2,7 @@ package com.comeon.backend.date.query.application;
 
 import com.comeon.backend.date.query.dto.VotingMemberSimple;
 import com.comeon.backend.date.query.dao.DateVotingDao;
-import com.comeon.backend.date.query.dto.VotingDetailsResponse;
+import com.comeon.backend.date.query.dto.DateVotingDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -15,10 +15,10 @@ public class DateVotingQueryService {
 
     private final DateVotingDao dateVotingDao;
 
-    public VotingDetailsResponse votingDetails(Long meetingId, LocalDate date, Long userId) {
+    public DateVotingDetails votingDetails(Long meetingId, LocalDate date, Long userId) {
         List<VotingMemberSimple> memberSimpleList = dateVotingDao.findVotingMemberSimpleList(meetingId, date);
         boolean myVoting = memberSimpleList.stream()
                 .anyMatch(memberSimple -> memberSimple.getUserId().equals(userId));
-        return new VotingDetailsResponse(date, myVoting, memberSimpleList);
+        return new DateVotingDetails(date, myVoting, memberSimpleList);
     }
 }

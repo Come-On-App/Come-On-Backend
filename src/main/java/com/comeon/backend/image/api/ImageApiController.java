@@ -1,6 +1,6 @@
 package com.comeon.backend.image.api;
 
-import com.comeon.backend.common.security.JwtPrincipal;
+import com.comeon.backend.config.security.JwtPrincipal;
 import com.comeon.backend.image.application.FileManager;
 import com.comeon.backend.image.application.ImageDto;
 import lombok.RequiredArgsConstructor;

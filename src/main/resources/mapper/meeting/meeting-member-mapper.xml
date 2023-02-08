@@ -2,8 +2,8 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.comeon.backend.meeting.infrastructure.MeetingMemberMapper">
-    <resultMap id="MemberSimpleMap" type="com.comeon.backend.meeting.query.dto.MemberSimpleResponse">
+<mapper namespace="com.comeon.backend.meetingmember.infrastructure.MeetingMemberMapper">
+    <resultMap id="MemberSimpleMap" type="com.comeon.backend.meetingmember.query.dto.MemberSimple">
         <id column="user_id" property="userId"/>
         <result column="member_id" property="memberId"/>
         <result column="member_role" property="memberRole"/>
@@ -19,8 +19,7 @@
     </select>
 
 
-
-    <resultMap id="MemberInfoMap" type="com.comeon.backend.meeting.query.dto.MemberInfoResponse">
+    <resultMap id="MemberDetailsMap" type="com.comeon.backend.meetingmember.query.dto.MemberDetails">
         <id column="members_member_id" property="memberId"/>
         <id column="members_user_id" property="userId"/>
         <id column="members_nickname" property="nickname"/>
@@ -28,7 +27,7 @@
         <id column="members_member_role" property="memberRole"/>
     </resultMap>
 
-    <select id="selectMemberList" resultMap="MemberInfoMap">
+    <select id="selectMemberDetailsList" resultMap="MemberDetailsMap">
         select mm.meeting_member_id as members_member_id,
                u.user_id            as members_user_id,
                u.nickname           as members_nickname,
@@ -40,7 +39,7 @@
         order by u.nickname
     </select>
 
-    <select id="selectMemberInfo" resultMap="MemberInfoMap">
+    <select id="selectMemberDetails" resultMap="MemberDetailsMap">
         select mm.meeting_member_id as members_member_id,
                u.user_id            as members_user_id,
                u.nickname           as members_nickname,

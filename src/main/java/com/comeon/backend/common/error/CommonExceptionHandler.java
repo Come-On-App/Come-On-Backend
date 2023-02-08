@@ -25,7 +25,7 @@ public class CommonExceptionHandler {
 
     @ExceptionHandler(RestApiException.class)
     public ResponseEntity<ErrorResponse> customExceptionHandle(RestApiException e) {
-        log.error("{}", e.getClass().getSimpleName(), e);
+        log.error("[{}] {}", e.getClass().getName(), e.getMessage());
         return ResponseEntityUtils.buildResponseByErrorCode(e.getErrorCode());
     }
 
