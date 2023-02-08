@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalTime;
 
 @Entity @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -51,5 +52,9 @@ public class Meeting extends BaseTimeEntity {
     public void postPersist() {
         MeetingCreateEvent createEvent = MeetingCreateEvent.create(this.id, this.createdUserId);
         Events.raise(createEvent);
+    }
+
+    public void modifyMeetingTime(LocalTime meetingTime) {
+        this.meetingTime = new MeetingTime(meetingTime);
     }
 }

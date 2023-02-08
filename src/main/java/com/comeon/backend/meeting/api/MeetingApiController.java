@@ -7,6 +7,7 @@ import com.comeon.backend.config.security.JwtPrincipal;
 import com.comeon.backend.meeting.command.application.MeetingFacade;
 import com.comeon.backend.meeting.command.application.dto.EntryCodeRenewResponse;
 import com.comeon.backend.meeting.command.application.dto.MeetingAddRequest;
+import com.comeon.backend.meeting.command.application.dto.MeetingTimeModifyRequest;
 import com.comeon.backend.meeting.query.application.MeetingQueryService;
 import com.comeon.backend.meeting.query.dao.MeetingDao;
 import com.comeon.backend.meeting.query.dao.MeetingSliceCondition;
@@ -74,5 +75,15 @@ public class MeetingApiController {
             @PathVariable Long meetingId
     ) {
         return meetingFacade.renewEntryCode(meetingId);
+    }
+
+    @RequiredMemberRole(MemberRole.HOST)
+    @PostMapping("/{meetingId}/meeting-time")
+    public MeetingTimeModifyResponse meetingTimeModify(
+            @PathVariable Long meetingId,
+            @Validated @RequestBody MeetingTimeModifyRequest request
+    ) {
+        meetingFacade.modifyMeetingTime(meetingId, request);
+        return new MeetingTimeModifyResponse();
     }
 }
