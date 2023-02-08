@@ -7,6 +7,7 @@ import com.comeon.backend.meeting.api.MeetingApiController;
 import com.comeon.backend.meeting.command.application.MeetingFacade;
 import com.comeon.backend.meeting.command.application.dto.EntryCodeRenewResponse;
 import com.comeon.backend.meeting.command.application.dto.MeetingAddRequest;
+import com.comeon.backend.meeting.command.application.dto.MeetingTimeModifyRequest;
 import com.comeon.backend.meeting.query.application.MeetingQueryService;
 import com.comeon.backend.meeting.query.dao.MeetingDao;
 import com.comeon.backend.meeting.query.dto.EntryCodeDetails;
@@ -407,6 +408,59 @@ public class MeetingApiControllerTest extends RestDocsTestSupport {
                                     PayloadDocumentation.fieldWithPath("meetingId").type(JsonFieldType.NUMBER).description("입장 코드를 갱신한 모임의 식별값"),
                                     PayloadDocumentation.fieldWithPath("entryCode").type(JsonFieldType.STRING).description("갱신된 입장 코드"),
                                     PayloadDocumentation.fieldWithPath("expiredAt").type(JsonFieldType.STRING).description("갱신된 입장 코드가 만료되는 시간. 만료일. +\nyyyy-MM-dd HH:mm:ss 형식. +\n자세한 내용은 요청/응답 예시를 확인해주세요.")
+                            )
+                    )
+            );
+        }
+    }
+
+    @Nested
+    @DisplayName("모임 시간 변경 API")
+    class meetingTimeModify {
+
+        String endpoint = "/api/v1/meetings/{meeting-id}/meeting-time";
+
+        @Test
+        @DisplayName("given: 모임 HOST 권한, 요청 경로에 meetingId, 변경할 시간 정보 -> then: HTTP 200")
+        void success() throws Exception {
+            //given
+            Long meetingIdMock = 55L;
+            MeetingTimeModifyRequest request = new MeetingTimeModifyRequest(LocalTime.of(22, 0, 0));
+
+            grantHost();
+            BDDMockito.willDoNothing().given(meetingFacade)
+                    .modifyMeetingTime(BDDMockito.anyLong(), BDDMockito.any());
+
+            //when
+            ResultActions perform = mockMvc.perform(
+                    RestDocumentationRequestBuilders.post(endpoint, meetingIdMock)
+                            .header(HttpHeaders.AUTHORIZATION, "Bearer " + currentRequestATK.getToken())
+                            .content(createJson(request))
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .characterEncoding(StandardCharsets.UTF_8)
+            );
+
+            //then
+            perform.andExpect(MockMvcResultMatchers.status().isOk());
+
+            // docs
+            perform.andDo(
+                    restDocs.document(
+                            RequestDocumentation.pathParameters(
+                                    getTitleAttributes(endpoint),
+                                    RequestDocumentation.parameterWithName("meeting-id").description("모임 시간을 변경할 모임의 식별값")
+                            ),
+                            HeaderDocumentation.requestHeaders(
+                                    getTitleAttributes("요청 헤더"),
+                                    authorizationHeaderDescriptor
+                            ),
+                            PayloadDocumentation.requestFields(
+                                    getTitleAttributes("요청 필드"),
+                                    PayloadDocumentation.fieldWithPath("meetingStartTime").type(JsonFieldType.STRING).description("모임 만남 시간. +\nHH:mm:ss 형식.")
+                            ),
+                            PayloadDocumentation.responseFields(
+                                    getTitleAttributes("응답 필드"),
+                                    PayloadDocumentation.fieldWithPath("success").type(JsonFieldType.BOOLEAN).description("요청 처리 성공 여부")
                             )
                     )
             );
