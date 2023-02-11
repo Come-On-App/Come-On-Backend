@@ -1,5 +1,6 @@
 package com.comeon.backend.date.command.domain.confirm;
 
+import com.comeon.backend.common.event.Events;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,6 +27,8 @@ public class FixedDate {
         this.meetingId = meetingId;
         this.startFrom = startFrom;
         this.endTo = endTo;
+
+        Events.raise(FixedDateEvent.create(meetingId));
     }
 
     @Override
