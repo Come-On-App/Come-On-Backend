@@ -1,5 +1,6 @@
 package com.comeon.backend.date.command.domain.voting;
 
+import com.comeon.backend.common.event.Events;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,6 +27,18 @@ public class DateVoting {
         this.meetingId = meetingId;
         this.userId = userId;
         this.date = date;
+
+        raiseEvent();
+    }
+
+    private void raiseEvent() {
+        DateVotingEvent event = DateVotingEvent.create(this.meetingId, this.date);
+        Events.raise(event);
+    }
+
+    @PostRemove
+    public void postRemove() {
+        raiseEvent();
     }
 
     @Override
