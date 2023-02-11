@@ -23,8 +23,8 @@ public class PlaceEventHandler {
     )
     public void handle(MeetingPlaceEvent event) {
         String topic = topics.getMeetingPlaces();
-        MeetingPlaceUpdateMessage message =
-                new MeetingPlaceUpdateMessage(event.getTargetMeetingId());
+        PlaceListUpdateMessage message =
+                new PlaceListUpdateMessage(event.getTargetMeetingId());
         producer.produce(topic, message);
     }
 }

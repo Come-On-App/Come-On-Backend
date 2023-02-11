@@ -8,7 +8,7 @@ import java.time.LocalDate;
 
 @Getter
 @AllArgsConstructor
-public class MeetingVotingUpdateMessage {
+public class VotingListUpdateMessage {
 
     private Long meetingId;
 

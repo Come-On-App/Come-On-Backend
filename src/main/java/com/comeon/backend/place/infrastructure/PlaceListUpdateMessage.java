@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class MeetingPlaceUpdateMessage {
+public class PlaceListUpdateMessage {
 
     private Long targetMeetingId;
 }

@@ -23,8 +23,8 @@ public class FixedDateEventHandler {
     )
     public void handle(FixedDateEvent event) {
         String topic = topics.getMeetingFixedDate();
-        MeetingFixedDateUpdateMessage message =
-                new MeetingFixedDateUpdateMessage(event.getMeetingId());
+        FixedDateUpdateMessage message =
+                new FixedDateUpdateMessage(event.getMeetingId());
         producer.produce(topic, message);
     }
 }

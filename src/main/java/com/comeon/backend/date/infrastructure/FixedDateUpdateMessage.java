@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class MeetingFixedDateUpdateMessage {
+public class FixedDateUpdateMessage {
 
     private Long meetingId;
 }

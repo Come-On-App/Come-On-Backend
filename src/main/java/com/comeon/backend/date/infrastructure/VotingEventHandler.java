@@ -23,8 +23,8 @@ public class VotingEventHandler {
     )
     public void handle(DateVotingEvent event) {
         String topic = topics.getMeetingVoting();
-        MeetingVotingUpdateMessage message =
-                new MeetingVotingUpdateMessage(event.getTargetMeetingId(), event.getTargetDate());
+        VotingListUpdateMessage message =
+                new VotingListUpdateMessage(event.getTargetMeetingId(), event.getTargetDate());
         producer.produce(topic, message);
     }
 }
