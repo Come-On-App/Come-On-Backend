@@ -4,6 +4,9 @@ import com.comeon.backend.api.support.utils.RestDocsTestSupport;
 import com.comeon.backend.date.api.FixedDateApiController;
 import com.comeon.backend.date.command.application.confirm.DateConfirmFacade;
 import com.comeon.backend.date.command.application.confirm.FixedDateAddRequest;
+import com.comeon.backend.date.query.dao.FixedDateDao;
+import com.comeon.backend.date.query.dto.FixedDateSimple;
+import com.comeon.backend.date.query.dto.MeetingFixedDateSimple;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -22,7 +25,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 @WebMvcTest(FixedDateApiController.class)
@@ -30,6 +32,9 @@ public class FixedDateInfoApiControllerTest extends RestDocsTestSupport {
 
     @MockBean
     DateConfirmFacade dateConfirmFacade;
+
+    @MockBean
+    FixedDateDao fixedDateDao;
 
     String baseEndpoint = "/api/v1/meetings/{meeting-id}/date/confirm";
     Long mockMeetingId = 117L;
@@ -69,7 +74,7 @@ public class FixedDateInfoApiControllerTest extends RestDocsTestSupport {
                     restDocs.document(
                             RequestDocumentation.pathParameters(
                                     getTitleAttributes(endpoint),
-                                    RequestDocumentation.parameterWithName("meeting-id").description("투표를 등록할 모임의 식별값")
+                                    RequestDocumentation.parameterWithName("meeting-id").description("모임일을 확정할 모임의 식별값")
                             ),
                             HeaderDocumentation.requestHeaders(
                                     getTitleAttributes("요청 헤더"),
@@ -82,7 +87,62 @@ public class FixedDateInfoApiControllerTest extends RestDocsTestSupport {
                             ),
                             PayloadDocumentation.responseFields(
                                     getTitleAttributes("응답 필드"),
-                                    PayloadDocumentation.fieldWithPath("success").type(JsonFieldType.BOOLEAN).description("투표가 성공적으로 등록되었는지 여부")
+                                    PayloadDocumentation.fieldWithPath("success").type(JsonFieldType.BOOLEAN).description("모임일 확정이 성공적으로 완료되었는지 여부")
+                            )
+                    )
+            );
+        }
+    }
+
+    @Nested
+    @DisplayName("모임 확정일 조회 API")
+    class fixedDateSimple {
+
+        String endpoint = baseEndpoint;
+
+        @Test
+        @DisplayName("given: 인증 필요 -> then: HTTP 200, 조회한 모임의 확정된 모임일 정보")
+        void success() throws Exception {
+            //given
+            BDDMockito.given(fixedDateDao.findFixedDateSimple(BDDMockito.anyLong()))
+                    .willReturn(
+                            new MeetingFixedDateSimple(
+                                    mockMeetingId,
+                                    new FixedDateSimple(
+                                            LocalDate.of(2023, 3, 21),
+                                            LocalDate.of(2023, 3, 21)
+                                    )
+                            )
+                    );
+
+            //when
+            ResultActions perform = mockMvc.perform(
+                    RestDocumentationRequestBuilders.get(endpoint, mockMeetingId)
+                            .header(HttpHeaders.AUTHORIZATION, "Bearer " + currentRequestATK.getToken())
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .characterEncoding(StandardCharsets.UTF_8)
+            );
+
+            //then
+            perform.andExpect(MockMvcResultMatchers.status().isOk());
+
+            // docs
+            perform.andDo(
+                    restDocs.document(
+                            RequestDocumentation.pathParameters(
+                                    getTitleAttributes(endpoint),
+                                    RequestDocumentation.parameterWithName("meeting-id").description("투표를 등록할 모임의 식별값")
+                            ),
+                            HeaderDocumentation.requestHeaders(
+                                    getTitleAttributes("요청 헤더"),
+                                    authorizationHeaderDescriptor
+                            ),
+                            PayloadDocumentation.responseFields(
+                                    getTitleAttributes("응답 필드"),
+                                    PayloadDocumentation.fieldWithPath("meetingId").type(JsonFieldType.NUMBER).description("확정일을 조회한 모임의 식별값."),
+                                    PayloadDocumentation.subsectionWithPath("fixedDate").type(JsonFieldType.OBJECT).description("모임의 확정일 정보.").optional(),
+                                    PayloadDocumentation.fieldWithPath("fixedDate.startDate").type(JsonFieldType.STRING).description("확정된 모임일의 시작 일자. +\nyyyy-MM-dd 형식의 날짜 지정."),
+                                    PayloadDocumentation.fieldWithPath("fixedDate.endDate").type(JsonFieldType.STRING).description("확정된 모임일의 시작 일자. +\nyyyy-MM-dd 형식의 날짜 지정.")
                             )
                     )
             );
