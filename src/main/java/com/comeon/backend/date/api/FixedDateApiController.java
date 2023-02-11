@@ -5,6 +5,8 @@ import com.comeon.backend.config.web.member.RequiredMemberRole;
 import com.comeon.backend.date.api.dto.MeetingDateConfirmResponse;
 import com.comeon.backend.date.command.application.confirm.DateConfirmFacade;
 import com.comeon.backend.date.command.application.confirm.FixedDateAddRequest;
+import com.comeon.backend.date.query.dao.FixedDateDao;
+import com.comeon.backend.date.query.dto.MeetingFixedDateSimple;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 public class FixedDateApiController {
 
     private final DateConfirmFacade dateConfirmFacade;
+    private final FixedDateDao fixedDateDao;
 
     @RequiredMemberRole(MemberRole.HOST)
     @PostMapping
@@ -26,5 +29,13 @@ public class FixedDateApiController {
     ) {
         dateConfirmFacade.confirmMeetingDate(meetingId, request);
         return new MeetingDateConfirmResponse();
+    }
+
+    @RequiredMemberRole
+    @GetMapping
+    public MeetingFixedDateSimple fixedDateSimple(
+            @PathVariable Long meetingId
+    ) {
+        return fixedDateDao.findFixedDateSimple(meetingId);
     }
 }

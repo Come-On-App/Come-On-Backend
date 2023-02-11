@@ -8,11 +8,11 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class PlacesUpdateEvent {
+public class MeetingPlaceEvent {
 
     private Long targetMeetingId;
 
-    public static PlacesUpdateEvent create(Long meetingId) {
-        return new PlacesUpdateEvent(meetingId);
+    public static MeetingPlaceEvent create(Long meetingId) {
+        return new MeetingPlaceEvent(meetingId);
     }
 }

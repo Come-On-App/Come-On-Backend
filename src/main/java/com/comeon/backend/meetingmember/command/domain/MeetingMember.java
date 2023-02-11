@@ -1,5 +1,6 @@
 package com.comeon.backend.meetingmember.command.domain;
 
+import com.comeon.backend.common.event.Events;
 import com.comeon.backend.common.model.BaseTimeEntity;
 import com.comeon.backend.config.web.member.MemberRole;
 import lombok.AccessLevel;
@@ -34,7 +35,10 @@ public class MeetingMember extends BaseTimeEntity {
     }
 
     public static MeetingMember createParticipantMember(Long meetingId, Long userId) {
-        return new MeetingMember(meetingId, userId, MemberRole.PARTICIPANT);
+        MeetingMember member = new MeetingMember(meetingId, userId, MemberRole.PARTICIPANT);
+        Events.raise(MeetingMemberEvent.create(meetingId));
+
+        return member;
     }
 
     public boolean isHost() {

@@ -54,7 +54,11 @@ public class MeetingPlace extends BaseTimeEntity {
         this.order = placeOrder;
         this.lastModifiedUserId = userId;
 
-        Events.raise(PlacesUpdateEvent.create(meetingId));
+        raiseEvent(meetingId);
+    }
+
+    private void raiseEvent(Long meetingId) {
+        Events.raise(MeetingPlaceEvent.create(meetingId));
     }
 
     public void decreaseOrder() {
@@ -72,7 +76,7 @@ public class MeetingPlace extends BaseTimeEntity {
 
         updateLastModifiedUserId(userId);
 
-        Events.raise(PlacesUpdateEvent.create(meetingId));
+        raiseEvent(meetingId);
     }
 
     private void updateName(String name) {
@@ -107,5 +111,10 @@ public class MeetingPlace extends BaseTimeEntity {
         if (userId != null) {
             this.lastModifiedUserId = userId;
         }
+    }
+
+    @PostRemove
+    public void postRemove() {
+        raiseEvent(meetingId);
     }
 }

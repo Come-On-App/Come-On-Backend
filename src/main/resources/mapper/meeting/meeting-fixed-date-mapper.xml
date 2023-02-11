@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.comeon.backend.date.infrastructure.dao.FixedDateMapper">
+
+    <resultMap id="MeetingFixedDateSimpleMap" type="com.comeon.backend.date.query.dto.MeetingFixedDateSimple">
+        <id column="meeting_id" property="meetingId"/>
+        <association property="fixedDate"
+                     javaType="com.comeon.backend.date.query.dto.FixedDateSimple">
+            <result column="meeting_start_date" property="startDate"/>
+            <result column="meeting_end_date" property="endDate"/>
+        </association>
+    </resultMap>
+    <select id="selectFixedDateSimple" resultMap="MeetingFixedDateSimpleMap">
+        select m.meeting_id   as meeting_id,
+               mfd.start_from as meeting_start_date,
+               mfd.end_to     as meeting_end_date
+        from meeting m
+                 left join meeting_fixed_date mfd on m.meeting_id = mfd.meeting_id
+        where m.meeting_id = #{meetingId};
+    </select>
+
+</mapper>

@@ -1,18 +1,19 @@
 package com.comeon.backend.date.command.domain.confirm;
 
+import com.comeon.backend.common.event.Events;
+import com.comeon.backend.common.model.BaseTimeEntity;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 @Entity @Getter
 @Table(name = "meeting_fixed_date")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class FixedDate {
+public class FixedDate extends BaseTimeEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "fixed_date_id")
@@ -26,6 +27,8 @@ public class FixedDate {
         this.meetingId = meetingId;
         this.startFrom = startFrom;
         this.endTo = endTo;
+
+        Events.raise(FixedDateEvent.create(meetingId));
     }
 
     @Override
