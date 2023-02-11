@@ -1,10 +1,8 @@
 package com.comeon.backend.place.infrastructure;
 
-import com.comeon.backend.common.producer.MeetingResourceUpdatedMessage;
-import com.comeon.backend.common.producer.TargetResourceOfMeeting;
 import com.comeon.backend.common.producer.KafkaProducer;
 import com.comeon.backend.common.producer.KafkaTopicProperties;
-import com.comeon.backend.place.command.domain.PlacesUpdateEvent;
+import com.comeon.backend.place.command.domain.MeetingPlaceEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -13,23 +11,20 @@ import org.springframework.transaction.event.TransactionalEventListener;
 
 @Service
 @RequiredArgsConstructor
-public class PlacesUpdateEventHandler {
+public class PlaceEventHandler {
 
     private final KafkaProducer producer;
     private final KafkaTopicProperties topics;
 
     @Async
     @TransactionalEventListener(
-            classes = PlacesUpdateEvent.class,
+            classes = MeetingPlaceEvent.class,
             phase = TransactionPhase.AFTER_COMMIT
     )
-    public void handle(PlacesUpdateEvent event) {
-        producer.produce(
-                topics.getMeetingPlaces(),
-                new MeetingResourceUpdatedMessage(
-                        event.getTargetMeetingId(),
-                        TargetResourceOfMeeting.PLACES
-                )
-        );
+    public void handle(MeetingPlaceEvent event) {
+        String topic = topics.getMeetingPlaces();
+        MeetingPlaceUpdateMessage message =
+                new MeetingPlaceUpdateMessage(event.getTargetMeetingId());
+        producer.produce(topic, message);
     }
 }
