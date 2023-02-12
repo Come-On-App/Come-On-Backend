@@ -86,11 +86,10 @@
     </resultMap>
 
     <select id="selectEntryCodeDetails" resultMap="EntryCodeDetailsMap">
-        select m.meeting_id,
-               mec.code,
-               date_add(mec.last_modified_date, interval 7 DAY) as 'expired_at'
+        select m.meeting_id                                      as meeting_id,
+               m.entry_code                                      as code,
+               date_add(m.entry_code_updated_at, interval 7 DAY) as 'expired_at'
         from meeting m
-                 left join meeting_entry_code mec on m.meeting_id = mec.meeting_id
         where m.meeting_id = #{meetingId};
     </select>
 
