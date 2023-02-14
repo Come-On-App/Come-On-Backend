@@ -26,6 +26,11 @@ public class MeetingMemberRepositoryImpl implements MeetingMemberRepository {
 
     @Override
     public List<MeetingMember> findMemberListByMeetingId(Long meetingId) {
-        return meetingMemberJpaRepository.findByMeetingId(meetingId);
+        return meetingMemberJpaRepository.findByMeetingIdOrderByCreatedDate(meetingId);
+    }
+
+    @Override
+    public void remove(MeetingMember member) {
+        meetingMemberJpaRepository.delete(member);
     }
 }

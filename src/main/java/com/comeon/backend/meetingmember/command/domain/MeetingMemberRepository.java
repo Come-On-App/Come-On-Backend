@@ -8,4 +8,5 @@ public interface MeetingMemberRepository {
     MeetingMember save(MeetingMember member);
     Optional<MeetingMember> findMember(Long meetingId, Long userId);
     List<MeetingMember> findMemberListByMeetingId(Long meetingId);
+    void remove(MeetingMember member);
 }
