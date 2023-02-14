@@ -32,6 +32,10 @@ include::meeting-time-modify.adoc[]
 == 모임 회원 API
 include::meeting-member-list.adoc[]
 
+include::my-meeting-member-details.adoc[]
+
+include::meeting-leave.adoc[]
+
 == 모임 장소 API
 include::meeting-place-list.adoc[]
 
