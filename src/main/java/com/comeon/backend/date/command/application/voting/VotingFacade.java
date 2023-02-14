@@ -9,6 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -52,5 +54,13 @@ public class VotingFacade {
                                 ", date: " + date.format(DateTimeFormatter.ISO_DATE))
                 );
         dateVotingRepository.deleteDateVotingBy(dateVoting);
+    }
+
+    public void readjustVotingRange(Long meetingId, LocalDate calendarStartFrom, LocalDate calendarEndTo) {
+        List<DateVoting> votingsToRemove = dateVotingRepository.findDateVotingListBy(meetingId).stream()
+                .filter(voting -> !voting.isRangeIn(calendarStartFrom, calendarEndTo))
+                .collect(Collectors.toList());
+
+        dateVotingRepository.deleteDateVotingsBatch(votingsToRemove);
     }
 }

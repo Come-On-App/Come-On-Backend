@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalTime;
 
 @Entity @Getter
@@ -34,27 +35,53 @@ public class Meeting extends BaseTimeEntity {
     private Long createdUserId;
 
     @Builder
-    public Meeting(String name, String thumbnailImageUrl, Calendar calendar, Long createdUserId) {
+    public Meeting(String name, String thumbnailImageUrl, LocalDate calendarStartFrom, LocalDate calendarEndTo, Long createdUserId) {
         this.name = name;
         this.thumbnailImageUrl = thumbnailImageUrl;
-        this.calendar = calendar;
+        this.calendar = Calendar.create(calendarStartFrom, calendarEndTo);
         this.entryCode = EntryCode.create();
         this.meetingTime = new MeetingTime();
 
         this.createdUserId = createdUserId;
     }
 
+    public void modifyMeetingInfo(MeetingInfo meetingInfo) {
+        if (meetingInfo.getMeetingName() != null) {
+            this.name = meetingInfo.getMeetingName();
+        }
+
+        if (meetingInfo.getMeetingImageUrl() != null) {
+            this.thumbnailImageUrl = meetingInfo.getMeetingImageUrl();
+        }
+
+        if (meetingInfo.getCalendarStartFrom() != null || meetingInfo.getCalendarEndTo() != null) {
+            LocalDate startFromToModify = meetingInfo.getCalendarStartFrom() != null
+                    ? meetingInfo.getCalendarStartFrom()
+                    : this.calendar.getStartFrom();
+            LocalDate endToToModify = meetingInfo.getCalendarEndTo() != null
+                    ? meetingInfo.getCalendarEndTo()
+                    : this.calendar.getEndTo();
+
+            this.calendar = Calendar.create(startFromToModify, endToToModify);
+
+            Events.raise(MeetingCalendarModifyEvent.create(this.id, this.calendar.getStartFrom(), this.calendar.getEndTo()));
+        }
+
+        Events.raise(MeetingInfoModifyEvent.create(this.id));
+    }
+
     public void renewEntryCode() {
         this.entryCode = EntryCode.create();
+    }
+
+    public void modifyMeetingTime(LocalTime meetingTime) {
+        // TODO 모임 시간 변경 이벤트 발생
+        this.meetingTime = new MeetingTime(meetingTime);
     }
 
     @PostPersist
     public void postPersist() {
         MeetingCreateEvent createEvent = MeetingCreateEvent.create(this.id, this.createdUserId);
         Events.raise(createEvent);
-    }
-
-    public void modifyMeetingTime(LocalTime meetingTime) {
-        this.meetingTime = new MeetingTime(meetingTime);
     }
 }

@@ -4,13 +4,14 @@ import com.comeon.backend.api.support.utils.RestDocsTestSupport;
 import com.comeon.backend.api.support.utils.RestDocsUtil;
 import com.comeon.backend.config.web.member.MemberRole;
 import com.comeon.backend.meetingmember.api.MeetingMemberApiController;
-import com.comeon.backend.meetingmember.query.dao.MeetingMemberDao;
+import com.comeon.backend.meetingmember.command.application.MeetingMemberFacade;
 import com.comeon.backend.meetingmember.query.dto.MemberDetails;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.headers.HeaderDocumentation;
@@ -27,6 +28,9 @@ import java.util.List;
 @WebMvcTest({MeetingMemberApiController.class})
 class MeetingMemberApiControllerTest extends RestDocsTestSupport {
 
+    @MockBean
+    MeetingMemberFacade meetingMemberFacade;
+
     @Nested
     @DisplayName("모임 회원 리스트 조회 API")
     class meetingMemberList {
@@ -34,7 +38,7 @@ class MeetingMemberApiControllerTest extends RestDocsTestSupport {
         String endpoint = "/api/v1/meetings/{meeting-id}/members";
 
         @Test
-        @DisplayName("given: 인증 필요, 요청 경로에 meetingId -> then: HTTP 200, 갱신된 입장 코드 정보")
+        @DisplayName("given: 인증 필요, 요청 경로에 meetingId -> then: HTTP 200, 해당 모임의 회원 정보 리스트")
         void success() throws Exception {
             //given
             Long meetingIdMock = 55L;
@@ -64,7 +68,7 @@ class MeetingMemberApiControllerTest extends RestDocsTestSupport {
                     restDocs.document(
                             RequestDocumentation.pathParameters(
                                     getTitleAttributes(endpoint),
-                                    RequestDocumentation.parameterWithName("meeting-id").description("입장 코드를 갱신할 모임의 식별값")
+                                    RequestDocumentation.parameterWithName("meeting-id").description("모임 회원 리스트를 조회할 모임의 식별값")
                             ),
                             HeaderDocumentation.requestHeaders(
                                     getTitleAttributes("요청 헤더"),
@@ -78,6 +82,108 @@ class MeetingMemberApiControllerTest extends RestDocsTestSupport {
                                     PayloadDocumentation.fieldWithPath("nickname").type(JsonFieldType.STRING).description("회원의 유저 닉네임."),
                                     PayloadDocumentation.fieldWithPath("profileImageUrl").type(JsonFieldType.STRING).description("회원의 유저 프로필 이미지 URL.").optional(),
                                     PayloadDocumentation.fieldWithPath("memberRole").type(JsonFieldType.STRING).description("모임에서 해당 회원의 권한. +\n" + RestDocsUtil.generateLinkCode(RestDocsUtil.DocUrl.MEETING_MEMBER_ROLE))
+                            )
+                    )
+            );
+        }
+    }
+
+    @Nested
+    @DisplayName("모임에서의 내 회원 정보 조회 API")
+    class myMemberInfo {
+
+        String endpoint = "/api/v1/meetings/{meeting-id}/members/me";
+
+        @Test
+        @DisplayName("given: 인증 필요, 요청 경로에 meetingId -> then: HTTP 200, 갱신된 입장 코드 정보")
+        void success() throws Exception {
+            //given
+            Long meetingIdMock = 55L;
+            BDDMockito.given(meetingMemberDao.findMemberDetails(BDDMockito.anyLong(), BDDMockito.anyLong()))
+                    .willReturn(
+                            new MemberDetails(
+                                    333L,
+                                    currentUserId,
+                                    currentRequestATK.getPayload().getNickname(),
+                                    null,
+                                    MemberRole.PARTICIPANT.name()
+                            )
+                    );
+
+            //when
+            ResultActions perform = mockMvc.perform(
+                    RestDocumentationRequestBuilders.get(endpoint, meetingIdMock)
+                            .header(HttpHeaders.AUTHORIZATION, "Bearer " + currentRequestATK.getToken())
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .characterEncoding(StandardCharsets.UTF_8)
+            );
+
+            //then
+            perform.andExpect(MockMvcResultMatchers.status().isOk());
+
+            // docs
+            perform.andDo(
+                    restDocs.document(
+                            RequestDocumentation.pathParameters(
+                                    getTitleAttributes(endpoint),
+                                    RequestDocumentation.parameterWithName("meeting-id").description("내 모임원 정보를 조회할 모임의 식별값")
+                            ),
+                            HeaderDocumentation.requestHeaders(
+                                    getTitleAttributes("요청 헤더"),
+                                    authorizationHeaderDescriptor
+                            ),
+                            PayloadDocumentation.responseFields(
+                                    getTitleAttributes("응답 필드"),
+                                    PayloadDocumentation.fieldWithPath("memberId").type(JsonFieldType.NUMBER).description("회원의 모임 회원 번호. +\n유저 식별값과는 별개의 정보입니다."),
+                                    PayloadDocumentation.fieldWithPath("userId").type(JsonFieldType.NUMBER).description("회원의 유저 식별값."),
+                                    PayloadDocumentation.fieldWithPath("nickname").type(JsonFieldType.STRING).description("회원의 유저 닉네임."),
+                                    PayloadDocumentation.fieldWithPath("profileImageUrl").type(JsonFieldType.STRING).description("회원의 유저 프로필 이미지 URL.").optional(),
+                                    PayloadDocumentation.fieldWithPath("memberRole").type(JsonFieldType.STRING).description("회원의 모임 권한. +\n" + RestDocsUtil.generateLinkCode(RestDocsUtil.DocUrl.MEETING_MEMBER_ROLE))
+                            )
+                    )
+            );
+        }
+    }
+
+    @Nested
+    @DisplayName("모임 탈퇴 API")
+    class meetingLeave {
+
+        String endpoint = "/api/v1/meetings/{meeting-id}/members/me";
+
+        @Test
+        @DisplayName("given: 인증 필요, 요청 경로에 meetingId -> then: HTTP 200, 갱신된 입장 코드 정보")
+        void success() throws Exception {
+            //given
+            Long meetingIdMock = 55L;
+            BDDMockito.willDoNothing().given(meetingMemberFacade)
+                    .removeMember(BDDMockito.anyLong(), BDDMockito.anyLong());
+
+            //when
+            ResultActions perform = mockMvc.perform(
+                    RestDocumentationRequestBuilders.delete(endpoint, meetingIdMock)
+                            .header(HttpHeaders.AUTHORIZATION, "Bearer " + currentRequestATK.getToken())
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .characterEncoding(StandardCharsets.UTF_8)
+            );
+
+            //then
+            perform.andExpect(MockMvcResultMatchers.status().isOk());
+
+            // docs
+            perform.andDo(
+                    restDocs.document(
+                            RequestDocumentation.pathParameters(
+                                    getTitleAttributes(endpoint),
+                                    RequestDocumentation.parameterWithName("meeting-id").description("탈퇴할 모임의 식별값")
+                            ),
+                            HeaderDocumentation.requestHeaders(
+                                    getTitleAttributes("요청 헤더"),
+                                    authorizationHeaderDescriptor
+                            ),
+                            PayloadDocumentation.responseFields(
+                                    getTitleAttributes("응답 필드"),
+                                    PayloadDocumentation.fieldWithPath("success").type(JsonFieldType.BOOLEAN).description("요청 처리 성공 여부")
                             )
                     )
             );

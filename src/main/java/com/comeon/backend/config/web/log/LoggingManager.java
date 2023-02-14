@@ -21,7 +21,8 @@ public class LoggingManager {
     private final ObjectMapper objectMapper;
 
     public void normalRequestLogging(RequestWrapper request) throws IOException {
-        log.info("Request: {} {}", request.getMethod(), request.getRequestURI() + request.getQueryString());
+        String requestUrl = request.getRequestURI() + (request.getQueryString() == null ? "" : request.getQueryString());
+        log.info("Request: {} {}", request.getMethod(), requestUrl);
 
         Map<String, Object> headerMap = getHeaderMap(request);
         log.info("Request Header: {}", headerMap);

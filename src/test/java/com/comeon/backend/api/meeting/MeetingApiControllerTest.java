@@ -7,6 +7,7 @@ import com.comeon.backend.meeting.api.MeetingApiController;
 import com.comeon.backend.meeting.command.application.MeetingFacade;
 import com.comeon.backend.meeting.command.application.dto.EntryCodeRenewResponse;
 import com.comeon.backend.meeting.command.application.dto.MeetingAddRequest;
+import com.comeon.backend.meeting.command.application.dto.MeetingModifyRequest;
 import com.comeon.backend.meeting.command.application.dto.MeetingTimeModifyRequest;
 import com.comeon.backend.meeting.query.application.MeetingQueryService;
 import com.comeon.backend.meeting.query.dao.MeetingDao;
@@ -105,6 +106,66 @@ public class MeetingApiControllerTest extends RestDocsTestSupport {
                             PayloadDocumentation.responseFields(
                                     getTitleAttributes("응답 필드"),
                                     PayloadDocumentation.fieldWithPath("meetingId").type(JsonFieldType.NUMBER).description("생성된 모임의 식별값")
+                            )
+                    )
+            );
+        }
+    }
+
+    @Nested
+    @DisplayName("모임 정보 수정 API")
+    class meetingModify {
+
+        String endpoint = "/api/v1/meetings/{meeting-id}";
+
+        @Test
+        @DisplayName("given: 인증 필요, 모임 정보 -> then: HTTP 200")
+        void success() throws Exception {
+            //given
+            MeetingModifyRequest request = new MeetingModifyRequest(
+                    "수정된 Come-On 모임",
+                    "https://xxx.xxxxx.xxx/meeting-thumbnail-image-url",
+                    null,
+                    LocalDate.of(2023, 2, 28)
+            );
+
+            long meetingId = 28L;
+            BDDMockito.given(meetingFacade.addMeeting(BDDMockito.anyLong(), BDDMockito.any()))
+                    .willReturn(meetingId);
+
+            //when
+            ResultActions perform = mockMvc.perform(
+                    RestDocumentationRequestBuilders.patch(endpoint, meetingId)
+                            .content(createJson(request))
+                            .header(HttpHeaders.AUTHORIZATION, "Bearer " + currentRequestATK.getToken())
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .characterEncoding(StandardCharsets.UTF_8)
+            );
+
+            //then
+            perform.andExpect(MockMvcResultMatchers.status().isOk());
+
+            // docs
+            perform.andDo(
+                    restDocs.document(
+                            RequestDocumentation.pathParameters(
+                                    getTitleAttributes(endpoint),
+                                    RequestDocumentation.parameterWithName("meeting-id").description("수정할 모임의 식별값")
+                            ),
+                            HeaderDocumentation.requestHeaders(
+                                    getTitleAttributes("요청 헤더"),
+                                    authorizationHeaderDescriptor
+                            ),
+                            PayloadDocumentation.requestFields(
+                                    getTitleAttributes("요청 필드"),
+                                    PayloadDocumentation.fieldWithPath("meetingName").type(JsonFieldType.STRING).description("수정할 모임의 이름.").optional(),
+                                    PayloadDocumentation.fieldWithPath("meetingImageUrl").type(JsonFieldType.STRING).description("수정할 모임 대표 썸네일 이미지.").optional(),
+                                    PayloadDocumentation.fieldWithPath("calendarStartFrom").type(JsonFieldType.STRING).description("수정할 캘린더의 시작일. +\nyyyy-MM-dd 형식의 날짜 지정. +\nex) 2023-01-01").optional(),
+                                    PayloadDocumentation.fieldWithPath("calendarEndTo").type(JsonFieldType.STRING).description("수정할 캘린더의 종료일. +\nyyyy-MM-dd 형식으로 날짜 지정. +\nex) 2023-01-01").optional()
+                            ),
+                            PayloadDocumentation.responseFields(
+                                    getTitleAttributes("응답 필드"),
+                                    PayloadDocumentation.fieldWithPath("success").type(JsonFieldType.BOOLEAN).description("요청 처리 성공 여부")
                             )
                     )
             );

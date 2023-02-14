@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -32,5 +33,15 @@ public class DateVotingRepositoryImpl implements DateVotingRepository {
     @Override
     public void deleteDateVotingBy(DateVoting dateVoting) {
         dateVotingJpaRepository.delete(dateVoting);
+    }
+
+    @Override
+    public List<DateVoting> findDateVotingListBy(Long meetingId) {
+        return dateVotingJpaRepository.findByMeetingId(meetingId);
+    }
+
+    @Override
+    public void deleteDateVotingsBatch(List<DateVoting> dateVotingsToRemove) {
+        dateVotingJpaRepository.deleteAllInBatch(dateVotingsToRemove);
     }
 }

@@ -1,6 +1,5 @@
 package com.comeon.backend.meeting.command.application.dto;
 
-import com.comeon.backend.meeting.command.domain.Calendar;
 import com.comeon.backend.meeting.command.domain.Meeting;
 import lombok.NoArgsConstructor;
 
@@ -53,7 +52,8 @@ public class MeetingAddRequest {
         return Meeting.builder()
                 .name(meetingName)
                 .thumbnailImageUrl(meetingImageUrl)
-                .calendar(new Calendar(getCalendarStartFrom(), getCalendarEndTo()))
+                .calendarStartFrom(getCalendarStartFrom())
+                .calendarEndTo(getCalendarEndTo())
                 .createdUserId(userId)
                 .build();
     }

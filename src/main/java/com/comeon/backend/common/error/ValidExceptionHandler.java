@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.MessageSource;
 import org.springframework.context.MessageSourceResolvable;
 import org.springframework.context.NoSuchMessageException;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
@@ -21,6 +22,7 @@ import java.util.Locale;
 import java.util.stream.Collectors;
 
 @Slf4j
+@Order(1)
 @RestControllerAdvice
 @RequiredArgsConstructor
 public class ValidExceptionHandler {

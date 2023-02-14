@@ -22,4 +22,9 @@ public class FixedDateRepositoryImpl implements FixedDateRepository {
     public Optional<FixedDate> findFixedDateByMeetingId(Long meetingId) {
         return fixedDateJpaRepository.findByMeetingId(meetingId);
     }
+
+    @Override
+    public void remove(FixedDate fixedDate) {
+        fixedDateJpaRepository.delete(fixedDate);
+    }
 }

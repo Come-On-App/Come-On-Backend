@@ -45,4 +45,9 @@ public class DateConfirmFacade {
     private void generateFixedDateExistError(FixedDate fixedDate) {
         throw new FixedDateAlreadyExistException(fixedDate);
     }
+
+    public void removeMeetingConfirmedDateIfExist(Long meetingId) {
+        fixedDateRepository.findFixedDateByMeetingId(meetingId)
+                .ifPresent(fixedDateRepository::remove);
+    }
 }

@@ -44,4 +44,14 @@ public class MeetingMember extends BaseTimeEntity {
     public boolean isHost() {
         return this.role == MemberRole.HOST;
     }
+
+    public void updateToHost() {
+        this.role = MemberRole.HOST;
+        Events.raise(MeetingMemberEvent.create(this.meetingId));
+    }
+
+    @PostRemove
+    public void postRemove() {
+        Events.raise(MeetingMemberEvent.create(this.meetingId));
+    }
 }

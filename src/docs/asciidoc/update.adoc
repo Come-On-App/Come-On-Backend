@@ -1,0 +1,13 @@
+[[update]]
+== 변경 사항
+
+[cols="5,3",options=header]
+|===
+|제목
+|작성일자
+
+// 가장 최신이 가장 위에 오게끔 작성
+| link:update/23-02-14.html[23-02-14 업데이트, role="update-popup"]
+| 2023-02-14
+
+|===

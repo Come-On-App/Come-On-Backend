@@ -19,8 +19,19 @@ public class Calendar {
     @Column(name = "calendar_end_to")
     private LocalDate endTo;
 
-    public Calendar(LocalDate startFrom, LocalDate endTo) {
+    private Calendar(LocalDate startFrom, LocalDate endTo) {
         this.startFrom = startFrom;
         this.endTo = endTo;
+    }
+
+    public static Calendar create(LocalDate startFrom, LocalDate endTo) {
+        if (!verifyCalendarRange(startFrom, endTo)) {
+            throw new CalendarRangeException();
+        }
+        return new Calendar(startFrom, endTo);
+    }
+
+    private static boolean verifyCalendarRange(LocalDate startFrom, LocalDate endTo) {
+        return !endTo.isBefore(startFrom);
     }
 }

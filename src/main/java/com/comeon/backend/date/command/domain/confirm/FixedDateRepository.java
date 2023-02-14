@@ -6,4 +6,5 @@ public interface FixedDateRepository {
 
     FixedDate save(FixedDate fixedDate);
     Optional<FixedDate> findFixedDateByMeetingId(Long meetingId);
+    void remove(FixedDate fixedDate);
 }

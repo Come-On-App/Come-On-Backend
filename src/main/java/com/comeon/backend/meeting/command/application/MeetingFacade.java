@@ -2,6 +2,7 @@ package com.comeon.backend.meeting.command.application;
 
 import com.comeon.backend.meeting.command.application.dto.EntryCodeRenewResponse;
 import com.comeon.backend.meeting.command.application.dto.MeetingAddRequest;
+import com.comeon.backend.meeting.command.application.dto.MeetingModifyRequest;
 import com.comeon.backend.meeting.command.application.dto.MeetingTimeModifyRequest;
 import com.comeon.backend.meeting.command.domain.Meeting;
 import com.comeon.backend.meeting.MeetingNotExistException;
@@ -20,6 +21,12 @@ public class MeetingFacade {
     public Long addMeeting(Long userId, MeetingAddRequest request) {
         Meeting meeting = request.toEntity(userId);
         return meetingRepository.save(meeting).getId();
+    }
+
+    public void modifyMeeting(Long meetingId, MeetingModifyRequest request) {
+        meetingRepository.findMeetingBy(meetingId)
+                .orElseThrow(() -> new MeetingNotExistException(meetingId))
+                .modifyMeetingInfo(request.toDomainDto());
     }
 
     public EntryCodeRenewResponse renewEntryCode(Long meetingId) {

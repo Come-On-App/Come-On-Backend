@@ -37,6 +37,11 @@ public class DateVoting extends BaseTimeEntity {
         Events.raise(event);
     }
 
+    public boolean isRangeIn(LocalDate startFrom, LocalDate endTo) {
+        return !this.date.isBefore(startFrom)
+                && !this.date.isAfter(endTo);
+    }
+
     @PostRemove
     public void postRemove() {
         raiseEvent();

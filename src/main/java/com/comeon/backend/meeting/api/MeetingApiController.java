@@ -7,6 +7,7 @@ import com.comeon.backend.config.security.JwtPrincipal;
 import com.comeon.backend.meeting.command.application.MeetingFacade;
 import com.comeon.backend.meeting.command.application.dto.EntryCodeRenewResponse;
 import com.comeon.backend.meeting.command.application.dto.MeetingAddRequest;
+import com.comeon.backend.meeting.command.application.dto.MeetingModifyRequest;
 import com.comeon.backend.meeting.command.application.dto.MeetingTimeModifyRequest;
 import com.comeon.backend.meeting.query.application.MeetingQueryService;
 import com.comeon.backend.meeting.query.dao.MeetingDao;
@@ -52,6 +53,16 @@ public class MeetingApiController {
         return SliceResponse.toSliceResponse(meetingSlice);
     }
 
+    @RequiredMemberRole(MemberRole.HOST)
+    @PatchMapping("/{meetingId}")
+    public MeetingModifyResponse meetingModify(
+            @PathVariable Long meetingId,
+            @Validated @RequestBody MeetingModifyRequest request
+    ) {
+        meetingFacade.modifyMeeting(meetingId, request);
+        return new MeetingModifyResponse();
+    }
+
     @RequiredMemberRole
     @GetMapping("/{meetingId}")
     public MeetingDetails meetingDetails(
@@ -77,6 +88,7 @@ public class MeetingApiController {
         return meetingFacade.renewEntryCode(meetingId);
     }
 
+    // TODO 모임 시간 조회 API
     @RequiredMemberRole(MemberRole.HOST)
     @PostMapping("/{meetingId}/meeting-time")
     public MeetingTimeModifyResponse meetingTimeModify(
