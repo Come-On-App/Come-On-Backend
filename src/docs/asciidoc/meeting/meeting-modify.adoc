@@ -1,0 +1,44 @@
+:doctype: book
+:icons: font
+:sectlinks:
+:docinfo: shared-head
+
+[[meeting-modify]]
+=== 모임 수정
+
+PATCH /api/v1/meetings/{meeting-id}
+
+- 모임 수정 API를 통해 캘린더 범위를 수정할 경우,
+수정된 캘린더 범위에 포함되지 않는 모임일 투표 내역은 삭제될 수 있습니다. +
+또한 모임 캘린더 범위 수정시 이미 확정된 모임일이 존재할 경우,
+확정된 모임일이 삭제됩니다.
+
+==== API Spec
+*경로 파라미터*
+
+include::{snippets}/meeting-modify/success/path-parameters.adoc[]
+
+*요청 헤더*
+
+include::{snippets}/meeting-modify/success/request-headers.adoc[]
+
+*요청 필드*
+
+include::{snippets}/meeting-modify/success/request-fields.adoc[]
+
+*응답 필드*
+
+include::{snippets}/meeting-modify/success/response-fields.adoc[]
+
+==== 요청/응답 예시
+*요청 예시*
+
+include::{snippets}/meeting-modify/success/http-request.adoc[]
+
+*응답 예시*
+
+include::{snippets}/meeting-modify/success/http-response.adoc[]
+
+오류 발생시 아래 "오류 코드 확인하기" 링크에서 모임 관련 오류(`3XXX`)를 확인해주세요.
+
+* link:../errors/error-code.html[오류 코드 확인하기,role="error-code-popup"]
