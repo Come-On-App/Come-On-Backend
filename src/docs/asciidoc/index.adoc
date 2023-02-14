@@ -12,7 +12,7 @@ ifndef::snippets[]
 :snippets: ./build/generated-snippets
 endif::[]
 
-include::update/index.adoc[]
+include::update.adoc[]
 
 == link:response/index.html[공통 응답 Docs, window=blank]
 
