@@ -57,4 +57,6 @@ include::voting-details.adoc[]
 == 모임일 확정 API
 include::meeting-date-confirm.adoc[]
 
+include::meeting-date-cancel.adoc[]
+
 include::meeting-confirmed-date-simple.adoc[]
