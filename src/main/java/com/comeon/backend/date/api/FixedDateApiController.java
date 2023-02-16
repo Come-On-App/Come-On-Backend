@@ -2,6 +2,7 @@ package com.comeon.backend.date.api;
 
 import com.comeon.backend.config.web.member.MemberRole;
 import com.comeon.backend.config.web.member.RequiredMemberRole;
+import com.comeon.backend.date.api.dto.MeetingDateCancelResponse;
 import com.comeon.backend.date.api.dto.MeetingDateConfirmResponse;
 import com.comeon.backend.date.command.application.confirm.DateConfirmFacade;
 import com.comeon.backend.date.command.application.confirm.FixedDateAddRequest;
@@ -29,6 +30,15 @@ public class FixedDateApiController {
     ) {
         dateConfirmFacade.confirmMeetingDate(meetingId, request);
         return new MeetingDateConfirmResponse();
+    }
+
+    @RequiredMemberRole(MemberRole.HOST)
+    @DeleteMapping
+    public MeetingDateCancelResponse meetingDateCancel(
+            @PathVariable Long meetingId
+    ) {
+        dateConfirmFacade.cancelMeetingConfirmedDate(meetingId);
+        return new MeetingDateCancelResponse();
     }
 
     @RequiredMemberRole

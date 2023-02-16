@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 @Service
@@ -20,14 +19,17 @@ public class DateConfirmFacade {
     private final DateRangeValidator dateRangeValidator;
 
     public void confirmMeetingDate(Long meetingId, FixedDateAddRequest request) {
-        fixedDateRepository.findFixedDateByMeetingId(meetingId)
-                .ifPresent(this::generateFixedDateExistError);
-
         LocalDate meetingDateStartFrom = request.getMeetingDateStartFrom();
         LocalDate meetingDateEndTo = request.getMeetingDateEndTo();
         checkDateRangeInCalendar(meetingId, meetingDateStartFrom, meetingDateEndTo);
 
-        FixedDate fixedDate = new FixedDate(meetingId, meetingDateStartFrom, meetingDateEndTo);
+        FixedDate fixedDate = fixedDateRepository.findFixedDateByMeetingId(meetingId)
+                .orElse(new FixedDate(meetingId, meetingDateStartFrom, meetingDateEndTo));
+        if (fixedDate.getId() != null) {
+            fixedDate.update(meetingDateStartFrom, meetingDateEndTo);
+            return;
+        }
+
         fixedDateRepository.save(fixedDate);
     }
 
@@ -42,8 +44,10 @@ public class DateConfirmFacade {
         }
     }
 
-    private void generateFixedDateExistError(FixedDate fixedDate) {
-        throw new FixedDateAlreadyExistException(fixedDate);
+    public void cancelMeetingConfirmedDate(Long meetingId) {
+        FixedDate fixedDate = fixedDateRepository.findFixedDateByMeetingId(meetingId)
+                .orElseThrow(FixedDateNotExistException::new);
+        fixedDateRepository.remove(fixedDate);
     }
 
     public void removeMeetingConfirmedDateIfExist(Long meetingId) {
