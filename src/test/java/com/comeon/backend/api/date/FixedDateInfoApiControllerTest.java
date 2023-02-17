@@ -187,8 +187,8 @@ public class FixedDateInfoApiControllerTest extends RestDocsTestSupport {
                                     getTitleAttributes("응답 필드"),
                                     PayloadDocumentation.fieldWithPath("meetingId").type(JsonFieldType.NUMBER).description("확정일을 조회한 모임의 식별값."),
                                     PayloadDocumentation.subsectionWithPath("fixedDate").type(JsonFieldType.OBJECT).description("모임의 확정일 정보.").optional(),
-                                    PayloadDocumentation.fieldWithPath("fixedDate.startDate").type(JsonFieldType.STRING).description("확정된 모임일의 시작 일자. +\nyyyy-MM-dd 형식의 날짜 지정."),
-                                    PayloadDocumentation.fieldWithPath("fixedDate.endDate").type(JsonFieldType.STRING).description("확정된 모임일의 시작 일자. +\nyyyy-MM-dd 형식의 날짜 지정.")
+                                    PayloadDocumentation.fieldWithPath("fixedDate.startDate").type(JsonFieldType.STRING).description("확정된 모임일의 시작 일자. +\nyyyy-MM-dd 형식으로 응답."),
+                                    PayloadDocumentation.fieldWithPath("fixedDate.endDate").type(JsonFieldType.STRING).description("확정된 모임일의 시작 일자. +\nyyyy-MM-dd 형식으로 응답.")
                             )
                     )
             );
