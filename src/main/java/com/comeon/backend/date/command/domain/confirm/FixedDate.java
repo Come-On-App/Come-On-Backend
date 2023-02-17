@@ -31,6 +31,11 @@ public class FixedDate extends BaseTimeEntity {
         Events.raise(FixedDateEvent.create(meetingId));
     }
 
+    public void update(LocalDate startFrom, LocalDate endTo) {
+        this.startFrom = startFrom;
+        this.endTo = endTo;
+    }
+
     @Override
     public String toString() {
         return "["

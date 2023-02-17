@@ -95,6 +95,52 @@ public class FixedDateInfoApiControllerTest extends RestDocsTestSupport {
     }
 
     @Nested
+    @DisplayName("모임일 삭제 API")
+    class meetingDateCancel {
+
+        String endpoint = baseEndpoint;
+
+        @Test
+        @DisplayName("given: 인증 필요, RequestBody - 모임 시작일, 종료일, 시작 시간 -> then: HTTP 200")
+        void success() throws Exception {
+            //given
+            BDDMockito.willDoNothing().given(dateConfirmFacade)
+                            .cancelMeetingConfirmedDate(BDDMockito.anyLong());
+
+            grantHost();
+
+            //when
+            ResultActions perform = mockMvc.perform(
+                    RestDocumentationRequestBuilders.delete(endpoint, mockMeetingId)
+                            .header(HttpHeaders.AUTHORIZATION, "Bearer " + currentRequestATK.getToken())
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .characterEncoding(StandardCharsets.UTF_8)
+            );
+
+            //then
+            perform.andExpect(MockMvcResultMatchers.status().isOk());
+
+            // docs
+            perform.andDo(
+                    restDocs.document(
+                            RequestDocumentation.pathParameters(
+                                    getTitleAttributes(endpoint),
+                                    RequestDocumentation.parameterWithName("meeting-id").description("취소할 모임의 식별값")
+                            ),
+                            HeaderDocumentation.requestHeaders(
+                                    getTitleAttributes("요청 헤더"),
+                                    authorizationHeaderDescriptor
+                            ),
+                            PayloadDocumentation.responseFields(
+                                    getTitleAttributes("응답 필드"),
+                                    PayloadDocumentation.fieldWithPath("success").type(JsonFieldType.BOOLEAN).description("모임일 취소가 성공적으로 완료되었는지 여부")
+                            )
+                    )
+            );
+        }
+    }
+
+    @Nested
     @DisplayName("모임 확정일 조회 API")
     class fixedDateSimple {
 
@@ -141,8 +187,8 @@ public class FixedDateInfoApiControllerTest extends RestDocsTestSupport {
                                     getTitleAttributes("응답 필드"),
                                     PayloadDocumentation.fieldWithPath("meetingId").type(JsonFieldType.NUMBER).description("확정일을 조회한 모임의 식별값."),
                                     PayloadDocumentation.subsectionWithPath("fixedDate").type(JsonFieldType.OBJECT).description("모임의 확정일 정보.").optional(),
-                                    PayloadDocumentation.fieldWithPath("fixedDate.startDate").type(JsonFieldType.STRING).description("확정된 모임일의 시작 일자. +\nyyyy-MM-dd 형식의 날짜 지정."),
-                                    PayloadDocumentation.fieldWithPath("fixedDate.endDate").type(JsonFieldType.STRING).description("확정된 모임일의 시작 일자. +\nyyyy-MM-dd 형식의 날짜 지정.")
+                                    PayloadDocumentation.fieldWithPath("fixedDate.startDate").type(JsonFieldType.STRING).description("확정된 모임일의 시작 일자. +\nyyyy-MM-dd 형식으로 응답."),
+                                    PayloadDocumentation.fieldWithPath("fixedDate.endDate").type(JsonFieldType.STRING).description("확정된 모임일의 시작 일자. +\nyyyy-MM-dd 형식으로 응답.")
                             )
                     )
             );
