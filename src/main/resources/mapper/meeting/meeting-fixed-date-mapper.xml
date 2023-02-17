@@ -21,4 +21,26 @@
         where m.meeting_id = #{meetingId};
     </select>
 
+    <resultMap id="MeetingFixedDateSummaryMap" type="com.comeon.backend.date.query.dto.MeetingFixedDateSummary">
+        <id column="meeting_id" property="meetingId"/>
+        <result column="meeting_name" property="meetingName"/>
+        <association property="fixedDate"
+                     javaType="com.comeon.backend.date.query.dto.FixedDateSimple">
+            <result column="meeting_start_date" property="startDate"/>
+            <result column="meeting_end_date" property="endDate"/>
+        </association>
+    </resultMap>
+    <select id="selectMeetingFixedDateSummary" resultMap="MeetingFixedDateSummaryMap">
+        select m.meeting_id   as meeting_id,
+               m.name         as meeting_name,
+               mfd.start_from as meeting_start_date,
+               mfd.end_to     as meeting_end_date
+        from meeting_fixed_date mfd
+                 left join meeting m on mfd.meeting_id = m.meeting_id
+                 left join meeting_member mm on m.meeting_id = mm.meeting_id
+        where mm.user_id = #{userId}
+          and mfd.start_from <![CDATA[>=]]> #{searchStartFrom}
+          and mfd.start_from <![CDATA[<=]]> #{searchEndTo}
+        order by mfd.start_from
+    </select>
 </mapper>
