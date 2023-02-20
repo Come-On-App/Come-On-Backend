@@ -38,6 +38,8 @@ include::meeting-leave.adoc[]
 
 include::member-drop.adoc[]
 
+include::host-role-delegate.adoc[]
+
 == 모임 장소 API
 include::meeting-place-list.adoc[]
 
