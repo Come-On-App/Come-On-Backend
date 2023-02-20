@@ -2,14 +2,18 @@ package com.comeon.backend.meetingmember.api;
 
 import com.comeon.backend.common.response.ListResponse;
 import com.comeon.backend.config.security.JwtPrincipal;
+import com.comeon.backend.config.web.member.MemberRole;
 import com.comeon.backend.config.web.member.RequiredMemberRole;
 import com.comeon.backend.meetingmember.api.dto.MeetingLeaveResponse;
+import com.comeon.backend.meetingmember.api.dto.MemberDropResponse;
 import com.comeon.backend.meetingmember.command.application.MeetingMemberFacade;
+import com.comeon.backend.meetingmember.api.dto.MemberDropRequest;
 import com.comeon.backend.meetingmember.query.dao.MeetingMemberDao;
 import com.comeon.backend.meetingmember.query.dto.MemberDetails;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -49,5 +53,15 @@ public class MeetingMemberApiController {
     ) {
         meetingMemberFacade.removeMember(meetingId, jwtPrincipal.getUserId());
         return new MeetingLeaveResponse();
+    }
+
+    @RequiredMemberRole(MemberRole.HOST)
+    @PostMapping("/drop")
+    public MemberDropResponse memberDrop(
+            @PathVariable Long meetingId,
+            @Validated @RequestBody MemberDropRequest request
+    ) {
+        meetingMemberFacade.removeMember(meetingId, request.getTargetUserId());
+        return new MemberDropResponse();
     }
 }
