@@ -63,4 +63,14 @@ public class MeetingMemberFacade {
             memberList.get(0).updateToHost();
         }
     }
+
+    public void delegateHostAuthTo(Long meetingId, Long targetUserId) {
+        MeetingMember hostMember = meetingMemberRepository.findHost(meetingId)
+                .orElseThrow(MemberNotExistException::new);
+        MeetingMember targetMember = meetingMemberRepository.findMember(meetingId, targetUserId)
+                .orElseThrow(MemberNotExistException::new);
+
+        hostMember.updateToParticipant();
+        targetMember.updateToHost();
+    }
 }

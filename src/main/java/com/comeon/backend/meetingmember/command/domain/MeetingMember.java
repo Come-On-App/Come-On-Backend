@@ -50,6 +50,11 @@ public class MeetingMember extends BaseTimeEntity {
         Events.raise(MeetingMemberEvent.create(this.meetingId));
     }
 
+    public void updateToParticipant() {
+        this.role = MemberRole.PARTICIPANT;
+        Events.raise(MeetingMemberEvent.create(this.meetingId));
+    }
+
     @PostRemove
     public void postRemove() {
         Events.raise(MeetingMemberEvent.create(this.meetingId));

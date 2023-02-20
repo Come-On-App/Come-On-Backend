@@ -4,10 +4,8 @@ import com.comeon.backend.common.response.ListResponse;
 import com.comeon.backend.config.security.JwtPrincipal;
 import com.comeon.backend.config.web.member.MemberRole;
 import com.comeon.backend.config.web.member.RequiredMemberRole;
-import com.comeon.backend.meetingmember.api.dto.MeetingLeaveResponse;
-import com.comeon.backend.meetingmember.api.dto.MemberDropResponse;
+import com.comeon.backend.meetingmember.api.dto.*;
 import com.comeon.backend.meetingmember.command.application.MeetingMemberFacade;
-import com.comeon.backend.meetingmember.api.dto.MemberDropRequest;
 import com.comeon.backend.meetingmember.query.dao.MeetingMemberDao;
 import com.comeon.backend.meetingmember.query.dto.MemberDetails;
 import lombok.RequiredArgsConstructor;
@@ -63,5 +61,15 @@ public class MeetingMemberApiController {
     ) {
         meetingMemberFacade.removeMember(meetingId, request.getTargetUserId());
         return new MemberDropResponse();
+    }
+
+    @RequiredMemberRole(MemberRole.HOST)
+    @PostMapping("/host-change")
+    public HostAuthDelegateResponse hostAuthDelegate(
+            @PathVariable Long meetingId,
+            @Validated @RequestBody HostAuthDelegateRequest request
+    ) {
+        meetingMemberFacade.delegateHostAuthTo(meetingId, request.getTargetUserId());
+        return new HostAuthDelegateResponse();
     }
 }

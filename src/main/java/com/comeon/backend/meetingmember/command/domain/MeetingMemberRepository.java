@@ -9,4 +9,5 @@ public interface MeetingMemberRepository {
     Optional<MeetingMember> findMember(Long meetingId, Long userId);
     List<MeetingMember> findMemberListByMeetingId(Long meetingId);
     void remove(MeetingMember member);
+    Optional<MeetingMember> findHost(Long meetingId);
 }
