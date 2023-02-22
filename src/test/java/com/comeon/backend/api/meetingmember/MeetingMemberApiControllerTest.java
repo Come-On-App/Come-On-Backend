@@ -4,6 +4,8 @@ import com.comeon.backend.api.support.utils.RestDocsTestSupport;
 import com.comeon.backend.api.support.utils.RestDocsUtil;
 import com.comeon.backend.config.web.member.MemberRole;
 import com.comeon.backend.meetingmember.api.MeetingMemberApiController;
+import com.comeon.backend.meetingmember.api.dto.HostAuthDelegateRequest;
+import com.comeon.backend.meetingmember.api.dto.MemberDropRequest;
 import com.comeon.backend.meetingmember.command.application.MeetingMemberFacade;
 import com.comeon.backend.meetingmember.query.dto.MemberDetails;
 import org.junit.jupiter.api.DisplayName;
@@ -95,7 +97,7 @@ class MeetingMemberApiControllerTest extends RestDocsTestSupport {
         String endpoint = "/api/v1/meetings/{meeting-id}/members/me";
 
         @Test
-        @DisplayName("given: 인증 필요, 요청 경로에 meetingId -> then: HTTP 200, 갱신된 입장 코드 정보")
+        @DisplayName("given: 인증 필요, 요청 경로에 meetingId -> then: HTTP 200")
         void success() throws Exception {
             //given
             Long meetingIdMock = 55L;
@@ -152,7 +154,7 @@ class MeetingMemberApiControllerTest extends RestDocsTestSupport {
         String endpoint = "/api/v1/meetings/{meeting-id}/members/me";
 
         @Test
-        @DisplayName("given: 인증 필요, 요청 경로에 meetingId -> then: HTTP 200, 갱신된 입장 코드 정보")
+        @DisplayName("given: 인증 필요, 요청 경로에 meetingId -> then: HTTP 200")
         void success() throws Exception {
             //given
             Long meetingIdMock = 55L;
@@ -180,6 +182,110 @@ class MeetingMemberApiControllerTest extends RestDocsTestSupport {
                             HeaderDocumentation.requestHeaders(
                                     getTitleAttributes("요청 헤더"),
                                     authorizationHeaderDescriptor
+                            ),
+                            PayloadDocumentation.responseFields(
+                                    getTitleAttributes("응답 필드"),
+                                    PayloadDocumentation.fieldWithPath("success").type(JsonFieldType.BOOLEAN).description("요청 처리 성공 여부")
+                            )
+                    )
+            );
+        }
+    }
+
+    @Nested
+    @DisplayName("모임 회원 강퇴 API")
+    class memberDrop {
+
+        String endpoint = "/api/v1/meetings/{meeting-id}/members/drop";
+
+        @Test
+        @DisplayName("given: 인증 필요, 요청 경로에 meetingId -> then: HTTP 200")
+        void success() throws Exception {
+            //given
+            Long meetingIdMock = 55L;
+            MemberDropRequest request = new MemberDropRequest(423L);
+
+            BDDMockito.willDoNothing().given(meetingMemberFacade)
+                    .removeMember(BDDMockito.anyLong(), BDDMockito.anyLong());
+
+            //when
+            ResultActions perform = mockMvc.perform(
+                    RestDocumentationRequestBuilders.post(endpoint, meetingIdMock)
+                            .content(createJson(request))
+                            .header(HttpHeaders.AUTHORIZATION, "Bearer " + currentRequestATK.getToken())
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .characterEncoding(StandardCharsets.UTF_8)
+            );
+
+            //then
+            perform.andExpect(MockMvcResultMatchers.status().isOk());
+
+            // docs
+            perform.andDo(
+                    restDocs.document(
+                            RequestDocumentation.pathParameters(
+                                    getTitleAttributes(endpoint),
+                                    RequestDocumentation.parameterWithName("meeting-id").description("강퇴할 유저가 속한 모임의 식별값")
+                            ),
+                            HeaderDocumentation.requestHeaders(
+                                    getTitleAttributes("요청 헤더"),
+                                    authorizationHeaderDescriptor
+                            ),
+                            PayloadDocumentation.requestFields(
+                                    getTitleAttributes("요청 필드"),
+                                    PayloadDocumentation.fieldWithPath("targetUserId").type(JsonFieldType.NUMBER).description("강퇴할 유저의 식별값(userId).")
+                            ),
+                            PayloadDocumentation.responseFields(
+                                    getTitleAttributes("응답 필드"),
+                                    PayloadDocumentation.fieldWithPath("success").type(JsonFieldType.BOOLEAN).description("요청 처리 성공 여부")
+                            )
+                    )
+            );
+        }
+    }
+
+    @Nested
+    @DisplayName("모임 방장 권한 위임 API")
+    class hostAuthDelegate {
+
+        String endpoint = "/api/v1/meetings/{meeting-id}/members/host-change";
+
+        @Test
+        @DisplayName("given: 인증 필요, 요청 경로에 meetingId, 바디에 targetUserId -> then: HTTP 200")
+        void success() throws Exception {
+            //given
+            Long meetingIdMock = 55L;
+            HostAuthDelegateRequest request = new HostAuthDelegateRequest(423L);
+
+            BDDMockito.willDoNothing().given(meetingMemberFacade)
+                    .delegateHostAuthTo(BDDMockito.anyLong(), BDDMockito.anyLong());
+
+            //when
+            ResultActions perform = mockMvc.perform(
+                    RestDocumentationRequestBuilders.post(endpoint, meetingIdMock)
+                            .content(createJson(request))
+                            .header(HttpHeaders.AUTHORIZATION, "Bearer " + currentRequestATK.getToken())
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .characterEncoding(StandardCharsets.UTF_8)
+            );
+
+            //then
+            perform.andExpect(MockMvcResultMatchers.status().isOk());
+
+            // docs
+            perform.andDo(
+                    restDocs.document(
+                            RequestDocumentation.pathParameters(
+                                    getTitleAttributes(endpoint),
+                                    RequestDocumentation.parameterWithName("meeting-id").description("방장 권한을 위임받을 유저가 속한 모임의 식별값")
+                            ),
+                            HeaderDocumentation.requestHeaders(
+                                    getTitleAttributes("요청 헤더"),
+                                    authorizationHeaderDescriptor
+                            ),
+                            PayloadDocumentation.requestFields(
+                                    getTitleAttributes("요청 필드"),
+                                    PayloadDocumentation.fieldWithPath("targetUserId").type(JsonFieldType.NUMBER).description("방장 권한을 위임받을 유저의 식별값(userId).")
                             ),
                             PayloadDocumentation.responseFields(
                                     getTitleAttributes("응답 필드"),

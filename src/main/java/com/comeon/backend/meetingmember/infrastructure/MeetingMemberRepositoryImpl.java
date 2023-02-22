@@ -33,4 +33,9 @@ public class MeetingMemberRepositoryImpl implements MeetingMemberRepository {
     public void remove(MeetingMember member) {
         meetingMemberJpaRepository.delete(member);
     }
+
+    @Override
+    public Optional<MeetingMember> findHost(Long meetingId) {
+        return meetingMemberJpaRepository.findHostMemberByMeetingId(meetingId);
+    }
 }

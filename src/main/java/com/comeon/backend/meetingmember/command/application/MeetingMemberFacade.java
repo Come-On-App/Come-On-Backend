@@ -5,7 +5,6 @@ import com.comeon.backend.meetingmember.command.application.dto.MeetingJoinRespo
 import com.comeon.backend.meetingmember.command.domain.MeetingMember;
 import com.comeon.backend.meetingmember.command.domain.MeetingMemberRepository;
 import com.comeon.backend.meetingmember.command.domain.MeetingService;
-import com.comeon.backend.meetingmember.query.application.NotMemberException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -55,7 +54,7 @@ public class MeetingMemberFacade {
         MeetingMember memberToRemove = memberList.stream()
                 .filter(member -> member.getUserId().equals(userId))
                 .findFirst()
-                .orElseThrow(NotMemberException::new);
+                .orElseThrow(MemberNotExistException::new);
 
         meetingMemberRepository.remove(memberToRemove);
         memberList.remove(memberToRemove);
@@ -63,5 +62,15 @@ public class MeetingMemberFacade {
         if (!memberList.isEmpty() && memberToRemove.isHost()) {
             memberList.get(0).updateToHost();
         }
+    }
+
+    public void delegateHostAuthTo(Long meetingId, Long targetUserId) {
+        MeetingMember hostMember = meetingMemberRepository.findHost(meetingId)
+                .orElseThrow(MemberNotExistException::new);
+        MeetingMember targetMember = meetingMemberRepository.findMember(meetingId, targetUserId)
+                .orElseThrow(MemberNotExistException::new);
+
+        hostMember.updateToParticipant();
+        targetMember.updateToHost();
     }
 }
