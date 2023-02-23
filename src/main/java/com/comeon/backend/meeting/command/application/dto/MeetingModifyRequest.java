@@ -52,12 +52,12 @@ public class MeetingModifyRequest {
         }
     }
 
-    public MeetingInfo toDomainDto() {
-        return new MeetingInfo(
-                getMeetingName(),
-                getMeetingImageUrl(),
-                getCalendarStartFrom(),
-                getCalendarEndTo()
-        );
+    public MeetingInfo toMeetingInfo() {
+        return MeetingInfo.builder()
+                .meetingName(this.meetingName)
+                .meetingImageUrl(this.meetingImageUrl)
+                .calendarStartFrom(this.getCalendarStartFrom())
+                .calendarEndTo(this.getCalendarEndTo())
+                .build();
     }
 }

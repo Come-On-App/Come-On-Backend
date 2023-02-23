@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.comeon.backend.date.infrastructure.dao.DateVotingMapper">
+<mapper namespace="com.comeon.backend.meeting.infrastructure.mapper.DateVotingMapper">
 
-    <resultMap id="VotingSimpleMap" type="com.comeon.backend.date.query.dto.DateVotingSimple">
+    <resultMap id="VotingSimpleMap" type="com.comeon.backend.meeting.query.dto.DateVotingSimple">
         <id column="voting_date" property="date"/>
         <id column="member_count" property="memberCount"/>
         <id column="current_user_voted" property="myVoting"/>
@@ -22,7 +22,7 @@
         group by mdv.date;
     </select>
 
-    <resultMap id="VotingMemberSimpleMap" type="com.comeon.backend.date.query.dto.VotingMemberSimple">
+    <resultMap id="VotingMemberSimpleMap" type="com.comeon.backend.meeting.query.dto.VotingMemberSimple">
         <id column="user_id" property="userId"/>
         <id column="nickname" property="nickname"/>
         <id column="profile_image_url" property="profileImageUrl"/>

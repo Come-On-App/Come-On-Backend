@@ -1,6 +1,6 @@
 package com.comeon.backend.config.web;
 
-import com.comeon.backend.config.web.member.MemberAuthorizationInterceptor;
+import com.comeon.backend.meeting.presentation.interceptor.MemberAuthorizationInterceptor;
 import com.comeon.backend.config.web.log.MultipartRequestLogInterceptor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;

@@ -2,12 +2,12 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.comeon.backend.date.infrastructure.dao.FixedDateMapper">
+<mapper namespace="com.comeon.backend.meeting.infrastructure.mapper.FixedDateMapper">
 
-    <resultMap id="MeetingFixedDateSimpleMap" type="com.comeon.backend.date.query.dto.MeetingFixedDateSimple">
+    <resultMap id="MeetingFixedDateSimpleMap" type="com.comeon.backend.meeting.query.dto.MeetingFixedDateSimple">
         <id column="meeting_id" property="meetingId"/>
         <association property="fixedDate"
-                     javaType="com.comeon.backend.date.query.dto.FixedDateSimple">
+                     javaType="com.comeon.backend.meeting.query.dto.FixedDateSimple">
             <result column="meeting_start_date" property="startDate"/>
             <result column="meeting_end_date" property="endDate"/>
         </association>
@@ -21,12 +21,12 @@
         where m.meeting_id = #{meetingId};
     </select>
 
-    <resultMap id="MeetingFixedDateSummaryMap" type="com.comeon.backend.date.query.dto.MeetingFixedDateSummary">
+    <resultMap id="MeetingFixedDateSummaryMap" type="com.comeon.backend.meeting.query.dto.MeetingFixedDateSummary">
         <id column="meeting_id" property="meetingId"/>
         <result column="meeting_name" property="meetingName"/>
         <result column="meeting_start_time" property="meetingStartTime"/>
         <association property="fixedDate"
-                     javaType="com.comeon.backend.date.query.dto.FixedDateSimple">
+                     javaType="com.comeon.backend.meeting.query.dto.FixedDateSimple">
             <result column="meeting_start_date" property="startDate"/>
             <result column="meeting_end_date" property="endDate"/>
         </association>
