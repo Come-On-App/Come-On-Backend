@@ -34,4 +34,16 @@ public class Calendar {
     private static boolean verifyCalendarRange(LocalDate startFrom, LocalDate endTo) {
         return !endTo.isBefore(startFrom);
     }
+
+    public boolean verifyDate(LocalDate date) {
+        return !this.startFrom.isAfter(date)
+                && !this.endTo.isBefore(date);
+    }
+
+    public boolean verifyDateRange(LocalDate startFrom, LocalDate endTo) {
+        return !this.startFrom.isAfter(startFrom)
+                && !this.startFrom.isAfter(endTo)
+                && !this.endTo.isBefore(startFrom)
+                && !this.endTo.isBefore(endTo);
+    }
 }

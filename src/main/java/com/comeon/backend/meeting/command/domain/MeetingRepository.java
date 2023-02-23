@@ -6,4 +6,6 @@ public interface MeetingRepository {
 
     Meeting save(Meeting meeting);
     Optional<Meeting> findMeetingBy(Long meetingId);
+    Optional<Meeting> findMeetingBy(String entryCode);
+    void flush();
 }
