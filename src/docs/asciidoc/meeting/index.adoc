@@ -49,6 +49,12 @@ include::meeting-place-modify.adoc[]
 
 include::meeting-place-remove.adoc[]
 
+include::meeting-place-lock-v2.adoc[]
+
+include::meeting-place-unlock-v2.adoc[]
+
+include::meeting-place-modify-v2.adoc[]
+
 == 모임일 투표 API
 include::voting-add.adoc[]
 

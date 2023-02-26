@@ -37,6 +37,8 @@ kafka:
     meeting-places: "test_places"
     meeting-voting: "test_voting"
     meeting-fixed-date: "test_fixed_date"
+    meeting-place-lock: "test_place_lock"
+    meeting-place-unlock: "test_place_unlock"
 
 cloud:
   aws:

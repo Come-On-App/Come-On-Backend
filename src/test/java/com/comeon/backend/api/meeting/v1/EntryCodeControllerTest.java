@@ -1,4 +1,4 @@
-package com.comeon.backend.api.meeting;
+package com.comeon.backend.api.meeting.v1;
 
 import com.comeon.backend.api.support.utils.RestDocsTestSupport;
 import com.comeon.backend.meeting.presentation.api.entrycode.EntryCodeController;
