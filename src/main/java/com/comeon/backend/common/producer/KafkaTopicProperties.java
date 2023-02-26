@@ -22,4 +22,10 @@ public class KafkaTopicProperties {
 
     @Value("${kafka.topic.meeting-fixed-date}")
     private String meetingFixedDate;
+
+    @Value("${kafka.topic.meeting-place-lock}")
+    private String meetingPlaceLock;
+
+    @Value("${kafka.topic.meeting-place-unlock}")
+    private String meetingPlaceUnlock;
 }

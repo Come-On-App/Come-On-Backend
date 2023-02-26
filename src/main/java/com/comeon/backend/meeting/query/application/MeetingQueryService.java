@@ -1,7 +1,7 @@
 package com.comeon.backend.meeting.query.application;
 
-import com.comeon.backend.meeting.command.application.EntryCodeNotMatchedException;
-import com.comeon.backend.meeting.command.application.MeetingNotExistException;
+import com.comeon.backend.meeting.command.application.v1.EntryCodeNotMatchedException;
+import com.comeon.backend.meeting.command.application.v1.MeetingNotExistException;
 import com.comeon.backend.meeting.query.dao.MeetingDao;
 import com.comeon.backend.meeting.query.dto.MeetingDetails;
 import lombok.RequiredArgsConstructor;

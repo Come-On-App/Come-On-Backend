@@ -2,9 +2,9 @@ package com.comeon.backend.meeting.presentation.api.meetingdate;
 
 import com.comeon.backend.meeting.command.domain.MemberRole;
 import com.comeon.backend.meeting.presentation.interceptor.RequiredMemberRole;
-import com.comeon.backend.meeting.command.application.CancelMeetingDateFacade;
-import com.comeon.backend.meeting.command.application.ConfirmMeetingDateFacade;
-import com.comeon.backend.meeting.command.application.dto.MeetingDateConfirmRequest;
+import com.comeon.backend.meeting.command.application.v1.CancelMeetingDateFacade;
+import com.comeon.backend.meeting.command.application.v1.ConfirmMeetingDateFacade;
+import com.comeon.backend.meeting.command.application.v1.dto.MeetingDateConfirmRequest;
 import com.comeon.backend.meeting.query.dao.FixedDateDao;
 import com.comeon.backend.meeting.query.dto.MeetingFixedDateSimple;
 import lombok.RequiredArgsConstructor;

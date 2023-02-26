@@ -3,11 +3,11 @@ package com.comeon.backend.api.meeting;
 import com.comeon.backend.api.support.utils.RestDocsTestSupport;
 import com.comeon.backend.api.support.utils.RestDocsUtil;
 import com.comeon.backend.meeting.presentation.api.meetingplace.MeetingPlaceController;
-import com.comeon.backend.meeting.command.application.AddMeetingPlaceFacade;
-import com.comeon.backend.meeting.command.application.ModifyMeetingPlaceFacade;
-import com.comeon.backend.meeting.command.application.RemoveMeetingPlaceFacade;
-import com.comeon.backend.meeting.command.application.dto.PlaceAddRequest;
-import com.comeon.backend.meeting.command.application.dto.PlaceModifyRequest;
+import com.comeon.backend.meeting.command.application.v1.AddMeetingPlaceFacade;
+import com.comeon.backend.meeting.command.application.v1.ModifyMeetingPlaceFacade;
+import com.comeon.backend.meeting.command.application.v1.RemoveMeetingPlaceFacade;
+import com.comeon.backend.meeting.command.application.v1.dto.PlaceAddRequest;
+import com.comeon.backend.meeting.command.application.v1.dto.PlaceModifyRequest;
 import com.comeon.backend.meeting.command.domain.PlaceCategory;
 import com.comeon.backend.meeting.query.dao.MeetingPlaceDao;
 import com.comeon.backend.meeting.query.dto.PlaceDetails;
@@ -167,7 +167,7 @@ public class MeetingPlaceControllerTest extends RestDocsTestSupport {
                             ),
                             PayloadDocumentation.requestFields(
                                     getTitleAttributes("요청 필드"),
-                                    PayloadDocumentation.fieldWithPath("name").type(JsonFieldType.STRING).description("장소의 이름"),
+                                    PayloadDocumentation.fieldWithPath("placeName").type(JsonFieldType.STRING).description("장소의 이름"),
                                     PayloadDocumentation.fieldWithPath("memo").type(JsonFieldType.STRING).description("장소에 대한 메모").optional(),
                                     PayloadDocumentation.fieldWithPath("address").type(JsonFieldType.STRING).description("장소의 주소"),
                                     PayloadDocumentation.fieldWithPath("lat").type(JsonFieldType.NUMBER).description("장소의 위도값"),
@@ -226,7 +226,7 @@ public class MeetingPlaceControllerTest extends RestDocsTestSupport {
                             ),
                             PayloadDocumentation.requestFields(
                                     getTitleAttributes("요청 필드"),
-                                    PayloadDocumentation.fieldWithPath("name").type(JsonFieldType.STRING).description("장소의 이름."),
+                                    PayloadDocumentation.fieldWithPath("placeName").type(JsonFieldType.STRING).description("장소의 이름."),
                                     PayloadDocumentation.fieldWithPath("memo").type(JsonFieldType.STRING).description("장소에 대한 메모. 비워두면 빈 값으로 저장됩니다.").optional(),
                                     PayloadDocumentation.fieldWithPath("address").type(JsonFieldType.STRING).description("장소의 주소. 비워두면 빈 값으로 저장됩니다."),
                                     PayloadDocumentation.fieldWithPath("lat").type(JsonFieldType.NUMBER).description("장소의 위도값. 비워두면 빈 값으로 저장됩니다."),

@@ -3,7 +3,7 @@ package com.comeon.backend.api.meeting;
 import com.comeon.backend.api.support.utils.RestDocsTestSupport;
 import com.comeon.backend.meeting.presentation.api.meetingtime.MeetingTimeModifyController;
 import com.comeon.backend.meeting.presentation.api.meetingtime.MeetingTimeModifyRequest;
-import com.comeon.backend.meeting.command.application.ModifyMeetingTimeFacade;
+import com.comeon.backend.meeting.command.application.v1.ModifyMeetingTimeFacade;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;

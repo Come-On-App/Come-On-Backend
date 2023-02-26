@@ -240,4 +240,43 @@ public class Meeting extends BaseTimeEntity {
 
         raiseDateVotingListUpdateEvent(date);
     }
+
+    public void lockPlace(Long userId, Long meetingPlaceId) {
+        MeetingPlace mp = this.meetingPlaces.stream()
+                .filter(meetingPlace -> meetingPlace.getId().equals(meetingPlaceId))
+                .findFirst()
+                .orElseThrow(() -> new PlaceNotExistException(meetingPlaceId));
+        mp.lock(userId);
+
+        raisePlaceLockEvent(userId, meetingPlaceId);
+    }
+
+    private void raisePlaceLockEvent(Long userId, Long meetingPlaceId) {
+        Events.raise(MeetingPlaceLockEvent.create(this.id, meetingPlaceId, userId));
+    }
+
+    public void unlockPlace(Long userId, Long meetingPlaceId) {
+        MeetingPlace mp = this.meetingPlaces.stream()
+                .filter(meetingPlace -> meetingPlace.getId().equals(meetingPlaceId))
+                .findFirst()
+                .orElseThrow(() -> new PlaceNotExistException(meetingPlaceId));
+        mp.unlock(userId);
+
+        raisePlaceUnlockEvent(userId, meetingPlaceId);
+    }
+
+    private void raisePlaceUnlockEvent(Long userId, Long meetingPlaceId) {
+        Events.raise(MeetingPlaceUnlockEvent.create(this.id, meetingPlaceId, userId));
+    }
+
+    public void modifyPlaceWithUnlock(Long userId, Long meetingPlaceId, PlaceInfo placeInfo) {
+        MeetingPlace mp = this.meetingPlaces.stream()
+                .filter(meetingPlace -> meetingPlace.getId().equals(meetingPlaceId))
+                .findFirst()
+                .orElseThrow(() -> new PlaceNotExistException(meetingPlaceId));
+        mp.updateWithUnlock(userId, placeInfo);
+
+        raiseMeetingPlaceListUpdateEvent();
+        raisePlaceUnlockEvent(userId, meetingPlaceId);
+    }
 }

@@ -3,7 +3,7 @@ package com.comeon.backend.meeting.presentation.api.meetingdate;
 import com.comeon.backend.common.response.ListResponse;
 import com.comeon.backend.config.security.JwtPrincipal;
 import com.comeon.backend.meeting.presentation.interceptor.RequiredMemberRole;
-import com.comeon.backend.meeting.command.application.VotingDateFacade;
+import com.comeon.backend.meeting.command.application.v1.VotingDateFacade;
 import com.comeon.backend.meeting.query.application.DateVotingQueryService;
 import com.comeon.backend.meeting.query.dao.DateVotingDao;
 import com.comeon.backend.meeting.query.dto.DateVotingDetails;
@@ -35,7 +35,7 @@ public class MeetingDateVotingController {
             @PathVariable Long meetingId,
             @Validated @RequestBody VotingAddRequest request
     ) {
-        votingDateFacade.addVoting(jwtPrincipal.getUserId(), meetingId, request.getDate());
+        votingDateFacade.addVoting(meetingId, jwtPrincipal.getUserId(), request.getDate());
         return new VotingAddResponse();
     }
 
@@ -46,7 +46,7 @@ public class MeetingDateVotingController {
             @PathVariable Long meetingId,
             @Validated @RequestBody VotingRemoveRequest request
     ) {
-        votingDateFacade.removeVoting(jwtPrincipal.getUserId(), meetingId, request.getDate());
+        votingDateFacade.removeVoting(meetingId, jwtPrincipal.getUserId(), request.getDate());
         return new VotingRemoveResponse();
     }
 

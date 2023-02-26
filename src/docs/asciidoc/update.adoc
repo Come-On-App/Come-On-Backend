@@ -7,7 +7,7 @@
 |작성일자
 
 // 가장 최신이 가장 위에 오게끔 작성
-| link:update/23-02-23.html[23-02-20 업데이트, role="update-popup"]
+| link:update/23-02-23.html[23-02-23 업데이트, role="update-popup"]
 | 2023-02-23
 
 | link:update/23-02-20.html[23-02-20 업데이트, role="update-popup"]

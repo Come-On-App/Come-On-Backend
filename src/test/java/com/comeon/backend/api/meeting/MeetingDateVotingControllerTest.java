@@ -6,7 +6,7 @@ import com.comeon.backend.meeting.command.domain.MemberRole;
 import com.comeon.backend.meeting.presentation.api.meetingdate.MeetingDateVotingController;
 import com.comeon.backend.meeting.presentation.api.meetingdate.VotingAddRequest;
 import com.comeon.backend.meeting.presentation.api.meetingdate.VotingRemoveRequest;
-import com.comeon.backend.meeting.command.application.VotingDateFacade;
+import com.comeon.backend.meeting.command.application.v1.VotingDateFacade;
 import com.comeon.backend.meeting.query.application.DateVotingQueryService;
 import com.comeon.backend.meeting.query.dao.DateVotingDao;
 import com.comeon.backend.meeting.query.dto.DateVotingDetails;

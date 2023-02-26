@@ -1,8 +1,8 @@
 package com.comeon.backend.meeting.presentation.api;
 
 import com.comeon.backend.config.security.JwtPrincipal;
-import com.comeon.backend.meeting.command.application.JoinMeetingFacade;
-import com.comeon.backend.meeting.command.application.dto.MeetingJoinResponse;
+import com.comeon.backend.meeting.command.application.v1.JoinMeetingFacade;
+import com.comeon.backend.meeting.command.application.v1.dto.MeetingJoinResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

@@ -2,11 +2,11 @@ package com.comeon.backend.meeting.presentation.api.meetingplace;
 
 import com.comeon.backend.common.response.ListResponse;
 import com.comeon.backend.meeting.presentation.interceptor.RequiredMemberRole;
-import com.comeon.backend.meeting.command.application.AddMeetingPlaceFacade;
-import com.comeon.backend.meeting.command.application.ModifyMeetingPlaceFacade;
-import com.comeon.backend.meeting.command.application.RemoveMeetingPlaceFacade;
-import com.comeon.backend.meeting.command.application.dto.PlaceAddRequest;
-import com.comeon.backend.meeting.command.application.dto.PlaceModifyRequest;
+import com.comeon.backend.meeting.command.application.v1.AddMeetingPlaceFacade;
+import com.comeon.backend.meeting.command.application.v1.ModifyMeetingPlaceFacade;
+import com.comeon.backend.meeting.command.application.v1.RemoveMeetingPlaceFacade;
+import com.comeon.backend.meeting.command.application.v1.dto.PlaceAddRequest;
+import com.comeon.backend.meeting.command.application.v1.dto.PlaceModifyRequest;
 import com.comeon.backend.meeting.query.dao.MeetingPlaceDao;
 import com.comeon.backend.meeting.query.dto.PlaceDetails;
 import lombok.RequiredArgsConstructor;

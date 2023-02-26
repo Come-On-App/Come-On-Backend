@@ -16,6 +16,9 @@ public enum MeetingErrorCode implements ErrorCode {
     HOST_CANNOT_DROP(3008, HttpStatus.BAD_REQUEST, "방장은 강퇴할 수 없습니다."),
 
     INVALID_PLACE_ID(3100, HttpStatus.NOT_FOUND, "존재하지 않는 장소 식별값입니다."),
+    PLACE_LOCK_ALREADY_EXIST(3101, HttpStatus.LOCKED, "다른 사용자가 장소를 수정중입니다. 잠시 후 다시 요청해주세요."),
+    PLACE_LOCK_NOT_EXIST(3102, HttpStatus.BAD_REQUEST, "해당 장소에 락이 존재하지 않습니다. 장소에 락을 먼저 수행한 후 요청해주세요."),
+    PLACE_LOCK_USER_NOT_MATCH(3103, HttpStatus.FORBIDDEN, "해당 장소의 락을 해제할 권한이 없습니다."),
 
     DATE_VOTING_EXIST(3200, HttpStatus.BAD_REQUEST, "이미 해당 일자에 투표하셨습니다."),
     NO_DATE_VOTING_EXIST(3201, HttpStatus.BAD_REQUEST, "해당 일자에 투표한 이력이 없습니다."),
