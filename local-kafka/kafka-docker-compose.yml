@@ -30,7 +30,7 @@ services:
       # topic_meeting_voting
       # topic_meeting_places
       # topic_meeting_fixed_date
-      KAFKA_CREATE_TOPICS: "topic_connecting_members:1:1,topic_meeting_meta:1:1,topic_meeting_members:1:1,topic_meeting_voting:1:1,topic_meeting_places:1:1,topic_meeting_fixed_date:1:1"
+      KAFKA_CREATE_TOPICS: "topic_connecting_members:1:1,topic_meeting_meta:1:1,topic_meeting_members:1:1,topic_meeting_voting:1:1,topic_meeting_places:1:1,topic_meeting_fixed_date:1:1,topic_meeting_place_lock:1:1,topic_meeting_place_unlock:1:1"
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
       KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092 # 내외부 통신에 필요한 프로토콜 지정
       # KAFKA_HEAP_OPTS: "-Xmx400m -Xms400m" # 카프카 브로커 실행시 힙 메모리 지정

@@ -2,8 +2,8 @@ package com.comeon.backend.meeting.presentation.api.entrycode;
 
 import com.comeon.backend.meeting.command.domain.MemberRole;
 import com.comeon.backend.meeting.presentation.interceptor.RequiredMemberRole;
-import com.comeon.backend.meeting.command.application.RenewEntryCodeFacade;
-import com.comeon.backend.meeting.command.application.dto.EntryCodeRenewResponse;
+import com.comeon.backend.meeting.command.application.v1.RenewEntryCodeFacade;
+import com.comeon.backend.meeting.command.application.v1.dto.EntryCodeRenewResponse;
 import com.comeon.backend.meeting.query.dao.MeetingDao;
 import com.comeon.backend.meeting.query.dto.EntryCodeDetails;
 import lombok.RequiredArgsConstructor;

@@ -44,6 +44,11 @@ public class MeetingPlace extends BaseTimeEntity {
     @Column(name = "place_order", nullable = false)
     private int order;
 
+    private Long lockUserId;
+
+    @Version
+    private long versionForJpa;
+
     public MeetingPlace(Meeting meeting, PlaceInfo placeInfo) {
         this.meeting = meeting;
         this.name = placeInfo.getPlaceName();
@@ -96,5 +101,32 @@ public class MeetingPlace extends BaseTimeEntity {
 
     private void updateGooglePlaceId(String googlePlaceId) {
         this.googlePlaceId = googlePlaceId;
+    }
+
+    public void lock(Long userId) {
+        if (this.lockUserId == null) {
+            this.lockUserId = userId;
+        }
+
+        if (!this.lockUserId.equals(userId)) {
+            throw new PlaceLockAlreadyExistException();
+        }
+    }
+
+    public void unlock(Long userId) {
+        if (this.lockUserId == null) {
+            throw new PlaceLockNotExistException();
+        }
+
+        if (!this.lockUserId.equals(userId)) {
+            throw new PlaceLockUserNotMatchException();
+        }
+
+        this.lockUserId = null;
+    }
+
+    public void updateWithUnlock(Long userId, PlaceInfo placeInfo) {
+        unlock(userId);
+        update(placeInfo);
     }
 }

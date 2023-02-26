@@ -2,7 +2,7 @@ package com.comeon.backend.meeting.presentation.api.meetingtime;
 
 import com.comeon.backend.meeting.command.domain.MemberRole;
 import com.comeon.backend.meeting.presentation.interceptor.RequiredMemberRole;
-import com.comeon.backend.meeting.command.application.ModifyMeetingTimeFacade;
+import com.comeon.backend.meeting.command.application.v1.ModifyMeetingTimeFacade;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
