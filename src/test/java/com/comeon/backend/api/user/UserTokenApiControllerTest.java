@@ -30,6 +30,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.util.Date;
+import java.util.Optional;
 
 import static com.comeon.backend.common.jwt.infrastructure.ClaimName.ISSUER;
 import static org.mockito.BDDMockito.*;
@@ -68,6 +69,9 @@ public class UserTokenApiControllerTest extends RestDocsTestSupport {
                                     currentRequestATK.getPayload().getAuthorities()
                             )
                     );
+
+            given(refreshTokenRepository.findRtkValueByUserId(anyLong()))
+                    .willReturn(Optional.ofNullable(rtk.getToken()));
 
             //when
             ResultActions perform = mockMvc.perform(
@@ -135,6 +139,9 @@ public class UserTokenApiControllerTest extends RestDocsTestSupport {
                             )
                     );
 
+            given(refreshTokenRepository.findRtkValueByUserId(anyLong()))
+                    .willReturn(Optional.ofNullable(rtk.getToken()));
+
             //when
             ResultActions perform = mockMvc.perform(
                     RestDocumentationRequestBuilders.post(userTokenReissueEndpoint)
@@ -159,7 +166,7 @@ public class UserTokenApiControllerTest extends RestDocsTestSupport {
         void allReissue() throws Exception {
             //given
             Instant instant = Instant.now().minusSeconds(16);
-            given(jwtBuilder.buildRtk())
+            given(jwtBuilder.buildRtk(anyLong()))
                     .willReturn(
                             Jwts.builder()
                                     .signWith(Keys.hmacShaKeyFor(jwtProperties.getSecretKey().getBytes(StandardCharsets.UTF_8)), SignatureAlgorithm.HS256)
@@ -167,6 +174,7 @@ public class UserTokenApiControllerTest extends RestDocsTestSupport {
                                     .claim(ISSUER.getValue(), ISSUER)
                                     .claim(ClaimName.ISSUED_AT.getValue(), Date.from(instant))
                                     .claim(ClaimName.EXPIRATION.getValue(), Date.from(instant.plusSeconds(jwtProperties.getRefreshTokenExpirySec())))
+                                    .claim(ClaimName.USER_ID.getValue(), currentUserId)
                                     .compact()
                     );
 
@@ -182,6 +190,9 @@ public class UserTokenApiControllerTest extends RestDocsTestSupport {
                                     currentRequestATK.getPayload().getAuthorities()
                             )
                     );
+
+            given(refreshTokenRepository.findRtkValueByUserId(anyLong()))
+                    .willReturn(Optional.ofNullable(rtk.getToken()));
 
             //when
             ResultActions perform = mockMvc.perform(

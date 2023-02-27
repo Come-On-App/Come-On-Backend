@@ -14,19 +14,19 @@ public class RefreshTokenRepository {
 
     private final RedisRepository redisRepository;
 
-    public void add(String refreshToken, Long userId, Instant expiry) {
-        redisRepository.set(refreshToken, String.valueOf(userId), Duration.between(Instant.now(), expiry));
+    public void add(Long userId, String refreshToken, Instant expiry) {
+        redisRepository.set(String.valueOf(userId), refreshToken, Duration.between(Instant.now(), expiry));
     }
 
-    public Optional<Long> findUserIdBy(String refreshToken) {
-        String userId = redisRepository.get(refreshToken);
-        if (userId == null) {
+    public Optional<String> findRtkValueByUserId(Long userId) {
+        String rtkValue = redisRepository.get(String.valueOf(userId));
+        if (rtkValue == null) {
             return Optional.empty();
         }
-        return Optional.of(Long.parseLong(userId));
+        return Optional.of(rtkValue);
     }
 
-    public void remove(String refreshToken) {
-        redisRepository.remove(refreshToken);
+    public void remove(Long userId) {
+        redisRepository.remove(String.valueOf(userId));
     }
 }

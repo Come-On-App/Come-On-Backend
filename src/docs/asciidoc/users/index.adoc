@@ -19,3 +19,5 @@ include::jwt-reissue.adoc[]
 include::my-details.adoc[]
 
 include::modify-me.adoc[]
+
+include::logout.adoc[]

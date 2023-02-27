@@ -15,4 +15,6 @@ public interface JwtManager {
     Long getUserIdByRtk(String token);
 
     boolean isSatisfiedRtkReissueCond(String refreshToken);
+
+    void logout(Long userId);
 }
