@@ -2,6 +2,7 @@ package com.comeon.backend.meeting.infrastructure.dao;
 
 import com.comeon.backend.meeting.infrastructure.mapper.MeetingPlaceMapper;
 import com.comeon.backend.meeting.query.dao.MeetingPlaceDao;
+import com.comeon.backend.meeting.query.dto.LockedPlaceSimple;
 import com.comeon.backend.meeting.query.dto.PlaceDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -17,5 +18,10 @@ public class MeetingPlaceDaoImpl implements MeetingPlaceDao {
     @Override
     public List<PlaceDetails> findPlacesByMeetingId(Long meetingId) {
         return placeMapper.selectPlacesByMeetingId(meetingId);
+    }
+
+    @Override
+    public List<LockedPlaceSimple> findLockedPlaceByMeetingId(Long meetingId) {
+        return placeMapper.selectLockedPlacesByMeetingId(meetingId);
     }
 }

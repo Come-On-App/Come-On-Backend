@@ -29,4 +29,17 @@
         where mp.meeting_id = #{meetingId}
         order by mp.place_order;
     </select>
+
+    <resultMap id="LockedPlaceMap" type="com.comeon.backend.meeting.query.dto.LockedPlaceSimple">
+        <id column="place_id" property="meetingPlaceId"/>
+        <result column="lock_user_id" property="lockingUserId"/>
+    </resultMap>
+
+    <select id="selectLockedPlacesByMeetingId" resultMap="LockedPlaceMap">
+        select mp.meeting_place_id as place_id,
+               mp.lock_user_id as lock_user_id
+        from meeting_place mp
+        where mp.meeting_id = #{meetingId}
+            and mp.lock_user_id is not null
+    </select>
 </mapper>
