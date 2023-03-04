@@ -1,9 +1,9 @@
-package com.comeon.backend.meeting.infrastructure.event;
+package com.comeon.backend.meeting.infrastructure.domain.event;
 
 import com.comeon.backend.common.producer.KafkaProducer;
 import com.comeon.backend.common.producer.KafkaTopicProperties;
 import com.comeon.backend.meeting.command.domain.event.DateVotingListUpdateEvent;
-import com.comeon.backend.meeting.infrastructure.event.message.DateVotingListUpdatedMessage;
+import com.comeon.backend.meeting.infrastructure.domain.event.message.DateVotingListUpdatedMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;

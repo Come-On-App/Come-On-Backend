@@ -37,7 +37,8 @@ public class SecurityConfig {
                 "/api/v1/oauth/**",
                 "/api/v1/auth/reissue",
                 "/test-api/v1/**",
-                "/api/v2/meetings/*/places/lock"
+                "/api/v2/meetings/*/places/lock",
+                "/api/v2/meetings/places/unlock"
         };
 
         http
