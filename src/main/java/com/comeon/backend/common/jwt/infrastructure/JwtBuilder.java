@@ -33,7 +33,7 @@ public class JwtBuilder {
                 .compact();
     }
 
-    public String buildRtk() {
+    public String buildRtk(Long userId) {
         Instant now = Instant.now();
         return Jwts.builder()
                 .signWith(Keys.hmacShaKeyFor(jwtProperties.getSecretKey().getBytes(StandardCharsets.UTF_8)), SignatureAlgorithm.HS256)
@@ -41,6 +41,7 @@ public class JwtBuilder {
                 .claim(ClaimName.ISSUER.getValue(), ISSUER)
                 .claim(ClaimName.ISSUED_AT.getValue(), Date.from(now))
                 .claim(ClaimName.EXPIRATION.getValue(), Date.from(now.plusSeconds(jwtProperties.getRefreshTokenExpirySec())))
+                .claim(ClaimName.USER_ID.getValue(), userId)
                 .compact();
     }
 }

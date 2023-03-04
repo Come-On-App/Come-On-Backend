@@ -61,10 +61,11 @@ public class TestJwtBuilder {
                 .claim(ClaimName.ISSUER.getValue(), ISSUER)
                 .claim(ClaimName.ISSUED_AT.getValue(), Date.from(now))
                 .claim(ClaimName.EXPIRATION.getValue(), Date.from(now.plusSeconds(refreshTokenExpirySec)))
+                .claim(ClaimName.USER_ID.getValue(), userId)
                 .compact();
 
         JwtToken refreshToken = new JwtToken(rtk, new Payload((jwtParser.parse(rtk))));
-        rtkRepository.add(refreshToken.getToken(), userId, refreshToken.getPayload().getExpiration());
+        rtkRepository.add(userId, refreshToken.getToken(), refreshToken.getPayload().getExpiration());
 
         return refreshToken;
     }

@@ -184,10 +184,9 @@ public class Meeting extends BaseTimeEntity {
 
         if (this.meetingDate != null) {
             meetingDate.update(startFrom, endTo);
-            return;
+        } else {
+            this.meetingDate = new MeetingDate(this, startFrom, endTo);
         }
-
-        this.meetingDate = new MeetingDate(this, startFrom, endTo);
 
         raiseMeetingDateUpdateEvent();
     }

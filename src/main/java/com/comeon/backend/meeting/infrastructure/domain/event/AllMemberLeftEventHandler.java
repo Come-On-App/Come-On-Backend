@@ -1,7 +1,7 @@
-package com.comeon.backend.meeting.infrastructure.event;
+package com.comeon.backend.meeting.infrastructure.domain.event;
 
 import com.comeon.backend.meeting.command.domain.event.AllMemberLeftEvent;
-import com.comeon.backend.meeting.infrastructure.repository.MeetingJpaRepository;
+import com.comeon.backend.meeting.infrastructure.domain.repository.MeetingJpaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;

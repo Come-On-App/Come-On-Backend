@@ -45,11 +45,11 @@ public class JwtManagerImpl implements JwtManager {
 
     @Override
     public JwtToken buildRtk(Long userId) {
-        String rtkValue = jwtBuilder.buildRtk();
+        String rtkValue = jwtBuilder.buildRtk(userId);
         Payload payload = new Payload(jwtParser.parse(rtkValue));
         JwtToken rtk = new JwtToken(rtkValue, payload);
 
-        rtkRepository.add(rtk.getToken(), userId, rtk.getPayload().getExpiration());
+        rtkRepository.add(userId, rtk.getToken(), rtk.getPayload().getExpiration());
 
         return rtk;
     }
@@ -60,8 +60,15 @@ public class JwtManagerImpl implements JwtManager {
             throw new InvalidRtkException();
         }
 
-        return rtkRepository.findUserIdBy(token)
+        Long userId = jwtParser.parse(token).getUserId();
+        String sessionTokenValue = rtkRepository.findRtkValueByUserId(userId)
                 .orElseThrow(() -> generateNoSessionRtkException(token));
+
+        if (!token.equals(sessionTokenValue)) {
+            throw new RtkNotMatchException();
+        }
+
+        return userId;
     }
 
     private NoSessionRtkException generateNoSessionRtkException(String token) {
@@ -72,5 +79,11 @@ public class JwtManagerImpl implements JwtManager {
     public boolean isSatisfiedRtkReissueCond(String refreshToken) {
         Instant expiration = jwtParser.parse(refreshToken).getExpiration();
         return reissueCondition.isSatisfied(expiration);
+    }
+
+    @Override
+    public void logout(Long userId) {
+        rtkRepository.findRtkValueByUserId(userId).orElseThrow(NoSessionRtkException::new);
+        rtkRepository.remove(userId);
     }
 }

@@ -14,12 +14,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.mockito.BDDMockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
-
-import java.util.Optional;
 
 @ActiveProfiles("test")
 @Import({
@@ -41,7 +40,7 @@ public abstract class ControllerUnitTest {
     @Autowired
     protected ObjectMapper objectMapper;
 
-    @Autowired
+    @SpyBean
     protected JwtManager jwtManager;
 
     @MockBean
@@ -60,8 +59,6 @@ public abstract class ControllerUnitTest {
     void setUpUnitTest() {
         BDDMockito.given(memberAuthorizationInterceptor.preHandle(BDDMockito.any(), BDDMockito.any(), BDDMockito.any()))
                 .willReturn(true);
-        BDDMockito.given(refreshTokenRepository.findUserIdBy(BDDMockito.anyString()))
-                .willReturn(Optional.of(currentUserId));
         grantParticipant();
     }
 
