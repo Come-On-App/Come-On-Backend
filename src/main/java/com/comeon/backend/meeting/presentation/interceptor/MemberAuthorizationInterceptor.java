@@ -2,7 +2,7 @@ package com.comeon.backend.meeting.presentation.interceptor;
 
 import com.comeon.backend.common.error.TypeMismatchException;
 import com.comeon.backend.meeting.command.domain.MemberRole;
-import com.comeon.backend.meeting.query.application.MeetingMemberQueryService;
+import com.comeon.backend.meeting.query.application.v1.MeetingMemberQueryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

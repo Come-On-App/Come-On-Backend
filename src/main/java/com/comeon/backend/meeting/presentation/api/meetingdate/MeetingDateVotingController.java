@@ -4,7 +4,7 @@ import com.comeon.backend.common.response.ListResponse;
 import com.comeon.backend.config.security.JwtPrincipal;
 import com.comeon.backend.meeting.presentation.interceptor.RequiredMemberRole;
 import com.comeon.backend.meeting.command.application.v1.VotingDateFacade;
-import com.comeon.backend.meeting.query.application.DateVotingQueryService;
+import com.comeon.backend.meeting.query.application.v1.DateVotingQueryService;
 import com.comeon.backend.meeting.query.dao.DateVotingDao;
 import com.comeon.backend.meeting.query.dto.DateVotingDetails;
 import com.comeon.backend.meeting.query.dto.DateVotingSimple;

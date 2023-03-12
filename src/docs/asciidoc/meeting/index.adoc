@@ -19,7 +19,11 @@ include::meeting-modify.adoc[]
 
 include::meeting-list.adoc[]
 
+include::meeting-list-v2.adoc[]
+
 include::meeting-details.adoc[]
+
+include::meeting-details-v2.adoc[]
 
 include::meeting-join.adoc[]
 
@@ -32,7 +36,11 @@ include::meeting-time-modify.adoc[]
 == 모임 회원 API
 include::meeting-member-list.adoc[]
 
+include::meeting-member-list-v2.adoc[]
+
 include::my-meeting-member-details.adoc[]
+
+include::my-meeting-member-details-v2.adoc[]
 
 include::meeting-leave.adoc[]
 

@@ -1,0 +1,7 @@
+:doctype: book
+:icons: font
+:sectlinks:
+:docinfo: shared-head
+
+[[profile-image-type-code]]
+include::{snippets}/enums/profile-image-types/enum-response-fields.adoc[]

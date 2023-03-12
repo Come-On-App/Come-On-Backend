@@ -46,6 +46,7 @@ public class RestDocsUtil {
         USER_STATUS("../enums", "user-status-code", "유저 상태 코드"),
         MEETING_MEMBER_ROLE("../enums", "meeting-member-role-code", "모임 회원 권한 코드"),
         PLACE_CATEGORY_CODE("../enums", "place-category-code", "장소 카테고리 코드"),
+        PROFILE_IMAGE_TYPE("../enums", "profile-image-type-code", "프로필 이미지 타입 코드"),
         ;
 
         private final String dirName;
