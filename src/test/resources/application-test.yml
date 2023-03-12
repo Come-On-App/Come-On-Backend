@@ -60,3 +60,5 @@ jwt:
     expire-time: 30 #sec
     reissue-criteria: 15 #sec
 
+user:
+  default-image: https://comeon-app-prod.s3.ap-northeast-2.amazonaws.com/default/comeon-default.jpg

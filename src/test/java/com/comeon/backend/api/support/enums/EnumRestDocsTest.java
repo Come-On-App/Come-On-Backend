@@ -152,6 +152,32 @@ public class EnumRestDocsTest extends RestDocsTestSupport {
                     )
             );
         }
+
+        @Test
+        @DisplayName("profile image types")
+        void profileImageTypes() throws Exception {
+            ResultActions perform = mockMvc.perform(
+                    RestDocumentationRequestBuilders.get("/enums/profile-image-type")
+                            .accept(MediaType.APPLICATION_JSON)
+            );
+
+            Map<String, String> data = objectMapper.readValue(
+                    perform.andReturn()
+                            .getResponse().getContentAsByteArray(),
+                    new TypeReference<>() {
+                    }
+            );
+
+            perform.andDo(
+                    restDocs.document(
+                            RestDocsUtil.customResponseFields(
+                                    "enum-response",
+                                    getTitleAttributes("프로필 이미지 타입 코드"),
+                                    enumConvertFieldDescriptor(data)
+                            )
+                    )
+            );
+        }
     }
 
     private static FieldDescriptor[] enumConvertFieldDescriptor(Map<String, String> enumValues) {

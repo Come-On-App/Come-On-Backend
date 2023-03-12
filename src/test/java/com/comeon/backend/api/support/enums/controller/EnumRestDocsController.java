@@ -1,5 +1,6 @@
 package com.comeon.backend.api.support.enums.controller;
 
+import com.comeon.backend.common.response.ProfileImageType;
 import com.comeon.backend.meeting.command.domain.MemberRole;
 import com.comeon.backend.meeting.command.domain.PlaceCategory;
 import com.comeon.backend.user.command.domain.OauthProvider;
@@ -45,5 +46,11 @@ public class EnumRestDocsController {
     public Map<String, String> placeCategory() {
         return Arrays.stream(PlaceCategory.values())
                 .collect(Collectors.toMap(PlaceCategory::name, PlaceCategory::getDescription));
+    }
+
+    @GetMapping("/profile-image-type")
+    public Map<String, String> profileImageTypes() {
+        return Arrays.stream(ProfileImageType.values())
+                .collect(Collectors.toMap(ProfileImageType::name, ProfileImageType::getDescription));
     }
 }
