@@ -1,4 +1,4 @@
-package com.comeon.backend.user.api.dto;
+package com.comeon.backend.user.api.v1.dto;
 
 import com.comeon.backend.common.jwt.JwtToken;
 import lombok.AllArgsConstructor;
