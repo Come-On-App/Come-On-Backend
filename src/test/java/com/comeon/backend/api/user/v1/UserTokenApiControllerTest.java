@@ -1,4 +1,4 @@
-package com.comeon.backend.api.user;
+package com.comeon.backend.api.user.v1;
 
 import com.comeon.backend.api.support.utils.RestDocsTestSupport;
 import com.comeon.backend.common.jwt.JwtToken;
@@ -6,8 +6,8 @@ import com.comeon.backend.common.jwt.TokenType;
 import com.comeon.backend.common.jwt.infrastructure.ClaimName;
 import com.comeon.backend.common.jwt.infrastructure.JwtBuilder;
 import com.comeon.backend.common.jwt.infrastructure.JwtProperties;
-import com.comeon.backend.user.api.UserTokenApiController;
-import com.comeon.backend.user.api.dto.UserTokenReissueRequest;
+import com.comeon.backend.user.api.v1.UserTokenApiController;
+import com.comeon.backend.user.api.v1.dto.UserTokenReissueRequest;
 import com.comeon.backend.user.query.UserDao;
 import com.comeon.backend.user.query.UserSimple;
 import io.jsonwebtoken.Jwts;

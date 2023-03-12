@@ -1,9 +1,9 @@
-package com.comeon.backend.user.api;
+package com.comeon.backend.user.api.v1;
 
 import com.comeon.backend.common.jwt.JwtManager;
 import com.comeon.backend.common.jwt.JwtToken;
-import com.comeon.backend.user.api.dto.UserTokenReissueRequest;
-import com.comeon.backend.user.api.dto.UserTokenResponse;
+import com.comeon.backend.user.api.v1.dto.UserTokenReissueRequest;
+import com.comeon.backend.user.api.v1.dto.UserTokenResponse;
 import com.comeon.backend.user.query.UserDao;
 import com.comeon.backend.user.query.UserSimple;
 import lombok.RequiredArgsConstructor;

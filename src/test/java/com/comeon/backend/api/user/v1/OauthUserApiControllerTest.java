@@ -1,7 +1,7 @@
-package com.comeon.backend.api.user;
+package com.comeon.backend.api.user.v1;
 
 import com.comeon.backend.api.support.utils.RestDocsTestSupport;
-import com.comeon.backend.user.api.OauthUserApiController;
+import com.comeon.backend.user.api.v1.OauthUserApiController;
 import com.comeon.backend.user.command.application.OauthUserFacade;
 import com.comeon.backend.user.command.application.dto.GoogleOauthRequest;
 import com.comeon.backend.user.command.application.dto.KakaoOauthRequest;
