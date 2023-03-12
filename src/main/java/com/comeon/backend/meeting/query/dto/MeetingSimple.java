@@ -53,4 +53,8 @@ public class MeetingSimple {
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
         private LocalDate endTo;
     }
+
+    public void setHostUserProfileImageUrl(String defaultImageUrl) {
+        this.hostUser.profileImageUrl = defaultImageUrl;
+    }
 }

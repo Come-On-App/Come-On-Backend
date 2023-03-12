@@ -1,5 +1,6 @@
-package com.comeon.backend.meeting.query.application;
+package com.comeon.backend.meeting.query.application.v1;
 
+import com.comeon.backend.meeting.query.application.NotMemberException;
 import com.comeon.backend.meeting.query.dao.MeetingMemberDao;
 import com.comeon.backend.meeting.query.dto.MemberSimple;
 import lombok.RequiredArgsConstructor;

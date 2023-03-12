@@ -1,4 +1,4 @@
-package com.comeon.backend.meeting.presentation.api;
+package com.comeon.backend.meeting.presentation.api.meeting.v1;
 
 import com.comeon.backend.config.security.JwtPrincipal;
 import com.comeon.backend.meeting.command.application.v1.JoinMeetingFacade;

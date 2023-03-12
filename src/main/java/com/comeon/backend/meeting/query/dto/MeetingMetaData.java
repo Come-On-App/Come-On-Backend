@@ -24,6 +24,10 @@ public class MeetingMetaData {
     private MeetingCalendar calendar;
     private ConfirmedDate fixedDate;
 
+    public void setHostUserProfileImageUrl(String defaultImageUrl) {
+        this.hostUser.profileImageUrl = defaultImageUrl;
+    }
+
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor

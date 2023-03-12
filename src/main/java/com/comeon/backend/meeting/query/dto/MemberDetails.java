@@ -14,4 +14,8 @@ public class MemberDetails {
     private String nickname;
     private String profileImageUrl;
     private String memberRole;
+
+    public void setProfileImageUrl(String defaultImageUrl) {
+        this.profileImageUrl = defaultImageUrl;
+    }
 }

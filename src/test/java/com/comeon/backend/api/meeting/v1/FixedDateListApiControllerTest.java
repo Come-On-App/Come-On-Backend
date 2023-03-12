@@ -1,8 +1,8 @@
 package com.comeon.backend.api.meeting.v1;
 
 import com.comeon.backend.api.support.utils.RestDocsTestSupport;
-import com.comeon.backend.meeting.presentation.api.FixedDateListApiController;
-import com.comeon.backend.meeting.query.application.FixedDateQueryService;
+import com.comeon.backend.meeting.presentation.api.meeting.v1.FixedDateListApiController;
+import com.comeon.backend.meeting.query.application.v1.FixedDateQueryService;
 import com.comeon.backend.meeting.query.dto.FixedDateSimple;
 import com.comeon.backend.meeting.query.dto.MeetingFixedDateSummary;
 import com.comeon.backend.meeting.query.dto.MeetingFixedDatesResponse;

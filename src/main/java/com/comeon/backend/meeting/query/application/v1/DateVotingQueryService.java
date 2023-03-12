@@ -1,4 +1,4 @@
-package com.comeon.backend.meeting.query.application;
+package com.comeon.backend.meeting.query.application.v1;
 
 import com.comeon.backend.meeting.query.dto.VotingMemberSimple;
 import com.comeon.backend.meeting.query.dao.DateVotingDao;

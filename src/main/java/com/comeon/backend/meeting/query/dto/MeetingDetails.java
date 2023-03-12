@@ -18,6 +18,10 @@ public class MeetingDetails {
     private List<DateVotingSimple> votingDates;
     private List<PlaceDetails> places;
 
+    public void setHostUserProfileImageUrl(String defaultImageUrl) {
+        this.meetingMetaData.setHostUserProfileImageUrl(defaultImageUrl);
+    }
+
     // Collection
     @Getter
     @NoArgsConstructor
@@ -29,6 +33,10 @@ public class MeetingDetails {
         private String nickname;
         private String profileImageUrl;
         private String memberRole;
+
+        public void setProfileImageUrl(String defaultImageUrl) {
+            this.profileImageUrl = defaultImageUrl;
+        }
     }
 
     @Getter

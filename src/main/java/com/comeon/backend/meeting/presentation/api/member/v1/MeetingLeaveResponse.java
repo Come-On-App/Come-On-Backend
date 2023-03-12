@@ -1,15 +1,15 @@
-package com.comeon.backend.meeting.presentation.api.member;
+package com.comeon.backend.meeting.presentation.api.member.v1;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class MemberDropResponse {
+public class MeetingLeaveResponse {
 
     private boolean success;
 
-    public MemberDropResponse() {
+    public MeetingLeaveResponse() {
         this.success = true;
     }
 }

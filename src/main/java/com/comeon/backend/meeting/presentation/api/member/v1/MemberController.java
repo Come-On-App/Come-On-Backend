@@ -1,4 +1,4 @@
-package com.comeon.backend.meeting.presentation.api.member;
+package com.comeon.backend.meeting.presentation.api.member.v1;
 
 import com.comeon.backend.common.response.ListResponse;
 import com.comeon.backend.config.security.JwtPrincipal;

@@ -1,7 +1,7 @@
-package com.comeon.backend.meeting.presentation.api;
+package com.comeon.backend.meeting.presentation.api.meeting.v1;
 
 import com.comeon.backend.config.security.JwtPrincipal;
-import com.comeon.backend.meeting.query.application.FixedDateQueryService;
+import com.comeon.backend.meeting.query.application.v1.FixedDateQueryService;
 import com.comeon.backend.meeting.query.dto.MeetingFixedDatesResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -1,4 +1,4 @@
-package com.comeon.backend.meeting.presentation.api.member;
+package com.comeon.backend.meeting.presentation.api.member.v1;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,7 +9,7 @@ import javax.validation.constraints.NotNull;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class HostRoleDelegateRequest {
+public class MemberDropRequest {
 
     @NotNull
     private Long targetUserId;

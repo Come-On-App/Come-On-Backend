@@ -1,4 +1,4 @@
-package com.comeon.backend.meeting.presentation.api;
+package com.comeon.backend.meeting.presentation.api.meeting.v1;
 
 import com.comeon.backend.common.response.SliceResponse;
 import com.comeon.backend.config.security.JwtPrincipal;
@@ -8,7 +8,7 @@ import com.comeon.backend.meeting.command.application.v1.CreateMeetingFacade;
 import com.comeon.backend.meeting.command.application.v1.ModifyMeetingFacade;
 import com.comeon.backend.meeting.command.application.v1.dto.MeetingCreateRequest;
 import com.comeon.backend.meeting.command.application.v1.dto.MeetingModifyRequest;
-import com.comeon.backend.meeting.query.application.MeetingQueryService;
+import com.comeon.backend.meeting.query.application.v1.MeetingQueryService;
 import com.comeon.backend.meeting.query.dao.MeetingDao;
 import com.comeon.backend.meeting.query.dao.MeetingSliceCondition;
 import com.comeon.backend.meeting.query.dto.MeetingDetails;
