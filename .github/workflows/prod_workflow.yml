@@ -1,0 +1,65 @@
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+# This workflow will build a Java project with Gradle and cache/restore any dependencies to improve the workflow execution time
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-gradle
+
+name: ComeOn App PROD CI/CD
+
+# Event Trigger
+on:
+  push:
+    branches: [ "main" ]
+
+permissions:
+  contents: read
+
+jobs:
+  # 작업 식별자 입력
+  test_and_build:
+    # 실행 환경 : ubuntu
+    runs-on: ubuntu-latest
+    # Task의 순서 명시
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+      with:
+        token: ${{ secrets.CONFIG_REPO_GITHUB_TOKEN }}
+        submodules: true
+    - name: Set up JDK 11
+      uses: actions/setup-java@v3
+      with:
+        java-version: '11'
+        distribution: 'temurin'
+    - name: Grant execute permisstion for gradlew
+      run: chmod +x gradlew
+    # 테스트 수행
+    - name: Test
+      run: ./gradlew clean test -Pprofile=test
+    # 프로젝트 빌드
+    - name: Build
+      run: ./gradlew bootJar
+    # 도커 이미지 빌드 & Push
+    - name: Setup Docker Buildx
+      uses: docker/setup-buildx-action@v2.2.1
+    - name: Docker Image build and push
+      run: |
+        docker login --username=${{ secrets.YOO_DOCKERHUB_USERNAME }} --password=${{ secrets.YOO_DOCKERHUB_PASSWORD }}
+        docker buildx build --platform linux/arm64/v8,linux/amd64 --tag ${{ secrets.YOO_DOCKERHUB_USERNAME }}/comeon-backend:latest --push .
+
+  deploy:
+    needs: test_and_build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Docker image pull and run
+        uses: appleboy/ssh-action@v0.1.7
+        with:
+          host: ${{ secrets.PROD_HOST }}
+          username: ${{ secrets.PROD_USERNAME }}
+          key: ${{ secrets.PROD_PRIVATE_KEY }}
+          port: ${{ secrets.PROD_PORT }}
+          script: |
+            docker compose -f ~/comeon-app/compose/api-server-docker-compose.yml down
+            docker image rm ${{ secrets.YOO_DOCKERHUB_USERNAME }}/comeon-backend
+            docker compose -f ~/comeon-app/compose/api-server-docker-compose.yml up -d --no-recreate
