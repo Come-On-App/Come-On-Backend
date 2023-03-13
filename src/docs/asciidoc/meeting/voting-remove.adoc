@@ -1,0 +1,39 @@
+:doctype: book
+:icons: font
+:sectlinks:
+:docinfo: shared-head
+
+[[voting-remove]]
+=== 모임일 투표 삭제
+
+DELETE /api/v1/meetings/{meeting-id}/date/voting
+
+==== API Spec
+*경로 파라미터*
+
+include::{snippets}/voting-remove/success/path-parameters.adoc[]
+
+*요청 헤더*
+
+include::{snippets}/voting-remove/success/request-headers.adoc[]
+
+*요청 필드*
+
+include::{snippets}/voting-remove/success/request-fields.adoc[]
+
+*응답 필드*
+
+include::{snippets}/voting-remove/success/response-fields.adoc[]
+
+==== 요청/응답 예시
+*요청 예시*
+
+include::{snippets}/voting-remove/success/http-request.adoc[]
+
+*응답 예시*
+
+include::{snippets}/voting-remove/success/http-response.adoc[]
+
+오류 발생시 아래 "오류 코드 확인하기" 링크에서 모임 관련 오류(`3XXX`)를 확인해주세요.
+
+* link:../errors/error-code.html[오류 코드 확인하기,role="error-code-popup"]

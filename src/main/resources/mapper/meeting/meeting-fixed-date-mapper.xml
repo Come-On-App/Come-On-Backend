@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.comeon.backend.meeting.infrastructure.mapper.FixedDateMapper">
+
+    <resultMap id="MeetingFixedDateSimpleMap" type="com.comeon.backend.meeting.query.dto.MeetingFixedDateSimple">
+        <id column="meeting_id" property="meetingId"/>
+        <association property="fixedDate"
+                     javaType="com.comeon.backend.meeting.query.dto.FixedDateSimple">
+            <result column="meeting_start_date" property="startDate"/>
+            <result column="meeting_end_date" property="endDate"/>
+        </association>
+    </resultMap>
+    <select id="selectFixedDateSimple" resultMap="MeetingFixedDateSimpleMap">
+        select m.meeting_id   as meeting_id,
+               mfd.start_from as meeting_start_date,
+               mfd.end_to     as meeting_end_date
+        from meeting m
+                 left join meeting_fixed_date mfd on m.meeting_id = mfd.meeting_id
+        where m.meeting_id = #{meetingId};
+    </select>
+
+    <resultMap id="MeetingFixedDateSummaryMap" type="com.comeon.backend.meeting.query.dto.MeetingFixedDateSummary">
+        <id column="meeting_id" property="meetingId"/>
+        <result column="meeting_name" property="meetingName"/>
+        <result column="meeting_start_time" property="meetingStartTime"/>
+        <association property="fixedDate"
+                     javaType="com.comeon.backend.meeting.query.dto.FixedDateSimple">
+            <result column="meeting_start_date" property="startDate"/>
+            <result column="meeting_end_date" property="endDate"/>
+        </association>
+    </resultMap>
+    <select id="selectMeetingFixedDateSummary" resultMap="MeetingFixedDateSummaryMap">
+        select m.meeting_id         as meeting_id,
+               m.name               as meeting_name,
+               mfd.start_from       as meeting_start_date,
+               mfd.end_to           as meeting_end_date,
+               m.meeting_start_time as meeting_start_time
+        from meeting_fixed_date mfd
+                 left join meeting m on mfd.meeting_id = m.meeting_id
+                 left join meeting_member mm on m.meeting_id = mm.meeting_id
+        where mm.user_id = #{userId}
+          and mfd.start_from <![CDATA[>=]]> #{searchStartFrom}
+          and mfd.start_from <![CDATA[<=]]> #{searchEndTo}
+        order by mfd.start_from
+    </select>
+</mapper>

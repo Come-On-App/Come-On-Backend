@@ -35,3 +35,10 @@ out/
 
 ### VS Code ###
 .vscode/
+
+local-db/write/db/**
+local-db/read/db/**
+
+/src/main/resources/static/docs/**
+spy.log
+/log

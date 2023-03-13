@@ -1,0 +1,53 @@
+:doctype: book
+:icons: font
+:sectlinks:
+:docinfo: shared-head
+
+[[jwt-reissue]]
+== 토큰 재발급
+
+POST /api/v1/auth/reissue
+
+=== API Spec
+==== 요청 필드
+include::{snippets}/user-token-reissue/always-all-reissue/request-fields.adoc[]
+
+==== 응답 필드
+include::{snippets}/user-token-reissue/always-all-reissue/response-fields.adoc[]
+include::{snippets}/user-token-reissue/always-all-reissue/response-fields-ACC-TOKEN.adoc[]
+include::{snippets}/user-token-reissue/always-all-reissue/response-fields-REF-TOKEN.adoc[]
+
+=== 요청/응답 예시
+==== 리프레시 토큰 항시 재발급 true 요청의 경우
+이 경우, 리프레시 토큰은 항상 재발급 됩니다.
+
+==== 요청 예시1
+include::{snippets}/user-token-reissue/always-all-reissue/http-request.adoc[]
+
+==== 응답 예시1
+include::{snippets}/user-token-reissue/always-all-reissue/http-response.adoc[]
+
+==== 리프레시 토큰 항시 재발급 false, 기존 리프레시 토큰 유효 기간이 7일 초과인 경우
+이 경우, 리프레시 토큰은 재발급되지 않습니다.
+
+==== 요청 예시2
+include::{snippets}/user-token-reissue/atk-only-reissue/http-request.adoc[]
+
+==== 응답 예시2
+include::{snippets}/user-token-reissue/atk-only-reissue/http-response.adoc[]
+
+==== 리프레시 토큰 항시 재발급 false, 기존 리프레시 토큰 유효 기간이 7일 이하인 경우
+이 경우, 리프레시 토큰도 함께 재발급 됩니다.
+
+==== 요청 예시3
+include::{snippets}/user-token-reissue/all-reissue/http-request.adoc[]
+
+==== 응답 예시3
+include::{snippets}/user-token-reissue/all-reissue/http-response.adoc[]
+
+
+
+오류 발생시 아래 "오류 코드 확인하기" 링크에서 유저 관련 오류(`2XXX`)를 확인해주세요.
+
+* link:../errors/error-code.html[오류 코드 확인하기,role="error-code-popup"]
+

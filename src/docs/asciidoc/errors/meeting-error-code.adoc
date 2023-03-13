@@ -1,0 +1,11 @@
+:doctype: book
+:icons: font
+:sectlinks:
+:docinfo: shared-head
+
+=== 모임 관련 오류 코드
+
+모임 관련 오류 코드는 `3XXX` 형식을 갖습니다.
+
+[[meeting-error-code]]
+include::{snippets}/error-code/meetings/error-code-response-fields.adoc[]

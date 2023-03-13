@@ -1,0 +1,40 @@
+:doctype: book
+:icons: font
+:sectlinks:
+:docinfo: shared-head
+
+[[entry-code-renew]]
+=== 모임 입장 코드 갱신
+
+POST /api/v1/meetings/{meeting-id}/entry-code
+
+==== API Spec
+*요청 경로*
+
+include::{snippets}/entry-code-renew/success/path-parameters.adoc[]
+
+*요청 헤더*
+
+include::{snippets}/entry-code-renew/success/request-headers.adoc[]
+
+*응답 필드*
+
+include::{snippets}/entry-code-renew/success/response-fields.adoc[]
+
+==== 요청/응답 예시
+*요청 예시*
+
+include::{snippets}/entry-code-renew/success/http-request.adoc[]
+
+*응답 예시*
+
+include::{snippets}/entry-code-renew/success/http-response.adoc[]
+
+==== 주의 사항
+- 입장 코드 갱신은 `HOST` 권한을 가진 유저만 가능합니다.
+- 입장 코드 갱신 이후에는 응답으로 전송된 입장 코드만 유효하며, 기존의 입장 코드는 폐기되어 더 이상 이용할 수 없게됩니다.
+
+
+오류 발생시 아래 "오류 코드 확인하기" 링크에서 모임 관련 오류(`3XXX`)를 확인해주세요.
+
+* link:../errors/error-code.html[오류 코드 확인하기,role="error-code-popup"]

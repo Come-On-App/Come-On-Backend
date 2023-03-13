@@ -1,0 +1,64 @@
+spring:
+  datasource:
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+    url: jdbc:h2:mem:testdb
+
+  redis:
+    port: 6379
+    host: localhost
+
+  security:
+    oauth2:
+      client:
+        registration:
+          kakao:
+            client-id: xxxxxxxxxxxxxxx
+            client-secret: xxxxxxxxxxxx
+            redirect-uri: http://localhost:11111/xxxxxxx
+            authorization-grant-type: authorization_code
+            client-authentication-method: POST
+            client-name: kakao
+        provider:
+          kakao:
+            authorization-uri: https://kauth.kakao.com/oauth/authorize
+            token-uri: https://kauth.kakao.com/oauth/token
+            user-info-uri: https://kapi.kakao.com/v2/user/me
+            user-name-attribute: id
+
+  kafka:
+    bootstrap-servers: localhost:1234
+
+kafka:
+  topic:
+    meeting-meta-data: "test_meta_data"
+    meeting-members: "test_members"
+    meeting-places: "test_places"
+    meeting-voting: "test_voting"
+    meeting-fixed-date: "test_fixed_date"
+    meeting-place-lock: "test_place_lock"
+    meeting-place-unlock: "test_place_unlock"
+
+cloud:
+  aws:
+    region:
+      static: ap-northeast-2
+    s3:
+      bucket: comeon-app-test
+    stack:
+      auto: false
+
+s3:
+  dir-name: test
+
+jwt:
+  secret: 76a6e4c00003d20b9805858efc7098c2bfcf073ebf19f5958ef6b9f533845cb6bfe4d4ca20ea3cc1e23730a6d87c893fe6a6ced760629a4f4e905cb4ab7b7915
+  access-token:
+    expire-time: 10 #sec
+  refresh-token:
+    expire-time: 30 #sec
+    reissue-criteria: 15 #sec
+
+user:
+  default-image: https://comeon-app-prod.s3.ap-northeast-2.amazonaws.com/default/comeon-default.jpg

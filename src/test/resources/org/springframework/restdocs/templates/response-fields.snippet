@@ -1,0 +1,13 @@
+.{{title}}
+[cols="<7,^4,^4,<14"]
+|===
+|필드명|타입|필수값|설명
+
+{{#fields}}
+|{{#tableCellContent}}`+{{path}}+`{{/tableCellContent}}
+|{{#tableCellContent}}`+{{type}}+`{{/tableCellContent}}
+|{{#tableCellContent}}{{#optional}}X{{/optional}}{{^optional}}O{{/optional}}{{/tableCellContent}}
+|{{#tableCellContent}}{{description}}{{/tableCellContent}}
+
+{{/fields}}
+|===

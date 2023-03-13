@@ -1,0 +1,16 @@
+:doctype: book
+:icons: font
+:sectlinks:
+:docinfo: shared-head
+
+[[list-response]]
+== List 응답
+
+=== Response Spec
+include::{snippets}/list-response/success/response-fields.adoc[]
+
+`contents` 필드에는 각 API 응답마다 다른 스펙의 데이터가 포함됩니다.
+
+=== Response Example
+include::{snippets}/list-response/success/http-response.adoc[]
+

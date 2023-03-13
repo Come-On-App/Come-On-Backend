@@ -1,0 +1,35 @@
+:doctype: book
+:icons: font
+:sectlinks:
+:docinfo: shared-head
+
+[[meeting-place-lock]]
+=== 모임 장소 락
+
+POST /api/v2/meetings/{meeting-id}/places/{place-id}/lock
+
+==== API Spec
+*경로 파라미터*
+
+include::{snippets}/meeting-place-lock/success/path-parameters.adoc[]
+
+*요청 헤더*
+
+include::{snippets}/meeting-place-lock/success/request-headers.adoc[]
+
+*응답 필드*
+
+include::{snippets}/meeting-place-lock/success/response-fields.adoc[]
+
+==== 요청/응답 예시
+*요청 예시*
+
+include::{snippets}/meeting-place-lock/success/http-request.adoc[]
+
+*응답 예시*
+
+include::{snippets}/meeting-place-lock/success/http-response.adoc[]
+
+오류 발생시 아래 "오류 코드 확인하기" 링크에서 모임 관련 오류(`3XXX`)를 확인해주세요.
+
+* link:../errors/error-code.html[오류 코드 확인하기,role="error-code-popup"]

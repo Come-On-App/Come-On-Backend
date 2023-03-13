@@ -1,0 +1,11 @@
+:doctype: book
+:icons: font
+:sectlinks:
+:docinfo: shared-head
+
+=== 공통 오류 코드
+
+공통 오류 코드는 `1XXX` 형식을 갖습니다.
+
+[[common-error-code]]
+include::{snippets}/error-code/common/error-code-response-fields.adoc[]

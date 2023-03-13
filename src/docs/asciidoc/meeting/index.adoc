@@ -1,0 +1,82 @@
+= Meeting API Docs
+:toc-title: Meeting API
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 2
+:sectlinks:
+:docinfo: shared-head
+
+ifndef::snippets[]
+:snippets: ./build/generated-snippets
+endif::[]
+
+== 모임 API
+include::meeting-add.adoc[]
+
+include::meeting-modify.adoc[]
+
+include::meeting-list.adoc[]
+
+include::meeting-list-v2.adoc[]
+
+include::meeting-details.adoc[]
+
+include::meeting-details-v2.adoc[]
+
+include::meeting-join.adoc[]
+
+include::entry-code-details.adoc[]
+
+include::entry-code-renew.adoc[]
+
+include::meeting-time-modify.adoc[]
+
+== 모임 회원 API
+include::meeting-member-list.adoc[]
+
+include::meeting-member-list-v2.adoc[]
+
+include::my-meeting-member-details.adoc[]
+
+include::my-meeting-member-details-v2.adoc[]
+
+include::meeting-leave.adoc[]
+
+include::member-drop.adoc[]
+
+include::host-role-delegate.adoc[]
+
+== 모임 장소 API
+include::meeting-place-list.adoc[]
+
+include::meeting-place-add.adoc[]
+
+include::meeting-place-modify.adoc[]
+
+include::meeting-place-remove.adoc[]
+
+include::meeting-place-lock-v2.adoc[]
+
+include::meeting-place-unlock-v2.adoc[]
+
+include::meeting-place-modify-v2.adoc[]
+
+== 모임일 투표 API
+include::voting-add.adoc[]
+
+include::voting-remove.adoc[]
+
+include::voting-simple-list.adoc[]
+
+include::voting-details.adoc[]
+
+== 모임일 확정 API
+include::meeting-date-confirm.adoc[]
+
+include::meeting-date-cancel.adoc[]
+
+include::meeting-confirmed-date-simple.adoc[]
+
+include::meeting-fixed-date-list.adoc[]

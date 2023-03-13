@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.comeon.backend.meeting.infrastructure.mapper.DateVotingMapper">
+
+    <resultMap id="VotingSimpleMap" type="com.comeon.backend.meeting.query.dto.DateVotingSimple">
+        <id column="voting_date" property="date"/>
+        <id column="member_count" property="memberCount"/>
+        <id column="current_user_voted" property="myVoting"/>
+    </resultMap>
+    <select id="selectVotingSimples" resultMap="VotingSimpleMap">
+        select mdv.date                               as voting_date,
+               count(mdv.user_id)                     as member_count,
+               exists(select *
+                      from meeting_date_voting mdv2
+                      where mdv2.meeting_id = #{meetingId}
+                        and mdv2.date = mdv.date
+                        and mdv2.user_id = #{userId}) as current_user_voted
+        from meeting_date_voting mdv
+        where mdv.meeting_id = #{meetingId}
+        group by mdv.date;
+    </select>
+
+    <resultMap id="VotingMemberSimpleMap" type="com.comeon.backend.meeting.query.dto.VotingMemberSimple">
+        <id column="user_id" property="userId"/>
+        <id column="nickname" property="nickname"/>
+        <id column="profile_image_url" property="profileImageUrl"/>
+        <id column="member_role" property="memberRole"/>
+    </resultMap>
+    <select id="selectVotingMemberSimples" resultMap="VotingMemberSimpleMap">
+        select u.user_id           as user_id,
+               u.nickname          as nickname,
+               u.profile_image_url as profile_image_url,
+               mm.role             as member_role
+        from meeting_date_voting mdv
+                 left join users u on mdv.user_id = u.user_id
+                 left join meeting_member mm on mdv.user_id = mm.user_id and mdv.meeting_id = mm.meeting_id
+        where mdv.meeting_id = #{meetingId}
+          and mdv.date = #{date}
+    </select>
+</mapper>

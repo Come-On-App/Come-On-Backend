@@ -1,0 +1,17 @@
+= Common Response Spec
+:toc-title: Common Response Spec
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 2
+:sectlinks:
+:docinfo: shared-head
+
+ifndef::snippets[]
+:snippets: ./build/generated-snippets
+endif::[]
+
+include::slice-response.adoc[]
+
+include::list-response.adoc[]
