@@ -60,6 +60,6 @@ jobs:
           key: ${{ secrets.DEV_PRIVATE_KEY }}
           port: ${{ secrets.DEV_PORT }}
           script: |
-            docker compose -f ~/yoo_dev/comeon-app-backend/docker-compose.yml down
+            docker compose -f ~/yoo_dev/comeon-app-backend/api-server-docker-compose.yml down
             docker image rm ${{ secrets.YOO_DOCKERHUB_USERNAME }}/comeon-backend
-            docker compose -f ~/yoo_dev/comeon-app-backend/docker-compose.yml up -d --no-recreate
+            docker compose -f ~/yoo_dev/comeon-app-backend/api-server-docker-compose.yml up -d --no-recreate

@@ -117,6 +117,7 @@
         </appender>
 
         <root level="info">
+            <appender-ref ref="FILE"/>
             <appender-ref ref="FILE_INFO"/>
             <appender-ref ref="FILE_WARN"/>
             <appender-ref ref="FILE_ERROR"/>
