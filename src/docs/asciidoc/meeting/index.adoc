@@ -31,6 +31,8 @@ include::entry-code-details.adoc[]
 
 include::entry-code-renew.adoc[]
 
+include::meeting-time-simple.adoc[]
+
 include::meeting-time-modify.adoc[]
 
 == 모임 회원 API

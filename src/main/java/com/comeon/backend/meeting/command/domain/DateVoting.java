@@ -34,4 +34,8 @@ public class DateVoting extends BaseTimeEntity {
         return !this.date.isBefore(startFrom)
                 && !this.date.isAfter(endTo);
     }
+
+    public boolean isVoter(Long userId) {
+        return this.userId.equals(userId);
+    }
 }

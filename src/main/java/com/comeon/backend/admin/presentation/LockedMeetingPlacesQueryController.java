@@ -1,5 +1,6 @@
-package com.comeon.backend.meeting.presentation.api.meetingplace.v2;
+package com.comeon.backend.admin.presentation;
 
+import com.comeon.backend.meeting.presentation.api.meetingplace.v2.LockedMeetingPlaceListResponse;
 import com.comeon.backend.meeting.query.dao.MeetingPlaceDao;
 import com.comeon.backend.meeting.query.dto.LockedPlaceSimple;
 import lombok.RequiredArgsConstructor;
@@ -14,8 +15,8 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v2/meetings/{meetingId}/places/lock")
-public class MeetingPlaceLockQueryController {
+@RequestMapping("/api/v1/admin/meetings/{meetingId}/places/lock")
+public class LockedMeetingPlacesQueryController {
 
     private final MeetingPlaceDao meetingPlaceDao;
 

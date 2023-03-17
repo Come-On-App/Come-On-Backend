@@ -68,8 +68,9 @@ public class Meeting extends BaseTimeEntity {
     }
 
     public void modifyMeetingTime(LocalTime meetingStartTime) {
-        // TODO Event
         this.meetingTime = MeetingTime.create(meetingStartTime);
+
+        Events.raise(MeetingTimeUpdateEvent.create(this.id));
     }
 
     public Member join(Long userId) {
@@ -114,6 +115,7 @@ public class Meeting extends BaseTimeEntity {
                 .findFirst()
                 .orElseThrow(MemberNotExistException::new);
         this.members.remove(memberToLeave);
+        dateVotingList.removeIf(dateVoting -> dateVoting.isVoter(memberToLeave.getUserId()));
 
         if (memberToLeave.isHost()) {
             members.stream()
@@ -135,6 +137,7 @@ public class Meeting extends BaseTimeEntity {
         }
 
         this.members.remove(memberToDrop);
+        dateVotingList.removeIf(dateVoting -> dateVoting.isVoter(memberToDrop.getUserId()));
 
         raiseMemberListUpdateEvent();
     }

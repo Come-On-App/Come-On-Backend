@@ -39,6 +39,7 @@ kafka:
     meeting-fixed-date: "test_fixed_date"
     meeting-place-lock: "test_place_lock"
     meeting-place-unlock: "test_place_unlock"
+    meeting-time: "test_meeting_time"
 
 cloud:
   aws:
@@ -62,3 +63,6 @@ jwt:
 
 user:
   default-image: https://comeon-app-prod.s3.ap-northeast-2.amazonaws.com/default/comeon-default.jpg
+
+admin:
+  key: 2512412r12r43gy24t3
