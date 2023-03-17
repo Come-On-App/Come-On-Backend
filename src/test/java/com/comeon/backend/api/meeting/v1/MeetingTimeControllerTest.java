@@ -1,9 +1,11 @@
 package com.comeon.backend.api.meeting.v1;
 
 import com.comeon.backend.api.support.utils.RestDocsTestSupport;
-import com.comeon.backend.meeting.presentation.api.meetingtime.MeetingTimeModifyController;
+import com.comeon.backend.meeting.presentation.api.meetingtime.MeetingTimeController;
 import com.comeon.backend.meeting.presentation.api.meetingtime.MeetingTimeModifyRequest;
 import com.comeon.backend.meeting.command.application.v1.ModifyMeetingTimeFacade;
+import com.comeon.backend.meeting.query.dao.MeetingDao;
+import com.comeon.backend.meeting.query.dto.MeetingTimeSimple;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -23,8 +25,11 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalTime;
 
-@WebMvcTest({MeetingTimeModifyController.class})
-public class MeetingTimeModifyControllerTest extends RestDocsTestSupport {
+@WebMvcTest({MeetingTimeController.class})
+public class MeetingTimeControllerTest extends RestDocsTestSupport {
+
+    @MockBean
+    MeetingDao meetingDao;
 
     @MockBean
     ModifyMeetingTimeFacade modifyMeetingTimeFacade;
@@ -76,6 +81,52 @@ public class MeetingTimeModifyControllerTest extends RestDocsTestSupport {
                             PayloadDocumentation.responseFields(
                                     getTitleAttributes("응답 필드"),
                                     PayloadDocumentation.fieldWithPath("success").type(JsonFieldType.BOOLEAN).description("요청 처리 성공 여부")
+                            )
+                    )
+            );
+        }
+    }
+
+    @Nested
+    @DisplayName("모임 시간 조회 API")
+    class meetingTimeSimple {
+
+        String endpoint = "/api/v1/meetings/{meeting-id}/meeting-time";
+
+        @Test
+        @DisplayName("given: 인증 필요, 요청 경로에 meetingId -> then: HTTP 200, 모임 시간 정보")
+        void success() throws Exception {
+            //given
+            Long meetingIdMock = 55L;
+
+            BDDMockito.given(meetingDao.findMeetingTimeSimple(BDDMockito.anyLong()))
+                    .willReturn(new MeetingTimeSimple(LocalTime.of(13,30,0)));
+
+            //when
+            ResultActions perform = mockMvc.perform(
+                    RestDocumentationRequestBuilders.get(endpoint, meetingIdMock)
+                            .header(HttpHeaders.AUTHORIZATION, "Bearer " + currentRequestATK.getToken())
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .characterEncoding(StandardCharsets.UTF_8)
+            );
+
+            //then
+            perform.andExpect(MockMvcResultMatchers.status().isOk());
+
+            // docs
+            perform.andDo(
+                    restDocs.document(
+                            RequestDocumentation.pathParameters(
+                                    getTitleAttributes(endpoint),
+                                    RequestDocumentation.parameterWithName("meeting-id").description("모임 시작 시간을 조회할 모임의 식별값")
+                            ),
+                            HeaderDocumentation.requestHeaders(
+                                    getTitleAttributes("요청 헤더"),
+                                    authorizationHeaderDescriptor
+                            ),
+                            PayloadDocumentation.responseFields(
+                                    getTitleAttributes("응답 필드"),
+                                    PayloadDocumentation.fieldWithPath("meetingStartTime").type(JsonFieldType.STRING).description("모임 시작 시간. +\nHH:mm:ss 형식")
                             )
                     )
             );

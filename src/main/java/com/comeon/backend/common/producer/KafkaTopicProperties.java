@@ -28,4 +28,7 @@ public class KafkaTopicProperties {
 
     @Value("${kafka.topic.meeting-place-unlock}")
     private String meetingPlaceUnlock;
+
+    @Value("${kafka.topic.meeting-time}")
+    private String meetingTime;
 }
