@@ -58,6 +58,7 @@ public class Meeting extends BaseTimeEntity {
         this.dateVotingList.removeIf(voting -> !this.metaData.verifyDateInMeetingCalendar(voting.getDate()));
 
         cancelMeetingDate();
+        cancelMeetingDateIfExist();
 
         Events.raise(MeetingMetaDataUpdateEvent.create(this.id));
     }
@@ -206,6 +207,11 @@ public class Meeting extends BaseTimeEntity {
         this.meetingDate = null;
 
         raiseMeetingDateUpdateEvent();
+    }
+
+    private void cancelMeetingDateIfExist() {
+        if (this.meetingDate != null) raiseMeetingDateUpdateEvent();
+        this.meetingDate = null;
     }
 
     public void addVoting(Long userId, LocalDate date) {
