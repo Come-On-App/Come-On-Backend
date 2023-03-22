@@ -140,6 +140,7 @@ public class Meeting extends BaseTimeEntity {
         dateVotingList.removeIf(dateVoting -> dateVoting.isVoter(memberToDrop.getUserId()));
 
         raiseMemberListUpdateEvent();
+        Events.raise(MemberDropEvent.create(this.id, memberToDrop.getUserId()));
     }
 
     public MeetingPlace addPlace(PlaceInfo placeInfo) {

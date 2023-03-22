@@ -31,4 +31,7 @@ public class KafkaTopicProperties {
 
     @Value("${kafka.topic.meeting-time}")
     private String meetingTime;
+
+    @Value("${kafka.topic.member-drop}")
+    private String memberDrop;
 }
