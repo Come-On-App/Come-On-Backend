@@ -1,7 +1,10 @@
 package com.comeon.backend.common.jwt;
 
+import java.util.Map;
+
 public interface JwtManager {
 
+    Map<String, Object> parseToMap(String token);
     Payload parse(String token);
 
     boolean verifyAtk(String token);

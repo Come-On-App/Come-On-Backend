@@ -20,4 +20,8 @@ public class OauthUserInfo {
     public static OauthUserInfo ofKakao(String oauthId, String email, String name) {
         return new OauthUserInfo(OauthProvider.KAKAO, oauthId, email, name);
     }
+
+    public static OauthUserInfo ofApple(String oauthId, String email, String name) {
+        return new OauthUserInfo(OauthProvider.APPLE, oauthId, email, name);
+    }
 }

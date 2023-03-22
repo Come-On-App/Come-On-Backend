@@ -1,5 +1,6 @@
 package com.comeon.backend.user.command.application;
 
+import com.comeon.backend.user.command.application.dto.AppleOauthRequest;
 import com.comeon.backend.user.command.application.dto.GoogleOauthRequest;
 import com.comeon.backend.user.command.application.dto.KakaoOauthRequest;
 import com.comeon.backend.user.command.domain.*;
@@ -14,6 +15,7 @@ public class OauthUserFacade {
 
     private final GoogleOauthService googleOauthService;
     private final KakaoOauthService kakaoOauthService;
+    private final AppleOauthService appleOauthService;
     private final OauthUserService oauthUserService;
 
     public Long googleLogin(GoogleOauthRequest request) {
@@ -24,6 +26,12 @@ public class OauthUserFacade {
 
     public Long kakaoLogin(KakaoOauthRequest request) {
         OauthUserInfo oauthUserInfo = kakaoOauthService.getUserInfoByCode(request.getCode());
+        User user = saveUser(oauthUserInfo);
+        return user.getId();
+    }
+
+    public Long appleLogin(AppleOauthRequest request) {
+        OauthUserInfo oauthUserInfo = appleOauthService.getUserInfoBy(request.getIdentityToken(), request.getUser(), request.getEmail(), request.getName());
         User user = saveUser(oauthUserInfo);
         return user.getId();
     }
