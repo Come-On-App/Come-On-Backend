@@ -5,8 +5,10 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.util.StringUtils;
 
 import javax.persistence.*;
+import java.util.UUID;
 
 @Entity @Getter
 @Table(name = "users")
@@ -19,9 +21,12 @@ public class User extends BaseTimeEntity {
 
     // oauth 정보 시작
     private String oauthId;
+
     @Enumerated(EnumType.STRING)
     private OauthProvider provider;
+
     private String email;
+
     private String name;
     // oauth 정보 종료
 
@@ -49,9 +54,15 @@ public class User extends BaseTimeEntity {
         this.oauthId = oauthId;
         this.provider = provider;
         this.email = email;
-        this.name = name;
+        if (!StringUtils.hasText(name)) {
+            String uuid = UUID.randomUUID().toString().substring(0, 5);
+            this.name = provider.name() + "_USER_" + uuid;
+            this.nickname = NicknameUtils.randomNickname(provider) + "_" + uuid;
+        } else {
+            this.name = name;
+            this.nickname = name;
+        }
 
-        this.nickname = name;
         this.role = Role.USER;
         this.status = UserStatus.ACTIVATE;
     }
@@ -67,11 +78,11 @@ public class User extends BaseTimeEntity {
     }
 
     public void updateEmail(String email) {
-        this.email = email;
+        if (StringUtils.hasText(email)) this.email = email;
     }
 
     public void updateName(String name) {
-        this.name = name;
+        if (StringUtils.hasText(name)) this.name = name;
     }
 
     private void updateNickname(String nickname) {

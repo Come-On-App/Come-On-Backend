@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
+import java.util.Map;
 
 @Component
 @RequiredArgsConstructor
@@ -19,6 +20,11 @@ public class JwtManagerImpl implements JwtManager {
     private final ReissueCondition reissueCondition;
     private final RefreshTokenRepository rtkRepository;
 
+
+    @Override
+    public Map<String, Object> parseToMap(String token) {
+        return jwtParser.parseToMap(token);
+    }
 
     @Override
     public Payload parse(String token) {
