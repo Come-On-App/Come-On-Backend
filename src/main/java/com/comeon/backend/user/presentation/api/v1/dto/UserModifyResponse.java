@@ -1,4 +1,4 @@
-package com.comeon.backend.user.api.v1.dto;
+package com.comeon.backend.user.presentation.api.v1.dto;
 
 import lombok.Getter;
 

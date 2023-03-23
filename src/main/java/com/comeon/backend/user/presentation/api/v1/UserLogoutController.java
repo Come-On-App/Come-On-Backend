@@ -1,8 +1,8 @@
-package com.comeon.backend.user.api.v1;
+package com.comeon.backend.user.presentation.api.v1;
 
 import com.comeon.backend.common.jwt.JwtManager;
 import com.comeon.backend.config.security.JwtPrincipal;
-import com.comeon.backend.user.api.v1.dto.UserLogoutResponse;
+import com.comeon.backend.user.presentation.api.v1.dto.UserLogoutResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

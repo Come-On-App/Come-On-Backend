@@ -1,7 +1,7 @@
-package com.comeon.backend.user.api.v1;
+package com.comeon.backend.user.presentation.api.v1;
 
 import com.comeon.backend.config.security.JwtPrincipal;
-import com.comeon.backend.user.api.v1.dto.UserModifyResponse;
+import com.comeon.backend.user.presentation.api.v1.dto.UserModifyResponse;
 import com.comeon.backend.user.command.application.UserFacade;
 import com.comeon.backend.user.command.application.dto.UserModifyRequest;
 import com.comeon.backend.user.query.UserDao;

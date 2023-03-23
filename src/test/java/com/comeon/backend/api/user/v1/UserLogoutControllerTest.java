@@ -1,7 +1,7 @@
 package com.comeon.backend.api.user.v1;
 
 import com.comeon.backend.api.support.utils.RestDocsTestSupport;
-import com.comeon.backend.user.api.v1.UserLogoutController;
+import com.comeon.backend.user.presentation.api.v1.UserLogoutController;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
