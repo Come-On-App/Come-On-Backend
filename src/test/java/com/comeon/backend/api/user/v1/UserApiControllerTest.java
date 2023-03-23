@@ -2,7 +2,7 @@ package com.comeon.backend.api.user.v1;
 
 import com.comeon.backend.api.support.utils.RestDocsTestSupport;
 import com.comeon.backend.api.support.utils.RestDocsUtil;
-import com.comeon.backend.user.api.v1.UserApiController;
+import com.comeon.backend.user.presentation.api.v1.UserApiController;
 import com.comeon.backend.user.command.application.UserFacade;
 import com.comeon.backend.user.command.application.dto.UserModifyRequest;
 import com.comeon.backend.user.query.UserDao;

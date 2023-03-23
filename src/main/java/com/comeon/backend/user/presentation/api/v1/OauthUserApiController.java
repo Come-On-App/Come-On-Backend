@@ -1,4 +1,4 @@
-package com.comeon.backend.user.api.v1;
+package com.comeon.backend.user.presentation.api.v1;
 
 import com.comeon.backend.common.jwt.JwtManager;
 import com.comeon.backend.common.jwt.JwtToken;
@@ -6,8 +6,8 @@ import com.comeon.backend.user.command.application.dto.AppleOauthRequest;
 import com.comeon.backend.user.command.application.OauthUserFacade;
 import com.comeon.backend.user.command.application.dto.GoogleOauthRequest;
 import com.comeon.backend.user.command.application.dto.KakaoOauthRequest;
+import com.comeon.backend.user.presentation.api.v1.dto.UserTokenResponse;
 import com.comeon.backend.user.query.UserDao;
-import com.comeon.backend.user.api.v1.dto.UserTokenResponse;
 import com.comeon.backend.user.query.UserSimple;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
