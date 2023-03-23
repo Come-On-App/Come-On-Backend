@@ -1,4 +1,4 @@
-package com.comeon.backend.user.api.v2;
+package com.comeon.backend.user.presentation.api.v2;
 
 import com.comeon.backend.config.security.JwtPrincipal;
 import com.comeon.backend.user.query.UserDetailsResponse;

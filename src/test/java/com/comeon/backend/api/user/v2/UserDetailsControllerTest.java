@@ -3,7 +3,7 @@ package com.comeon.backend.api.user.v2;
 import com.comeon.backend.api.support.utils.RestDocsTestSupport;
 import com.comeon.backend.api.support.utils.RestDocsUtil;
 import com.comeon.backend.common.response.ProfileImageType;
-import com.comeon.backend.user.api.v2.UserDetailsController;
+import com.comeon.backend.user.presentation.api.v2.UserDetailsController;
 import com.comeon.backend.user.query.UserDetailsResponse;
 import com.comeon.backend.user.query.UserQueryService;
 import org.junit.jupiter.api.DisplayName;
