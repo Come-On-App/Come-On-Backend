@@ -3,29 +3,37 @@ package com.comeon.backend.meeting.presentation.api.meetingtime;
 import com.comeon.backend.meeting.command.domain.MemberRole;
 import com.comeon.backend.meeting.presentation.interceptor.RequiredMemberRole;
 import com.comeon.backend.meeting.command.application.v1.ModifyMeetingTimeFacade;
+import com.comeon.backend.meeting.query.dao.MeetingDao;
+import com.comeon.backend.meeting.query.dto.MeetingTimeSimple;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-public class MeetingTimeModifyController {
+@RequestMapping("/api/v1/meetings/{meetingId}/meeting-time")
+public class MeetingTimeController {
 
+    private final MeetingDao meetingDao;
     private final ModifyMeetingTimeFacade modifyMeetingTimeFacade;
 
-    // TODO 모임 시간 조회 API
     @RequiredMemberRole(MemberRole.HOST)
-    @PostMapping("/api/v1/meetings/{meetingId}/meeting-time")
+    @PostMapping
     public MeetingTimeModifyResponse meetingTimeModify(
             @PathVariable Long meetingId,
             @Validated @RequestBody MeetingTimeModifyRequest request
     ) {
         modifyMeetingTimeFacade.modifyMeetingTime(meetingId, request.getMeetingStartTime());
         return new MeetingTimeModifyResponse();
+    }
+
+    @RequiredMemberRole
+    @GetMapping
+    public MeetingTimeSimple meetingTimeSimple(
+            @PathVariable Long meetingId
+    ) {
+        return meetingDao.findMeetingTimeSimple(meetingId);
     }
 }

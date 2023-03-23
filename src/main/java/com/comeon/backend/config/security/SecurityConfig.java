@@ -20,9 +20,14 @@ public class SecurityConfig {
     private final JwtAuthenticationProvider jwtAuthenticationProvider;
     private final JwtAccessDeniedHandler accessDeniedHandler;
     private final JwtAuthenticationEntryPoint authenticationEntryPoint;
+    private final AdminKeyProperties adminKeyProperties;
 
     private JwtAuthenticationFilter jwtAuthenticationFilter() {
         return new JwtAuthenticationFilter(jwtManager, jwtAuthenticationProvider);
+    }
+
+    private AdminKeyAuthenticationFilter adminKeyAuthenticationFilter() {
+        return new AdminKeyAuthenticationFilter(adminKeyProperties);
     }
 
     @Bean
@@ -58,7 +63,8 @@ public class SecurityConfig {
                 .authenticationEntryPoint(authenticationEntryPoint)
 
                 .and()
-                .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(adminKeyAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

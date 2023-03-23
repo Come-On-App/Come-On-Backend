@@ -23,6 +23,17 @@ public class JwtParser {
 
     private final ObjectMapper objectMapper;
 
+    public Map<String, Object> parseToMap(String token) {
+        String[] split = token.split("\\.");
+        String payloadString = decodePayload(split[1]);
+        try {
+            return objectMapper.readValue(payloadString, new TypeReference<>() {
+            });
+        } catch (JsonProcessingException e) {
+            throw new RestApiException(e, CommonErrorCode.INTERNAL_SERVER_ERROR); // TODO 오류 처리
+        }
+    }
+
     public JwtClaims parse(String token) {
         String[] split = token.split("\\.");
         String payloadString = decodePayload(split[1]);

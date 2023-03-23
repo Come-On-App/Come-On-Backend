@@ -2,6 +2,7 @@ package com.comeon.backend.user.api.v1;
 
 import com.comeon.backend.common.jwt.JwtManager;
 import com.comeon.backend.common.jwt.JwtToken;
+import com.comeon.backend.user.command.application.dto.AppleOauthRequest;
 import com.comeon.backend.user.command.application.OauthUserFacade;
 import com.comeon.backend.user.command.application.dto.GoogleOauthRequest;
 import com.comeon.backend.user.command.application.dto.KakaoOauthRequest;
@@ -48,6 +49,12 @@ public class OauthUserApiController {
     @PostMapping("/kakao")
     public UserTokenResponse kakaoOauthLogin(@Validated @RequestBody KakaoOauthRequest request) {
         Long userId = oauthUserFacade.kakaoLogin(request);
+        return getResponse(userId);
+    }
+
+    @PostMapping("/apple")
+    public UserTokenResponse appleOauthLogin(@Validated @RequestBody AppleOauthRequest request) {
+        Long userId = oauthUserFacade.appleLogin(request);
         return getResponse(userId);
     }
 }

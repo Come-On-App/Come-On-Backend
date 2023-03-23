@@ -57,7 +57,7 @@ public class Meeting extends BaseTimeEntity {
         this.metaData.modify(meetingInfo);
         this.dateVotingList.removeIf(voting -> !this.metaData.verifyDateInMeetingCalendar(voting.getDate()));
 
-        cancelMeetingDate();
+        cancelMeetingDateIfExist();
 
         Events.raise(MeetingMetaDataUpdateEvent.create(this.id));
     }
@@ -68,8 +68,9 @@ public class Meeting extends BaseTimeEntity {
     }
 
     public void modifyMeetingTime(LocalTime meetingStartTime) {
-        // TODO Event
         this.meetingTime = MeetingTime.create(meetingStartTime);
+
+        Events.raise(MeetingTimeUpdateEvent.create(this.id));
     }
 
     public Member join(Long userId) {
@@ -114,6 +115,7 @@ public class Meeting extends BaseTimeEntity {
                 .findFirst()
                 .orElseThrow(MemberNotExistException::new);
         this.members.remove(memberToLeave);
+        dateVotingList.removeIf(dateVoting -> dateVoting.isVoter(memberToLeave.getUserId()));
 
         if (memberToLeave.isHost()) {
             members.stream()
@@ -135,8 +137,10 @@ public class Meeting extends BaseTimeEntity {
         }
 
         this.members.remove(memberToDrop);
+        dateVotingList.removeIf(dateVoting -> dateVoting.isVoter(memberToDrop.getUserId()));
 
         raiseMemberListUpdateEvent();
+        Events.raise(MemberDropEvent.create(this.id, memberToDrop.getUserId()));
     }
 
     public MeetingPlace addPlace(PlaceInfo placeInfo) {
@@ -203,6 +207,11 @@ public class Meeting extends BaseTimeEntity {
         this.meetingDate = null;
 
         raiseMeetingDateUpdateEvent();
+    }
+
+    private void cancelMeetingDateIfExist() {
+        if (this.meetingDate != null) raiseMeetingDateUpdateEvent();
+        this.meetingDate = null;
     }
 
     public void addVoting(Long userId, LocalDate date) {

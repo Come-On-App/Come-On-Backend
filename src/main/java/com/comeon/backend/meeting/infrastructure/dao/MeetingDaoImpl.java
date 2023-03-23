@@ -5,10 +5,7 @@ import com.comeon.backend.meeting.infrastructure.mapper.MeetingSliceParam;
 import com.comeon.backend.meeting.infrastructure.mapper.MeetingMapper;
 import com.comeon.backend.meeting.query.dao.MeetingDao;
 import com.comeon.backend.meeting.query.dao.MeetingSliceCondition;
-import com.comeon.backend.meeting.query.dto.EntryCodeDetails;
-import com.comeon.backend.meeting.query.dto.MeetingCalendarDetails;
-import com.comeon.backend.meeting.query.dto.MeetingDetails;
-import com.comeon.backend.meeting.query.dto.MeetingSimple;
+import com.comeon.backend.meeting.query.dto.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -48,5 +45,10 @@ public class MeetingDaoImpl implements MeetingDao {
     @Override
     public MeetingCalendarDetails findMeetingCalendar(Long meetingId) {
         return meetingMapper.selectMeetingCalendar(meetingId);
+    }
+
+    @Override
+    public MeetingTimeSimple findMeetingTimeSimple(Long meetingId) {
+        return meetingMapper.selectMeetingTime(meetingId);
     }
 }

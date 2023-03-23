@@ -241,4 +241,14 @@
         where mp.meeting_id = #{meetingId}
         order by mp.place_order
     </select>
+
+    <resultMap id="MeetingTimeSimpleMap" type="com.comeon.backend.meeting.query.dto.MeetingTimeSimple">
+        <id column="meeting_start_time" property="meetingStartTime"/>
+    </resultMap>
+    <select id="selectMeetingTime" resultMap="MeetingTimeSimpleMap">
+        select m.meeting_start_time as meeting_start_time
+        from meeting m
+        where m.meeting_id = #{meetingId}
+    </select>
+
 </mapper>
