@@ -13,7 +13,8 @@ public class OauthPageController {
     public String kakaoOauthPage(@RequestParam String code) {
         log.debug("code: {}", code);
 //        String redirectUrl = "exp://127.0.0.1:19000/oauth/callback/kakao?code=" + code;
-        String redirectUrl = "exp://192.168.1.3:19000/--/oauth/callback/kakao?code=" + code;
+//        String redirectUrl = "exp://192.168.1.3:19000/--/oauth/callback/kakao?code=" + code;
+        String redirectUrl = "exp://221.146.106.195:19000/--/oauth/callback/kakao?code=" + code;
         log.debug("redirectUrl: {}", redirectUrl);
 
         return "redirect:" + redirectUrl;
