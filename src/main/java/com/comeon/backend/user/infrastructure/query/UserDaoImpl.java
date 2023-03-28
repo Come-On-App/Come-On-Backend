@@ -1,6 +1,7 @@
 package com.comeon.backend.user.infrastructure.query;
 
 import com.comeon.backend.user.query.UserDetails;
+import com.comeon.backend.user.query.UserOauthInfo;
 import com.comeon.backend.user.query.UserSimple;
 import com.comeon.backend.user.query.UserDao;
 import lombok.RequiredArgsConstructor;
@@ -20,5 +21,10 @@ public class UserDaoImpl implements UserDao {
     @Override
     public UserSimple findUserSimple(Long userId) {
         return userMapper.selectUserSimpleByUserId(userId);
+    }
+
+    @Override
+    public UserOauthInfo findUserOauthInfo(Long userId) {
+        return userMapper.selectUserOauthInfoByUserId(userId);
     }
 }

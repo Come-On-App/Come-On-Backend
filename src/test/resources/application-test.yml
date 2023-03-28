@@ -27,6 +27,14 @@ spring:
             user-info-uri: https://kapi.kakao.com/v2/user/me
             user-name-attribute: id
 
+      logout:
+        callback-uri: xxxxxxxxxxxxxxxxxxxxxx
+        kakao:
+          uri: xxxxxxxxxxxxxxx
+
+      login:
+        callback-uri: xxxxxxxxx
+
   kafka:
     bootstrap-servers: localhost:1234
 
@@ -67,3 +75,7 @@ user:
 
 admin:
   key: 2512412r12r43gy24t3
+
+cookie:
+  secure: false
+  same-site: lax
