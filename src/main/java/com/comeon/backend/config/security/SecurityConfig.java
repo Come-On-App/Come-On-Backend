@@ -21,6 +21,7 @@ public class SecurityConfig {
     private final JwtAccessDeniedHandler accessDeniedHandler;
     private final JwtAuthenticationEntryPoint authenticationEntryPoint;
     private final AdminKeyProperties adminKeyProperties;
+    private final UserLogoutHandler userLogoutHandler;
 
     private JwtAuthenticationFilter jwtAuthenticationFilter() {
         return new JwtAuthenticationFilter(jwtManager, jwtAuthenticationProvider);
@@ -37,13 +38,19 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        String logoutUrl = "/logout";
+
         String[] authWhiteList = {
+                "/",
                 "/oauth/callback/**",
                 "/api/v1/oauth/**",
                 "/api/v1/auth/reissue",
                 "/test-api/v1/**",
                 "/api/v2/meetings/*/places/lock",
-                "/api/v2/meetings/places/unlock"
+                "/api/v2/meetings/places/unlock",
+
+                logoutUrl,
+                logoutUrl + "/callback",
         };
 
         http
@@ -56,6 +63,11 @@ public class SecurityConfig {
                 .authorizeRequests()
                 .antMatchers(authWhiteList).permitAll()
                 .anyRequest().authenticated() // 나머지는 인증된 유저면 허가
+
+                .and()
+                .logout()
+                .logoutUrl(logoutUrl)
+                .addLogoutHandler(userLogoutHandler)
 
                 .and()
                 .exceptionHandling()

@@ -30,9 +30,25 @@
     </select>
 
     <select id="selectUserSimpleByUserId" resultMap="UserSimpleMap">
-        select u.user_id as user_id,
+        select u.user_id  as user_id,
                u.nickname as nickname,
-               u.role as role
+               u.role     as role
+        from users u
+        where u.user_id = #{userId}
+    </select>
+
+    <resultMap id="UserOauthInfo" type="com.comeon.backend.user.query.UserOauthInfo">
+        <id column="user_id" property="userId"/>
+        <result column="provider" property="provider"/>
+        <result column="email" property="email"/>
+        <result column="name" property="name"/>
+    </resultMap>
+
+    <select id="selectUserOauthInfoByUserId" resultMap="UserOauthInfo">
+        select u.user_id  as user_id,
+               u.provider as provider,
+               u.email    as email,
+               u.name     as name
         from users u
         where u.user_id = #{userId}
     </select>
