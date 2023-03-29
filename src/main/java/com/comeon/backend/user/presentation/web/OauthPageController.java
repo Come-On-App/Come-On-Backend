@@ -15,7 +15,7 @@ public class OauthPageController {
 
     @GetMapping("/oauth/callback/kakao")
     public String kakaoOauthPage(@RequestParam String code) {
-        String redirectUrl = callbackUri + "?code" + code;
+        String redirectUrl = callbackUri + "?code=" + code;
         log.debug("redirectUrl: {}", redirectUrl);
 
         return "redirect:" + redirectUrl;
