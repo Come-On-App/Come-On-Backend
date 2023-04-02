@@ -24,6 +24,7 @@ public class Report extends BaseTimeEntity {
     private String content;
     private String reportImageUrl;
 
+    @Column(columnDefinition = "TEXT")
     private String reference;
 
     @Builder

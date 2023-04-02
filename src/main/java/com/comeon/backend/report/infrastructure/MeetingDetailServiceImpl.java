@@ -44,10 +44,12 @@ public class MeetingDetailServiceImpl implements MeetingDetailService {
                         meetingDetailForReport.getMeetingMetaData().getCalendar().getStartFrom(),
                         meetingDetailForReport.getMeetingMetaData().getCalendar().getEndTo()
                 ),
-                new MeetingDetail.ConfirmedDate(
-                        meetingDetailForReport.getMeetingMetaData().getFixedDate().getStartFrom(),
-                        meetingDetailForReport.getMeetingMetaData().getFixedDate().getEndTo()
-                )
+                meetingDetailForReport.getMeetingMetaData().getFixedDate() != null ?
+                        new MeetingDetail.ConfirmedDate(
+                                meetingDetailForReport.getMeetingMetaData().getFixedDate().getStartFrom(),
+                                meetingDetailForReport.getMeetingMetaData().getFixedDate().getEndTo()
+                        ) :
+                        null
         );
     }
 
