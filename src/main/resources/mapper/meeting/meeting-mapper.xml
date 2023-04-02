@@ -251,4 +251,109 @@
         where m.meeting_id = #{meetingId}
     </select>
 
+
+
+
+    <!-- For Report 모임 상세 조회  -->
+    <resultMap id="MeetingMetaDataForReportMap" type="com.comeon.backend.meeting.query.dto.MeetingDetailForReport$MeetingMetaData">
+        <id column="meeting_id" property="meetingId"/>
+        <result column="meeting_image_url" property="thumbnailImageUrl"/>
+        <result column="meeting_name" property="meetingName"/>
+        <result column="meeting_start_time" property="meetingStartTime"/>
+        <association property="hostUser"
+                     javaType="com.comeon.backend.meeting.query.dto.MeetingDetailForReport$HostUserSimple">
+            <result column="host_user_user_id" property="userId"/>
+            <result column="host_user_nickname" property="nickname"/>
+            <result column="host_user_profile_image" property="profileImageUrl"/>
+        </association>
+        <association property="calendar"
+                     javaType="com.comeon.backend.meeting.query.dto.MeetingDetailForReport$MeetingCalendar">
+            <result column="calendar_start_from" property="startFrom"/>
+            <result column="calendar_end_to" property="endTo"/>
+        </association>
+        <association property="fixedDate"
+                     javaType="com.comeon.backend.meeting.query.dto.MeetingDetailForReport$ConfirmedDate">
+            <result column="fixed_date_start_from" property="startFrom"/>
+            <result column="fixed_date_end_to" property="endTo"/>
+        </association>
+    </resultMap>
+
+    <resultMap id="MemberDetailForReportMap" type="com.comeon.backend.meeting.query.dto.MeetingDetailForReport$MemberDetails">
+        <id column="members_member_id" property="memberId"/>
+        <id column="members_user_id" property="userId"/>
+        <id column="members_nickname" property="nickname"/>
+        <id column="members_profile_image_url" property="profileImageUrl"/>
+        <id column="members_member_role" property="memberRole"/>
+    </resultMap>
+    <select id="selectMembersForReport" resultMap="MemberDetailForReportMap">
+        select mm.meeting_member_id as members_member_id,
+               u.user_id            as members_user_id,
+               u.nickname           as members_nickname,
+               u.profile_image_url  as members_profile_image_url,
+               mm.role              as members_member_role
+        from meeting_member mm
+                 left join users u on mm.user_id = u.user_id
+        where mm.meeting_id = #{meetingId}
+        order by u.nickname
+    </select>
+
+    <resultMap id="PlaceDetailForReportMap" type="com.comeon.backend.meeting.query.dto.MeetingDetailForReport$PlaceDetails">
+        <id column="places_meeting_place_id" property="meetingPlaceId"/>
+        <id column="places_name" property="placeName"/>
+        <id column="places_memo" property="memo"/>
+        <id column="places_lat" property="lat"/>
+        <id column="places_lng" property="lng"/>
+        <id column="places_address" property="address"/>
+        <id column="places_order" property="order"/>
+        <id column="places_category" property="category"/>
+        <id column="places_google_place_id" property="googlePlaceId"/>
+    </resultMap>
+    <select id="selectPlaceDetailsForReport" resultMap="PlaceDetailForReportMap">
+        select mp.meeting_place_id as places_meeting_place_id,
+               mp.name             as places_name,
+               mp.memo             as places_memo,
+               mp.lat              as places_lat,
+               mp.lng              as places_lng,
+               mp.address          as places_address,
+               mp.place_order      as places_order,
+               mp.category         as places_category,
+               mp.google_place_id  as places_google_place_id
+        from meeting_place mp
+        where mp.meeting_id = #{meetingId}
+        order by mp.place_order
+    </select>
+
+    <resultMap id="MeetingDetailForReportMap" type="com.comeon.backend.meeting.query.dto.MeetingDetailForReport">
+        <association property="meetingMetaData"
+                     javaType="com.comeon.backend.meeting.query.dto.MeetingDetailForReport$MeetingMetaData"
+                     resultMap="MeetingMetaDataForReportMap">
+        </association>
+
+        <collection property="members" column="meetingId = meeting_id" javaType="List" select="selectMembersForReport"/>
+        <collection property="places" column="meetingId = meeting_id" javaType="List" select="selectPlaceDetailsForReport"/>
+    </resultMap>
+    <select id="selectMeetingDetailForReport" resultMap="MeetingDetailForReportMap">
+        select m.meeting_id                   as meeting_id,
+               m.thumbnail_image_url          as meeting_image_url,
+               m.name                         as meeting_name,
+               m.meeting_start_time           as meeting_start_time,
+               m.calendar_start_from          as calendar_start_from,
+               m.calendar_end_to              as calendar_end_to,
+               mfd.start_from                 as fixed_date_start_from,
+               mfd.end_to                     as fixed_date_end_to,
+               host_member.user_id            as host_user_user_id,
+               host_member.user_nickname      as host_user_nickname,
+               host_member.user_profile_image as host_user_profile_image
+        from meeting m
+                 left join meeting_fixed_date mfd on m.meeting_id = mfd.meeting_id
+                 left join (select mm.meeting_id       as meeting_id,
+                                   u.user_id           as user_id,
+                                   u.nickname          as user_nickname,
+                                   u.profile_image_url as user_profile_image,
+                                   mm.role             as host_role
+                            from meeting_member mm
+                                     left join users u on mm.user_id = u.user_id
+                            where mm.role = 'HOST') host_member on m.meeting_id = host_member.meeting_id
+        where m.meeting_id = #{meetingId}
+    </select>
 </mapper>

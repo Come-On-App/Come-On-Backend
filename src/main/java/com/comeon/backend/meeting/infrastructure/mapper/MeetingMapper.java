@@ -14,4 +14,6 @@ public interface MeetingMapper {
     MeetingCalendarDetails selectMeetingCalendar(Long meetingId);
     Long selectMeetingId(String entryCode);
     MeetingTimeSimple selectMeetingTime(Long meetingId);
+
+    MeetingDetailForReport selectMeetingDetailForReport(Long meetingId);
 }

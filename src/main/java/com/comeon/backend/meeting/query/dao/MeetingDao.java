@@ -13,4 +13,5 @@ public interface MeetingDao {
     MeetingDetails findMeetingDetails(Long meetingId, Long userId);
     MeetingCalendarDetails findMeetingCalendar(Long meetingId);
     MeetingTimeSimple findMeetingTimeSimple(Long meetingId);
+    MeetingDetailForReport findMeetingDetailForReport(Long meetingId);
 }
