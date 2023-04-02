@@ -23,3 +23,5 @@ include::update.adoc[]
 == link:users/index.html[User API Docs, window=blank]
 
 == link:meeting/index.html[Meeting API Docs, window=blank]
+
+== link:report/index.html[Report API Docs, window=blank]
