@@ -51,4 +51,9 @@ public class MeetingDaoImpl implements MeetingDao {
     public MeetingTimeSimple findMeetingTimeSimple(Long meetingId) {
         return meetingMapper.selectMeetingTime(meetingId);
     }
+
+    @Override
+    public MeetingDetailForReport findMeetingDetailForReport(Long meetingId) {
+        return meetingMapper.selectMeetingDetailForReport(meetingId);
+    }
 }
