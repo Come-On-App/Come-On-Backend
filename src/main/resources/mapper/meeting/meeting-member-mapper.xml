@@ -49,4 +49,10 @@
                  left join users u on mm.user_id = u.user_id
         where mm.meeting_id = #{meetingId} and mm.user_id = #{userId}
     </select>
+
+    <select id="selectMeetingIds" resultType="java.lang.Long">
+        select mm.meeting_id
+        from meeting_member mm
+        where mm.user_id = #{userId};
+    </select>
 </mapper>

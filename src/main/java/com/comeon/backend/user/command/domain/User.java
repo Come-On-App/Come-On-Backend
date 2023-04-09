@@ -92,4 +92,12 @@ public class User extends BaseTimeEntity {
     private void updateProfileImage(String profileImageUrl) {
         this.profileImageUrl = profileImageUrl;
     }
+
+    public void withdraw() {
+        this.oauthId = null;
+        this.email = null;
+        this.name = null;
+
+        this.status = UserStatus.WITHDRAWN;
+    }
 }
