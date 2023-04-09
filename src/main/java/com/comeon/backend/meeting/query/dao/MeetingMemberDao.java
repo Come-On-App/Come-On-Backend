@@ -12,4 +12,5 @@ public interface MeetingMemberDao {
     List<MemberDetails> findMemberDetailsList(Long meetingId);
 
     MemberDetails findMemberDetails(Long meetingId, Long userId);
+    List<Long> findMeetingIds(Long userId);
 }

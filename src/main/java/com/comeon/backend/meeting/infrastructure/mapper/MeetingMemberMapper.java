@@ -12,4 +12,5 @@ public interface MeetingMemberMapper {
     MemberSimple selectMemberSimpleByMeetingIdAndUserId(Long meetingId, Long userId);
     List<MemberDetails> selectMemberDetailsList(Long meetingId);
     MemberDetails selectMemberDetails(Long meetingId, Long userId);
+    List<Long> selectMeetingIds(Long userId);
 }

@@ -29,4 +29,9 @@ public class MeetingMemberDaoImpl implements MeetingMemberDao {
     public MemberDetails findMemberDetails(Long meetingId, Long userId) {
         return meetingMemberMapper.selectMemberDetails(meetingId, userId);
     }
+
+    @Override
+    public List<Long> findMeetingIds(Long userId) {
+        return meetingMemberMapper.selectMeetingIds(userId);
+    }
 }
