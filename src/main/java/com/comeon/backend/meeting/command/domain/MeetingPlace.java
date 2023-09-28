@@ -26,19 +26,15 @@ public class MeetingPlace extends BaseTimeEntity {
 
     private String memo;
 
-    @Column(nullable = false)
     private String address;
 
-    @Column(nullable = false)
     private Double lng;
 
-    @Column(nullable = false)
     private Double lat;
 
     @Enumerated(EnumType.STRING)
     private PlaceCategory category;
 
-    @Column(nullable = false)
     private String googlePlaceId;
 
     @Column(name = "place_order", nullable = false)

@@ -13,4 +13,8 @@ public class VotingMemberSimple {
     private String nickname;
     private String profileImageUrl;
     private String memberRole;
+
+    public void setProfileImageUrl(String profileImageUrl) {
+        this.profileImageUrl = profileImageUrl;
+    }
 }
