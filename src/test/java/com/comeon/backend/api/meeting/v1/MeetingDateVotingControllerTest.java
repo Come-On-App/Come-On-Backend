@@ -221,10 +221,10 @@ public class MeetingDateVotingControllerTest extends RestDocsTestSupport {
                                     date,
                                     true,
                                     List.of(
-                                            new VotingMemberSimple(123L, "user_123", null, MemberRole.HOST.name()),
+                                            new VotingMemberSimple(123L, "user_123", "https://xxx.xxxxx.xxx/xxxxxxx", MemberRole.HOST.name()),
                                             new VotingMemberSimple(242L, "user_242", "https://xxx.xxxxx.xxx/xxxxxxx", MemberRole.PARTICIPANT.name()),
-                                            new VotingMemberSimple(257L, "user_257", null, MemberRole.PARTICIPANT.name()),
-                                            new VotingMemberSimple(277L, "user_277", null, MemberRole.PARTICIPANT.name()),
+                                            new VotingMemberSimple(257L, "user_257", "https://xxx.xxxxx.xxx/xxxxxxx", MemberRole.PARTICIPANT.name()),
+                                            new VotingMemberSimple(277L, "user_277", "https://xxx.xxxxx.xxx/xxxxxxx", MemberRole.PARTICIPANT.name()),
                                             new VotingMemberSimple(278L, "user_278", "https://xxx.xxxxx.xxx/xxxxxxx", MemberRole.PARTICIPANT.name())
                                     )
                             )
@@ -265,7 +265,7 @@ public class MeetingDateVotingControllerTest extends RestDocsTestSupport {
                                     PayloadDocumentation.fieldWithPath("votingUsers").type(JsonFieldType.ARRAY).description("투표한 회원들의 정보"),
                                     PayloadDocumentation.fieldWithPath("votingUsers[].userId").type(JsonFieldType.NUMBER).description("회원의 유저 식별값"),
                                     PayloadDocumentation.fieldWithPath("votingUsers[].nickname").type(JsonFieldType.STRING).description("회원의 유저 닉네임"),
-                                    PayloadDocumentation.fieldWithPath("votingUsers[].profileImageUrl").type(JsonFieldType.STRING).description("회원의 프로필 이미지 URL").optional(),
+                                    PayloadDocumentation.fieldWithPath("votingUsers[].profileImageUrl").type(JsonFieldType.STRING).description("회원의 프로필 이미지 URL"),
                                     PayloadDocumentation.fieldWithPath("votingUsers[].memberRole").type(JsonFieldType.STRING).description("회원의 모임 권한 +\n" + RestDocsUtil.generateLinkCode(RestDocsUtil.DocUrl.MEETING_MEMBER_ROLE))
                             )
                     )
