@@ -48,18 +48,18 @@ jobs:
         docker login --username=${{ secrets.YOO_DOCKERHUB_USERNAME }} --password=${{ secrets.YOO_DOCKERHUB_PASSWORD }}
         docker buildx build --platform linux/arm64/v8,linux/amd64 --tag ${{ secrets.YOO_DOCKERHUB_USERNAME }}/comeon-backend:latest --push .
 
-  deploy:
-    needs: test_and_build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Docker image pull and run
-        uses: appleboy/ssh-action@v0.1.7
-        with:
-          host: ${{ secrets.DEV_HOST }}
-          username: ${{ secrets.DEV_USERNAME }}
-          key: ${{ secrets.DEV_PRIVATE_KEY }}
-          port: ${{ secrets.DEV_PORT }}
-          script: |
-            docker compose -f ~/yoo_dev/comeon-app-backend/api-server-docker-compose.yml down
-            docker image rm ${{ secrets.YOO_DOCKERHUB_USERNAME }}/comeon-backend
-            docker compose -f ~/yoo_dev/comeon-app-backend/api-server-docker-compose.yml up -d --no-recreate
+  # deploy:
+  #   needs: test_and_build
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Docker image pull and run
+  #       uses: appleboy/ssh-action@v0.1.7
+  #       with:
+  #         host: ${{ secrets.DEV_HOST }}
+  #         username: ${{ secrets.DEV_USERNAME }}
+  #         key: ${{ secrets.DEV_PRIVATE_KEY }}
+  #         port: ${{ secrets.DEV_PORT }}
+  #         script: |
+  #           docker compose -f ~/yoo_dev/comeon-app-backend/api-server-docker-compose.yml down
+  #           docker image rm ${{ secrets.YOO_DOCKERHUB_USERNAME }}/comeon-backend
+  #           docker compose -f ~/yoo_dev/comeon-app-backend/api-server-docker-compose.yml up -d --no-recreate
