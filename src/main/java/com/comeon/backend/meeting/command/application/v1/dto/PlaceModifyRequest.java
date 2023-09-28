@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 
 @Getter
 @NoArgsConstructor
@@ -18,19 +17,15 @@ public class PlaceModifyRequest {
 
     private String memo;
 
-    @NotNull
     private Double lat;
 
-    @NotNull
     private Double lng;
 
-    @NotBlank
     private String address;
 
     @NotBlank
     private String category;
 
-    @NotBlank
     private String googlePlaceId;
 
     public PlaceInfo toPlaceInfo() {

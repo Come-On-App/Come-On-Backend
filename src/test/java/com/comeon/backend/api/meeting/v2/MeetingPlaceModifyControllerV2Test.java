@@ -179,11 +179,11 @@ public class MeetingPlaceModifyControllerV2Test extends RestDocsTestSupport {
                                     getTitleAttributes("요청 필드"),
                                     PayloadDocumentation.fieldWithPath("placeName").type(JsonFieldType.STRING).description("장소의 이름."),
                                     PayloadDocumentation.fieldWithPath("memo").type(JsonFieldType.STRING).description("장소에 대한 메모. 비워두면 빈 값으로 저장됩니다.").optional(),
-                                    PayloadDocumentation.fieldWithPath("address").type(JsonFieldType.STRING).description("장소의 주소. 비워두면 빈 값으로 저장됩니다."),
-                                    PayloadDocumentation.fieldWithPath("lat").type(JsonFieldType.NUMBER).description("장소의 위도값. 비워두면 빈 값으로 저장됩니다."),
-                                    PayloadDocumentation.fieldWithPath("lng").type(JsonFieldType.NUMBER).description("장소의 경도값. 비워두면 빈 값으로 저장됩니다."),
+                                    PayloadDocumentation.fieldWithPath("address").type(JsonFieldType.STRING).description("장소의 주소. 비워두면 빈 값으로 저장됩니다.").optional(),
+                                    PayloadDocumentation.fieldWithPath("lat").type(JsonFieldType.NUMBER).description("장소의 위도값. 비워두면 빈 값으로 저장됩니다.").optional(),
+                                    PayloadDocumentation.fieldWithPath("lng").type(JsonFieldType.NUMBER).description("장소의 경도값. 비워두면 빈 값으로 저장됩니다.").optional(),
                                     PayloadDocumentation.fieldWithPath("category").type(JsonFieldType.STRING).description("장소 카테고리. +\n" + RestDocsUtil.generateLinkCode(RestDocsUtil.DocUrl.PLACE_CATEGORY_CODE)),
-                                    PayloadDocumentation.fieldWithPath("googlePlaceId").type(JsonFieldType.STRING).description("Google Place API에서 장소의 식별값. 비워두면 빈 값으로 저장됩니다.")
+                                    PayloadDocumentation.fieldWithPath("googlePlaceId").type(JsonFieldType.STRING).description("Google Place API에서 장소의 식별값. 비워두면 빈 값으로 저장됩니다.").optional()
                             ),
                             PayloadDocumentation.responseFields(
                                     getTitleAttributes("응답 필드"),
